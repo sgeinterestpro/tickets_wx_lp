@@ -13,7 +13,10 @@ class App extends Component {
 
   config = {
     pages: [
-      'pages/index/index'
+      'pages/index/index',
+      'pages/ticket_list/index',
+      'pages/ticket_scan/index',
+      'pages/ticket_show/index'
     ],
     window: {
       backgroundTextStyle: 'light',

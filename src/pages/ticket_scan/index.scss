@@ -1,0 +1,40 @@
+Page {
+  background-color: #383c42;
+}
+
+.container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+
+  .main {
+    box-sizing: border-box;
+    box-shadow: 0 0 2px 0 rgba(25, 29, 33, 0.15);
+    position: relative;
+    width: 670px;
+    margin: 40px auto 0;
+    padding: 0 40px;
+    background: #fff;
+    border-radius: 12px;
+
+    .item {
+      border-bottom: 2px solid #F4F5F7;
+    }
+  }
+}
+
+.input-container {
+  padding: 10px 0 0 0;
+  width: 590px;
+  margin: 0 auto;
+}
+
+.btn-submit {
+  padding: 10px 0 ;
+  width: 590px;
+  margin: 0 auto 25px;
+}
+
