@@ -2,7 +2,7 @@
   "miniprogramRoot": "./dist",
   "projectname": "tickets_wx_lp",
   "description": "票券微信小程序",
-  "appid": "touristappid",
+  "appid": "wxcc7eb1363daedf9b",
   "setting": {
     "urlCheck": true,
     "es6": false,
