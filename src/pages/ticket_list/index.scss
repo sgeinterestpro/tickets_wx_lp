@@ -14,7 +14,7 @@ Page {
   height: 100%;
   .main {
     box-sizing: border-box;
-    box-shadow: 0 0 2px 0 rgba(25, 29, 33, 0.15);
+    box-shadow: 0 0 0 0 rgba(25, 29, 33, 0.15);
     position: relative;
     width: 670px;
     margin: 40px auto 0;
@@ -75,7 +75,7 @@ Page {
   }
 }
 .input-container {
-  padding: 10px 0 0 0;
+  padding: 50px 0 0 0;
   width: 590px;
   margin: 0 auto;
 }

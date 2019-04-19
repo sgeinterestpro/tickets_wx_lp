@@ -2,6 +2,7 @@ import Taro, {Component} from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import {AtButton, AtInput} from 'taro-ui'
 import './index.scss'
+import TabBar from "../../component/tabbar";
 
 export default class Index extends Component {
 
@@ -77,6 +78,7 @@ export default class Index extends Component {
             <AtButton type='primary' onClick={this.handleSubmit}>提交</AtButton>
           </View>
         </View>
+        <TabBar current="ticket_scan"/>
       </View>
     )
   }

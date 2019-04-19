@@ -1,7 +1,8 @@
 import Taro, {Component} from '@tarojs/taro'
 import {View} from '@tarojs/components'
-import {AtList, AtListItem} from "taro-ui";
+import {AtButton, AtList, AtListItem} from "taro-ui";
 import './index.scss'
+import TabBar from "../../component/tabbar";
 
 export default class Index extends Component {
 
@@ -65,6 +66,7 @@ export default class Index extends Component {
           <AtList>
             {list.map((item, index) => (
               <AtListItem
+                className='item'
                 key={index}
                 title={item.title}
                 note={item.note}
@@ -77,7 +79,13 @@ export default class Index extends Component {
           </AtList>
         </View>
         <View class='input-container'>
+          <AtButton
+            type='secondary'
+            circle
+            disabled
+          >无法领取更多</AtButton>
         </View>
+        <TabBar current="ticket_list"/>
       </View>
     )
   }
