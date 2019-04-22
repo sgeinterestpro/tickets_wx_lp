@@ -1,4 +1,4 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro, {Component} from '@tarojs/taro'
 import Index from './pages/index'
 
 import './app.scss'
@@ -16,31 +16,37 @@ class App extends Component {
       'pages/index/index',
       'pages/ticket_list/index',
       'pages/ticket_scan/index',
-      'pages/ticket_show/index'
+      'pages/ticket_show/index',
     ],
     window: {
+      backgroundColor: "#356284",
       backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
+      navigationBarBackgroundColor: '#1A5784',
+      navigationBarTitleText: '票券助手',
+      navigationBarTextStyle: 'white',
+      // enablePullDownRefresh: true,
     }
   }
 
-  componentDidMount () {}
+  componentDidMount() {
+  }
 
-  componentDidShow () {}
+  componentDidShow() {
+  }
 
-  componentDidHide () {}
+  componentDidHide() {
+  }
 
-  componentDidCatchError () {}
+  componentDidCatchError() {
+  }
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数
-  render () {
+  render() {
     return (
-      <Index />
+      <Index/>
     )
   }
 }
 
-Taro.render(<App />, document.getElementById('app'))
+Taro.render(<App/>, document.getElementById('app'))

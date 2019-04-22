@@ -20,7 +20,7 @@ export default class Index extends Component {
   }
 
   componentDidMount() {
-    const { id } = this.$router.params
+    const {id} = this.$router.params
     this.setState({value: id})
     Taro.getSystemInfo({
       success: res => {
@@ -50,11 +50,15 @@ export default class Index extends Component {
     drawQrcode({
       width: 200 * scale,
       height: 200 * scale,
-      canvasId: 'myQrcode',
+      canvasId: 'qrCode',
       _this: this.$scope,
       text: value
     });
   };
+
+  qrCodeClick = () => {
+    console.log("qrClick");
+  }
 
   render() {
     const {value} = this.state;
@@ -62,11 +66,11 @@ export default class Index extends Component {
       <View class='container'>
         <View class='main'>
           <View class='qrcode item'>
-            <Canvas className='scanCode' canvasId='myQrcode' />
+            <Canvas className='scanCode' canvasId='qrCode' onClick={this.qrCodeClick.bind(this)}/>
             <View class='tips'> {value} </View>
           </View>
-          <View class='round left' />
-          <View class='round right' />
+          <View class='round left'/>
+          <View class='round right'/>
           <View class='intro item'>
             <View class='title'>说明：</View>
             <View>1. 有效期至 2019年5月31日。</View>

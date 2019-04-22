@@ -2,12 +2,12 @@ import Taro, {Component} from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import {AtButton, AtList, AtListItem} from "taro-ui";
 import './index.scss'
-import TabBar from "../../component/tabbar";
 
 export default class Index extends Component {
 
   config = {
-    navigationBarTitleText: '所有券'
+    navigationBarTitleText: '所有券',
+    enablePullDownRefresh: true,
   }
 
   constructor() {
@@ -37,6 +37,10 @@ export default class Index extends Component {
   }
 
   componentDidMount() {
+    console.log("startPullDownRefresh");
+    Taro.startPullDownRefresh().then(() => {
+      console.log("PullDownRefresh");
+    })
   }
 
   componentWillUnmount() {
@@ -57,6 +61,15 @@ export default class Index extends Component {
       url: `/pages/ticket_show/index?id=${item.id}&name=${item.name}`
     })
   };
+  onReceiveClick = () => {
+    let {list} = this.state;
+    list.push({
+      id: 'sport_201904150003',
+      title: '运动券',
+      note: '游泳',
+    });
+    this.setState({list})
+  }
 
   render() {
     const {list} = this.state;
@@ -82,10 +95,10 @@ export default class Index extends Component {
           <AtButton
             type='secondary'
             circle
-            disabled
-          >无法领取更多</AtButton>
+            // disabled
+            onClick={this.onReceiveClick.bind(this)}
+          >无法领取更2多</AtButton>
         </View>
-        <TabBar current="ticket_list"/>
       </View>
     )
   }

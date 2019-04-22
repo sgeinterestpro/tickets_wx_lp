@@ -7,7 +7,8 @@ import TabBar from "../../component/tabbar";
 export default class Index extends Component {
 
   config = {
-    navigationBarTitleText: '扫描券'
+    navigationBarTitleText: '扫描券',
+    enablePullDownRefresh: false,
   }
 
   constructor() {
@@ -21,6 +22,9 @@ export default class Index extends Component {
   }
 
   componentDidMount() {
+    Taro.startPullDownRefresh().then(() => {
+      Taro.stopPullDownRefresh()
+    })
   }
 
   componentWillUnmount() {
@@ -31,6 +35,10 @@ export default class Index extends Component {
 
   componentDidHide() {
   }
+
+  onPullDownRefresh() {
+    Taro.stopPullDownRefresh()
+  };
 
   /**
    * 保存输入框数据更改
