@@ -1,13 +1,17 @@
 import Taro from '@tarojs/taro'
-import {Image, View} from '@tarojs/components'
-import {AtDivider, AtList, AtListItem} from 'taro-ui';
+import {View} from '@tarojs/components'
+import {AtTabBar} from "taro-ui";
 import './index.scss'
-import bg from '../../img/bg.png'
+import TicketList from '../../component/ticket_list/index'
+import TicketScan from '../../component/ticket_scan/index'
+import UserInfo from '../../component/user_info/index'
 
 export default class Index extends Taro.Component {
   config = {
+    navigationBarBackgroundColor: '#383c42',
+    navigationBarTextStyle: 'white',
     navigationBarTitleText: '票券助手',
-    enablePullDownRefresh: true,
+    // enablePullDownRefresh: true,
   };
 
   constructor() {
@@ -27,9 +31,9 @@ export default class Index extends Taro.Component {
   }
 
   tabList = [
-    {id: 'Ticket_List', title: '票券夹', iconType: 'tags', text: 'new'},
+    {id: 'Ticket_List', title: '票券夹', iconType: 'tags', text: '1', max: '99'},
     {id: 'Ticket_Scan', title: '使用', iconType: 'search'},
-    {id: 'Ticket_User', title: '我', iconType: 'user', text: '100', max: '99'}
+    {id: 'Ticket_User', title: '我', iconType: 'user', text: 'new'}
   ];
 
   handleClick = current => {
@@ -40,41 +44,18 @@ export default class Index extends Taro.Component {
     const {current} = this.state;
 
     return (
-      <View className='page page-index'>
-        <View className='module-list at-row'>
-          <Image className='module-list__bg' mode='widthFix' src={bg}/>
-          <View className='module-list__item at-col'>
-            <View className='module-list__item__icon at-icon at-icon-shopping-bag'/>
-            <View className='module-list__item__title'>领取</View>
-          </View>
-          <View className='module-list__item at-col'>
-            <View className='module-list__item__icon at-icon at-icon-search'/>
-            <View className='module-list__item__title'>使用</View>
-          </View>
-        </View>
-        <View className='ticket-link'>
-          <AtListItem className='ticket-link__item' title='我的票券' hasBorder={false} arrow='right'
-                      iconInfo={{size: 25, color: '#78A4FA', value: 'tags',}}/>
-        </View>
-        <View className='ticket-list'>
-          <View className='ticket-list__title'>可用票券</View>
-          <AtList hasBorder={false}>
-            <AtListItem
-              arrow='right'
-              title='羽毛球'
-              note='凭此券可使用羽毛球馆2小时'
-              extraText='去使用'
-            />
-            <AtListItem
-              arrow='right'
-              title='游泳券'
-              note='凭此券可使用游泳馆2小时'
-              extraText='去使用'
-              hasBorder={false}
-            />
-            {/*<AtDivider content='没有更多了'/>*/}
-          </AtList>
-        </View>
+      <View>
+        {current === 0 && <TicketList>票券列表</TicketList>}
+        {current === 1 && <TicketScan>票券扫描</TicketScan>}
+        {current === 2 && <UserInfo>个人信息</UserInfo>}
+        <AtTabBar
+          backgroundColor='#ececec'
+          color='#ea6bb8'
+          tabList={this.tabList}
+          onClick={this.handleClick.bind(this)}
+          current={current}
+          fixed
+        />
       </View>
     )
   }

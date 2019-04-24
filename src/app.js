@@ -2,6 +2,7 @@ import Taro, {Component} from '@tarojs/taro'
 import Index from './pages/index'
 
 import './app.scss'
+import {login} from "./common/getUserInfo";
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -14,9 +15,9 @@ class App extends Component {
   config = {
     pages: [
       'pages/index/index',
-      'pages/ticket_list/index',
-      'pages/ticket_scan/index',
+      'pages/index_new/index',
       'pages/ticket_show/index',
+      'pages/qrcode_show/index',
     ],
     window: {
       backgroundColor: "#356284",
@@ -24,8 +25,22 @@ class App extends Component {
       navigationBarBackgroundColor: '#1A5784',
       navigationBarTitleText: '票券助手',
       navigationBarTextStyle: 'white',
-      // enablePullDownRefresh: true,
     }
+  }
+  getOpenId = () => {
+    login(`/${this.$router.params.path}`)
+      .then(() => {
+        // console.debug(userInfo)
+        Taro.eventCenter.trigger('UnionId')
+      })
+      .catch(err => {
+        Taro.showModal({confirmColor: '#FF0000', content: err, showCancel: false}).then(() => {
+          this.getUid()
+        })
+      })
+  }
+  componentWillMount() {
+    this.getOpenId()
   }
 
   componentDidMount() {
