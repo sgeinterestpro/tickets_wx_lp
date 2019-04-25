@@ -102,6 +102,7 @@ export default class Index extends Component {
     const ticket = ticket_list[index];
     deleteTicket(ticket.id).then((res) => {
       console.log(res);
+      this.updateTicketList();
     });
     this.setState({open_index: -1});
   };
