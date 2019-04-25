@@ -8,11 +8,15 @@ export default class Index extends Component {
 
   constructor() {
     super(...arguments);
+    const date = new Date();
+    const year = date.getFullYear().toString();
+    const month = (date.getMonth() + 1).toString();
+    const day = date.getDate().toString();
     this.state = {
       eventShow: ['羽毛球', '乒乓球', '游泳'],
       eventValue: ['badminton', 'pingpang', 'swim'],
       eventSelect: 1,
-      dateSel: '2018-04-22'
+      dateSel: [year, (month.length === 1) ? '0' + month : month, day].join('-')
     }
   }
 

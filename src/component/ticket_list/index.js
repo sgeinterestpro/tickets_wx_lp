@@ -2,8 +2,15 @@ import Taro, {Component} from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import {AtButton, AtList, AtListItem, AtSwipeAction} from "taro-ui";
 import ModalTicketApply from '../modal_ticket_apply'
-import {applyNewTicket, getTickets} from "../../apis";
+import {applyNewTicket, deleteTicket, getTickets} from "../../apis";
 import './index.scss'
+
+const state_table = {
+  'unused': '未使用',
+  'expired': '已过期',
+  'used': '已使用'
+}
+
 
 export default class Index extends Component {
 
@@ -11,6 +18,7 @@ export default class Index extends Component {
     super(...arguments)
     this.state = {
       modal_ticket_apply_show: false,
+      open_index: -1,
       ticket_list: [
         {
           id: 'sport_201904150002',
@@ -31,9 +39,8 @@ export default class Index extends Component {
   componentWillMount() {
   }
 
-
   componentDidMount() {
-    getTickets()
+    this.updateTicketList();
   }
 
 
@@ -47,6 +54,25 @@ export default class Index extends Component {
   }
 
   /**
+   * 更新票券列表显示
+   */
+  updateTicketList = () => {
+    getTickets().then(res => {
+      let ticket_list_new = [];
+      res.items.map((item) => {
+        ticket_list_new.push(
+          {
+            id: item.id,
+            title: item.title,
+            note: state_table[item.state],
+            enable: item.state === 'unused',
+          })
+      });
+      this.setState({ticket_list: ticket_list_new});
+    })
+  };
+
+  /**
    * 券点击事件，跳转到票券详情
    * @param item 票券参数
    */
@@ -55,31 +81,66 @@ export default class Index extends Component {
       url: `/pages/ticket_show/index?id=${item.id}&name=${item.name}`
     })
   };
-  onSwipeActionClick = (index) => {
-    let {ticket_list} = this.state;
-    ticket_list.splice(index, 1);
-    this.setState({ticket_list})
-  };
-  onSwipeActionOpened = () => {
+
+  /**
+   * 滑动功能区打开
+   * 限制只能打开一个滑动功能区
+   * @param index
+   */
+  onSwipeActionOpened = (index) => {
+    console.log('onSwipeActionOpened', index);
+    this.setState({open_index: index})
   };
 
-  onReceiveClick = () => {
+  /**
+   * 滑动功能区点击
+   * 删除票券
+   * @param index
+   */
+  onSwipeActionClick = (index) => {
+    const {ticket_list} = this.state;
+    const ticket = ticket_list[index];
+    deleteTicket(ticket.id).then((res) => {
+      console.log(res);
+    });
+    this.setState({open_index: -1});
+  };
+
+  /**
+   * 领取新票券按钮点击
+   */
+  onBtnApplyClick = () => {
     this.setState({modal_ticket_apply_show: true});
   };
-  ModalTicketApplyConfirm = (data) => {
-    applyNewTicket(data).then(() => {
-      Taro.showModal({content: '领取成功', showCancel: false});
-      getTickets()
-    });
-    this.ModalTicketApplyClose()
-  }
-  ModalTicketApplyClose = () => {
+
+  /**
+   * 关闭领券中心弹窗
+   * @constructor
+   */
+  modalTicketApplyClose = () => {
     this.setState({modal_ticket_apply_show: false})
-  }
+  };
+
+  /**
+   * 领取新票券
+   * @param data
+   * @constructor
+   */
+  modalTicketApplyConfirm = (data) => {
+    applyNewTicket(data).then((res) => {
+      if (res.code !== 0) {
+        Taro.showModal({content: res.message, showCancel: false});
+      } else {
+        Taro.showModal({content: '领取成功', showCancel: false});
+      }
+      this.updateTicketList();
+    });
+    this.modalTicketApplyClose()
+  };
 
 
   render() {
-    const {ticket_list, modal_ticket_apply_show} = this.state;
+    const {ticket_list, modal_ticket_apply_show, open_index} = this.state;
 
     return (
       <View class='container'>
@@ -90,7 +151,7 @@ export default class Index extends Component {
                 key={index}
                 onClick={this.onSwipeActionClick.bind(this, index)}
                 onOpened={this.onSwipeActionOpened.bind(this, index)}
-                isOpened={item.isSwipeActionOpened}
+                isOpened={index === open_index}
                 disabled={!item.enable}
                 autoClose
                 options={[{text: '删除', style: {backgroundColor: '#FF4949'}}]}
@@ -114,15 +175,15 @@ export default class Index extends Component {
         </View>
         <ModalTicketApply
           isOpened={modal_ticket_apply_show}
-          onConfirm={this.ModalTicketApplyConfirm.bind(this)}
-          onClose={this.ModalTicketApplyClose.bind(this)}
+          onConfirm={this.modalTicketApplyConfirm.bind(this)}
+          onClose={this.modalTicketApplyClose.bind(this)}
         />
         <View class='ticket-apply'>
           <AtButton
             type='secondary'
             circle
             disabled={ticket_list.length >= 3}
-            onClick={this.onReceiveClick.bind(this)}
+            onClick={this.onBtnApplyClick.bind(this)}
           >
             {ticket_list.length >= 3 ? '没有领取额度了' : `本周还可领取${3 - ticket_list.length}张`}
           </AtButton>
