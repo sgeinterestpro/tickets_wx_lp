@@ -2,7 +2,7 @@ import Taro, {Component} from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import {AtButton, AtList, AtListItem, AtSwipeAction} from "taro-ui";
 import ModalTicketApply from '../modal_ticket_apply'
-import {applyNewTicket, deleteTicket, getTickets} from "../../apis";
+import {applyNewTicket, deleteTicket, getTicketList} from "../../apis";
 import './index.scss'
 
 const state_table = {
@@ -19,20 +19,7 @@ export default class Index extends Component {
     this.state = {
       modal_ticket_apply_show: false,
       open_index: -1,
-      ticket_list: [
-        {
-          id: 'sport_201904150002',
-          title: '羽毛球',
-          note: '已使用',
-          enable: false,
-        },
-        {
-          id: 'sport_201904150003',
-          title: '游泳',
-          note: '已过期',
-          enable: false,
-        },
-      ]
+      ticket_list: []
     }
   }
 
@@ -57,18 +44,19 @@ export default class Index extends Component {
    * 更新票券列表显示
    */
   updateTicketList = () => {
-    getTickets().then(res => {
+    getTicketList().then(res => {
       let ticket_list_new = [];
       res.items.map((item) => {
         ticket_list_new.push(
           {
             id: item.id,
             title: item.title,
-            note: state_table[item.state],
+            date: item.date,
+            state: state_table[item.state],
             enable: item.state === 'unused',
           })
       });
-      this.setState({ticket_list: ticket_list_new});
+      this.setState({ticket_list: ticket_list_new, open_index: -1});
     })
   };
 
@@ -77,6 +65,7 @@ export default class Index extends Component {
    * @param item 票券参数
    */
   onTicketClick = (item) => {
+    this.setState({open_index: -1});
     Taro.navigateTo({
       url: `/pages/ticket_show/index?id=${item.id}&name=${item.name}`
     })
@@ -98,13 +87,13 @@ export default class Index extends Component {
    * @param index
    */
   onSwipeActionClick = (index) => {
+    //todo 增加删除确认
     const {ticket_list} = this.state;
     const ticket = ticket_list[index];
     deleteTicket(ticket.id).then((res) => {
       console.log(res);
       this.updateTicketList();
     });
-    this.setState({open_index: -1});
   };
 
   /**
@@ -133,10 +122,10 @@ export default class Index extends Component {
         Taro.showModal({content: res.message, showCancel: false});
       } else {
         Taro.showModal({content: '领取成功', showCancel: false});
+        this.modalTicketApplyClose();
+        this.updateTicketList();
       }
-      this.updateTicketList();
     });
-    this.modalTicketApplyClose()
   };
 
 
@@ -145,6 +134,11 @@ export default class Index extends Component {
 
     return (
       <View class='container'>
+        <ModalTicketApply
+          isOpened={modal_ticket_apply_show}
+          onConfirm={this.modalTicketApplyConfirm.bind(this)}
+          onClose={this.modalTicketApplyClose.bind(this)}
+        />
         <View class='ticket-list'>
           <AtList>
             {ticket_list.length > 0 ? ticket_list.map((item, index) => (
@@ -160,9 +154,9 @@ export default class Index extends Component {
                 <AtListItem
                   className='item'
                   title={item.title}
-                  note={item.note}
+                  note={item.date}
                   disabled={!item.enable}
-                  extraText='去使用'
+                  extraText={item.state}
                   arrow='right'
                   thumb='https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png'
                   onClick={this.onTicketClick.bind(this, item)}
@@ -174,11 +168,6 @@ export default class Index extends Component {
             />}
           </AtList>
         </View>
-        <ModalTicketApply
-          isOpened={modal_ticket_apply_show}
-          onConfirm={this.modalTicketApplyConfirm.bind(this)}
-          onClose={this.modalTicketApplyClose.bind(this)}
-        />
         <View class='ticket-apply'>
           <AtButton
             type='secondary'

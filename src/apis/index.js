@@ -1,7 +1,7 @@
 import Taro from "@tarojs/taro";
 
-const url_base = "http://127.0.0.1:10000";
-// const url_base = "http://108.160.133.130:10000";
+// const url_base = "http://127.0.0.1:10000";
+const url_base = "http://108.160.133.130:10000";
 
 const request = (method, url, data) => Taro.request({
   url: url,
@@ -20,10 +20,13 @@ const request = (method, url, data) => Taro.request({
 const GET = (url) => request("GET", url);
 const POST = (url, data) => request("POST", url, data);
 const DELETE = (url) => request("DELETE", url);
+const PUT = (url, data) => request("PUT", url, data);
 
-const getTickets = () => GET(`${url_base}/ticket`);
+const getTicketList = () => GET(`${url_base}/ticket`);
 const applyNewTicket = (data) => POST(`${url_base}/ticket`, data);
 const deleteTicket = (ticket_id) => DELETE(`${url_base}/ticket/${ticket_id}`);
+const getTicketInfo = (ticket_id) => GET(`${url_base}/ticket/${ticket_id}`);
+const useTicket = (ticket_id, data) => PUT(`${url_base}/ticket/${ticket_id}`, data);
 const getHistoryTickets = () => GET(`${url_base}/ticket_history`);
 
-export {getTickets, applyNewTicket, deleteTicket, getHistoryTickets}
+export {getTicketList, applyNewTicket, deleteTicket, getTicketInfo, useTicket, getHistoryTickets}

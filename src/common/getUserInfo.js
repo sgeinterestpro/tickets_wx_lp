@@ -3,7 +3,7 @@ import Taro from '@tarojs/taro'
 const getUserInfo = () => new Promise((resolve, reject) => {
   Taro.getUserInfo().then(res => {
     if (res.userInfo) {
-      Taro.setStorage({key: 'userInfo', data: res.userInfo})
+      Taro.setStorage({key: 'userInfo', data: res.userInfo});
       resolve(res)
     } else {
       reject(res)
@@ -11,7 +11,7 @@ const getUserInfo = () => new Promise((resolve, reject) => {
   }).catch(err => {
     reject(err)
   })
-})
+});
 
 const wxLogin = jsCode => new Promise((resolve, reject) => {
   Taro.request({
