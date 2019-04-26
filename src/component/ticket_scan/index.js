@@ -2,13 +2,8 @@ import Taro, {Component} from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import {AtButton, AtInput} from 'taro-ui'
 import './index.scss'
-import TabBar from "../../component/tabbar";
 
 export default class Index extends Component {
-
-  config = {
-    navigationBarTitleText: '扫描券'
-  }
 
   constructor() {
     super(...arguments)
@@ -70,7 +65,7 @@ export default class Index extends Component {
       <View class='container'>
         <View class='main'>
           <View class='input-container'>
-            <AtInput border={false} value={ticket_num} onChange={this.handleInputChange} placeholder='输入转换内容'>
+            <AtInput border={false} value={ticket_num} onChange={this.handleInputChange} placeholder='手动输入电子票券'>
               <AtButton type='primary' onClick={this.handleScan}>扫描</AtButton>
             </AtInput>
           </View>

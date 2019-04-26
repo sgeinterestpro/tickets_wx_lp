@@ -6,6 +6,8 @@ import './index.scss'
 export default class Index extends Component {
 
   config = {
+    navigationBarBackgroundColor: '#383c42',
+    navigationBarTextStyle: 'white',
     navigationBarTitleText: '查看券'
   }
 
@@ -20,7 +22,7 @@ export default class Index extends Component {
   }
 
   componentDidMount() {
-    const { id } = this.$router.params
+    const {id} = this.$router.params
     this.setState({value: id})
     Taro.getSystemInfo({
       success: res => {
@@ -50,11 +52,17 @@ export default class Index extends Component {
     drawQrcode({
       width: 200 * scale,
       height: 200 * scale,
-      canvasId: 'myQrcode',
+      canvasId: 'qrCode',
       _this: this.$scope,
       text: value
     });
   };
+  onQrCodeClick = (value) => {
+    console.log("qrClick");
+    Taro.navigateTo({
+      url: `/pages/qrcode_show/index?value=${value}`
+    })
+  }
 
   render() {
     const {value} = this.state;
@@ -62,12 +70,12 @@ export default class Index extends Component {
       <View class='container'>
         <View class='main'>
           <View class='qrcode item'>
-            <Canvas className='scanCode' canvasId='myQrcode' />
+            <Canvas className='scanCode' canvasId='qrCode' onClick={this.onQrCodeClick.bind(this, value)}/>
             <View class='tips'> {value} </View>
           </View>
-          <View class='round left' />
-          <View class='round right' />
-          <View class='intro item'>
+          <View class='round left'/>
+          <View class='round right'/>
+          <View class='intro'>
             <View class='title'>说明：</View>
             <View>1. 有效期至 2019年5月31日。</View>
             <View>2. 仅供本人使用不可转借他人。</View>

@@ -2,12 +2,16 @@ import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import {AtTabBar} from "taro-ui";
 import './index.scss'
-import TicketList from '../ticket_list/index'
-import TicketScan from '../ticket_scan/index'
+import TicketList from '../../component/ticket_list/index'
+import TicketScan from '../../component/ticket_scan/index'
+import UserInfo from '../../component/user_info/index'
 
 export default class Index extends Taro.Component {
   config = {
-    navigationBarTitleText: '券'
+    navigationBarBackgroundColor: '#383c42',
+    navigationBarTextStyle: 'white',
+    navigationBarTitleText: '票券助手',
+    // enablePullDownRefresh: true,
   };
 
   constructor() {
@@ -18,6 +22,7 @@ export default class Index extends Taro.Component {
     }
   }
 
+
   onShareAppMessage() {
     return {
       title: 'Tickets',
@@ -26,9 +31,9 @@ export default class Index extends Taro.Component {
   }
 
   tabList = [
-    {id: 'Ticket_List', title: '票券夹', iconType: 'tags', text: 'new'},
+    {id: 'Ticket_List', title: '票券夹', iconType: 'tags', text: '1', max: '99'},
     {id: 'Ticket_Scan', title: '使用', iconType: 'search'},
-    {id: 'Ticket_User', title: '我', iconType: 'user', text: '100', max: '99'}
+    {id: 'Ticket_User', title: '我', iconType: 'user', text: 'new'}
   ];
 
   handleClick = current => {
@@ -40,9 +45,9 @@ export default class Index extends Taro.Component {
 
     return (
       <View>
-        {current === 0 && <TicketList>1</TicketList>}
-        {current === 1 && <TicketScan>2</TicketScan>}
-        {current === 2 && <View>个人信息</View>}
+        {current === 0 && <TicketList>票券列表</TicketList>}
+        {current === 1 && <TicketScan>票券扫描</TicketScan>}
+        {current === 2 && <UserInfo>个人信息</UserInfo>}
         <AtTabBar
           backgroundColor='#ececec'
           color='#ea6bb8'
