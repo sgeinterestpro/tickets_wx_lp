@@ -1,0 +1,67 @@
+page {
+  background-color: #F7F7F7;
+}
+
+.page {
+  position: relative;
+
+  view,
+  div {
+    box-sizing: border-box;
+  }
+}
+
+.page-index {
+  padding: 0;
+
+  .module-list {
+    padding: 80px 40px 20px;
+    background-color: #1A5784;
+    color: #FFFFFF;
+
+    &__bg {
+      position: fixed;
+      top: 140px;
+      left: 0;
+      width: 750px;
+    }
+
+    &__item {
+      text-align: center;
+      padding: 50px 0;
+
+      &__icon {
+        text-align: center;
+        font-size: 100px;
+      }
+
+      &__title {
+        margin: 10px;
+      }
+    }
+  }
+
+  .ticket-link {
+    background-color: white;
+
+    &__item {
+      padding: 48px 48px;
+    }
+  }
+
+  .ticket-list {
+    margin: 30px 0 0;
+    padding: 0 20px;
+    background-color: white;
+
+    &__title {
+      padding: 20px;
+      font-size: 30px;
+      color: #999999;
+    }
+
+    &__item {
+
+    }
+  }
+}
