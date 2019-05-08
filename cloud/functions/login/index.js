@@ -18,7 +18,7 @@ exports.main = async (event, context) => {
     if (res.total === 0) {
       console.log('create.user');
       return db.collection('user').doc(wxContext.OPENID).set({
-        data: {weekly_limit: 0, quota_used: 0}
+        data: {weekly_limit: 3, quota_used: 0}
       });
     }
   }).then(() => {
