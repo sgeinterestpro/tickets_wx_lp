@@ -1,11 +1,18 @@
-import Taro, {Component} from '@tarojs/taro'
-import {View} from '@tarojs/components'
-import {AtButton, AtInput, AtToast} from 'taro-ui'
-import ModalTicketDisplay from "../modal_ticket_checked";
+import Taro from '@tarojs/taro'
+import { View } from '@tarojs/components'
+import { AtButton, AtInput, AtToast } from 'taro-ui'
 import './index.scss'
-import {useTicket} from "../../apis";
+import TicketTabBar from '../../component/tab_bar'
+import ModalTicketDisplay from "../../component/modal_ticket_checked";
+import { useTicket } from "../../apis";
 
-export default class Index extends Component {
+export default class Index extends Taro.Component {
+  config = {
+    navigationBarBackgroundColor: '#383c42',
+    navigationBarTextStyle: 'white',
+    navigationBarTitleText: '票券使用',
+    enablePullDownRefresh: false,
+  };
 
   constructor() {
     super(...arguments);
@@ -20,7 +27,7 @@ export default class Index extends Component {
    * @param value
    */
   handleInputChange = (value) => {
-    this.setState({ticket_id: value})
+    this.setState({ ticket_id: value })
   };
 
   /**
@@ -53,7 +60,7 @@ export default class Index extends Component {
   };
 
   render() {
-    const {ticket_id, modal_ticket_display_show} = this.state;
+    const { ticket_id, modal_ticket_display_show } = this.state;
     return (
       <View class='container'>
         <ModalTicketDisplay
@@ -64,7 +71,8 @@ export default class Index extends Component {
         <View class='main'>
           <View class='input-container'>
             <AtInput border={false} value={ticket_id} onChange={this.handleInputChange.bind(this)}
-                     placeholder='手动输入电子票券'>
+              placeholder='手动输入电子票券'
+            >
               <AtButton type='primary' onClick={this.onBtnScanClick.bind(this)}>扫描</AtButton>
             </AtInput>
           </View>
@@ -72,7 +80,7 @@ export default class Index extends Component {
             <AtButton type='primary' onClick={this.modalTicketDisplayShow.bind(this, ticket_id)}>手动提交</AtButton>
           </View>
         </View>
-        <TabBar current="ticket_scan"/>
+        <TicketTabBar />
       </View>
     )
   }

@@ -1,8 +1,8 @@
-import Taro, {Component} from '@tarojs/taro'
+import Taro, { Component } from '@tarojs/taro'
 import Index from './pages/index'
 
 import './app.scss'
-import {login} from "./common/getUserInfo";
+import { login } from "./common/getUserInfo";
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -15,9 +15,11 @@ class App extends Component {
   config = {
     pages: [
       'pages/index/index',
-      'pages/index_new/index',
-      'pages/ticket_show/index',
-      'pages/qrcode_show/index',
+      'pages/user-auth/index',
+      'pages/index-list/index',
+      'pages/index-scan/index',
+      'pages/index-user/index',
+      'pages/ticket-show/index',
     ],
     window: {
       backgroundColor: "#356284",
@@ -36,7 +38,7 @@ class App extends Component {
         Taro.eventCenter.trigger('UnionId')
       })
       .catch(err => {
-        Taro.showModal({confirmColor: '#FF0000', content: err, showCancel: false}).then(() => {
+        Taro.showModal({ confirmColor: '#FF0000', content: err, showCancel: false }).then(() => {
           this.getUid()
         })
       })
@@ -47,25 +49,14 @@ class App extends Component {
     this.getOpenId()
   }
 
-  componentDidMount() {
-  }
-
-  componentDidShow() {
-  }
-
-  componentDidHide() {
-  }
-
-  componentDidCatchError() {
-  }
+  componentDidMount() { }
+  componentDidShow() { }
+  componentDidHide() { }
+  componentDidCatchError() { }
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数
-  render() {
-    return (
-      <Index/>
-    )
-  }
+  render() { return (<Index />) }
 }
 
-Taro.render(<App/>, document.getElementById('app'))
+Taro.render(<App />, document.getElementById('app'))

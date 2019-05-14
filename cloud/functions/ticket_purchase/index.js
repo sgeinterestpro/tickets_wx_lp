@@ -48,7 +48,7 @@ exports.main = async (event, context) => {
           date: _.in(this_weeks)
         }).count().then(res => {
           if (res.total >= 3)
-            return {'code': -1, 'message': '已超过本周领取限额'};
+            return {'code': -1, 'message': '无法领取更多票券'};
           else if (!('date' in data))
             return {'code': -2, 'message': '请求参数出错'};
           else if (!(date_now <= data.date && data.date <= this_weeks[6]))

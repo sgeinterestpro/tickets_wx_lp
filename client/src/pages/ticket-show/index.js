@@ -1,7 +1,11 @@
-import Taro, {Component} from '@tarojs/taro'
-import {Canvas, View} from '@tarojs/components'
+import Taro, { Component } from '@tarojs/taro'
+import { Canvas, View } from '@tarojs/components'
 import drawQrcode from 'weapp-qrcode';
 import './index.scss'
+
+const deviceWidth = 750;
+const qrCodeSize = 400;
+const qrCodeMaxSize = 666;
 
 export default class Index extends Component {
 
@@ -14,7 +18,7 @@ export default class Index extends Component {
   constructor() {
     super(...arguments)
     this.state = {
-      value: ''
+      qrShow: false
     }
   }
 
@@ -22,12 +26,13 @@ export default class Index extends Component {
   }
 
   componentDidMount() {
-    const {id} = this.$router.params
-    this.setState({value: id})
+    const { id } = this.$router.params
+    // this.setState({ value: id })
     Taro.getSystemInfo({
       success: res => {
         // 设置屏幕比例
-        const scale = res.screenWidth / 375;
+        const scale = res.screenWidth / (deviceWidth / 2);
+        drawQrcode()
         this.drawQrCode(id, scale);
       }
     }).then(res => console.log(res));
@@ -50,31 +55,41 @@ export default class Index extends Component {
    */
   drawQrCode = (value, scale = 1) => {
     drawQrcode({
-      width: 200 * scale,
-      height: 200 * scale,
-      canvasId: 'qrCode',
       _this: this.$scope,
+      canvasId: 'qrCode',
+      width: (qrCodeSize / 2) * scale,
+      height: (qrCodeSize / 2) * scale,
+      text: value
+    });
+    drawQrcode({
+      _this: this.$scope,
+      canvasId: 'qrCodeMax',
+      width: (qrCodeMaxSize / 2) * scale,
+      height: (qrCodeMaxSize / 2) * scale,
       text: value
     });
   };
-  onQrCodeClick = (value) => {
+
+  onQrCodeClick = () => {
     console.log("qrClick");
-    Taro.navigateTo({
-      url: `/pages/qrcode_show/index?value=${value}`
-    })
+    const { qrShow } = this.state;
+    this.setState({ qrShow: !qrShow })
   }
 
   render() {
-    const {value} = this.state;
+    const { qrShow } = this.state;
     return (
       <View class='container'>
-        <View class='main'>
-          <View class='qrcode item'>
-            <Canvas className='scanCode' canvasId='qrCode' onClick={this.onQrCodeClick.bind(this, value)}/>
-            <View class='tips'> {value} </View>
+        <View class='qrCodeMax' hidden={!qrShow} onClick={this.onQrCodeClick.bind(this)}>
+          <Canvas className='code' canvasId='qrCodeMax' />
+        </View>
+        <View class='main' hidden={qrShow}>
+          <View class='qrCode item' onClick={this.onQrCodeClick.bind(this)} >
+            <Canvas className='code' canvasId='qrCode' />
+            {/* <View class='tips'> {value} </View> */}
           </View>
-          <View class='round left'/>
-          <View class='round right'/>
+          <View class='round left' />
+          <View class='round right' />
           <View class='intro'>
             <View class='title'>说明：</View>
             <View>1. 有效期至 2019年5月31日。</View>

@@ -1,8 +1,9 @@
-import Taro, {Component} from '@tarojs/taro'
-import {View} from '@tarojs/components'
-import {AtButton, AtList, AtListItem, AtSwipeAction, AtToast} from "taro-ui";
+import Taro from '@tarojs/taro'
+import { View } from '@tarojs/components'
+import { AtButton, AtList, AtListItem, AtSwipeAction, AtToast } from "taro-ui";
 import './index.scss'
-import ModalTicketPurchase from '../modal_ticket_purchase'
+import TicketTabBar from '../../component/tab_bar'
+import ModalTicketPurchase from '../../component/modal_ticket_purchase'
 import {deleteTicket, getTicketList} from "../../apis";
 
 const state_table = {
@@ -11,8 +12,13 @@ const state_table = {
   'used': '已使用'
 }
 
-
-export default class Index extends Component {
+export default class Index extends Taro.Component {
+  config = {
+    navigationBarBackgroundColor: '#383c42',
+    navigationBarTextStyle: 'white',
+    navigationBarTitleText: '票券列表',
+    enablePullDownRefresh: true,
+  };
 
   constructor() {
     super(...arguments);
@@ -26,11 +32,7 @@ export default class Index extends Component {
     }
   }
 
-  componentWillMount() {
-  }
-
   componentDidMount() {
-    this.updateTicketList();
     this.setState({
       toast_loading: true,
       toast_text: '加载中...',
@@ -38,13 +40,8 @@ export default class Index extends Component {
     });
   }
 
-  componentWillUnmount() {
-  }
-
   componentDidShow() {
-  }
-
-  componentDidHide() {
+    this.updateTicketList();
   }
 
   /**
@@ -74,7 +71,7 @@ export default class Index extends Component {
   onTicketClick = (item) => {
     this.setState({open_index: -1});
     Taro.navigateTo({
-      url: `/pages/ticket_show/index?id=${item._id}`
+      url: `/pages/ticket-show/index?id=${item._id}`
     })
   };
 
@@ -152,55 +149,58 @@ export default class Index extends Component {
   };
 
   render() {
-    const {ticket_list, modal_ticket_purchase_show, open_index} = this.state;
-    const {toast_loading, toast_text, toast_status} = this.state;
+    const { ticket_list, modal_ticket_purchase_show, open_index } = this.state;
+    const { toast_loading, toast_text, toast_status } = this.state;
 
     return (
-      <View class='container'>
-        <AtToast isOpened={toast_loading} text={toast_text} status={toast_status} duration={0} hasMask/>
-        <ModalTicketPurchase
-          isOpened={modal_ticket_purchase_show}
-          onHide={this.modalTicketPurchaseHide.bind(this)}
-        />
-        <View class='ticket-list'>
-          <AtList>
-            {ticket_list.length > 0 ? ticket_list.map((item, index) => (
-              <AtSwipeAction
-                key={index}
-                onClick={this.onSwipeActionClick.bind(this, index)}
-                onOpened={this.onSwipeActionOpened.bind(this, index)}
-                isOpened={index === open_index}
-                disabled={!item.enable}
-                autoClose
-                options={[{text: '删除', style: {backgroundColor: '#FF4949'}}]}
-              >
-                <AtListItem
-                  className='item'
-                  title={item.title}
-                  note={item.date}
-                  disabled={!item.enable}
-                  extraText={item.state}
-                  arrow='right'
-                  thumb='https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png'
-                  onClick={this.onTicketClick.bind(this, item)}
-                />
-              </AtSwipeAction>
-            )) : <AtListItem
-              className='item'
-              title='本周还未领取优惠券'
-            />}
-          </AtList>
+      <View>
+        <View class='container'>
+          <AtToast isOpened={toast_loading} text={toast_text} status={toast_status} duration={0} hasMask />
+          <ModalTicketPurchase
+            isOpened={modal_ticket_purchase_show}
+            onHide={this.modalTicketPurchaseHide.bind(this)}
+          />
+          <View class='ticket-list'>
+            <AtList>
+              {ticket_list.length > 0 ?
+                ticket_list.map((item, index) => (
+                  <AtSwipeAction
+                    key={index}
+                    onClick={this.onSwipeActionClick.bind(this, index)}
+                    onOpened={this.onSwipeActionOpened.bind(this, index)}
+                    isOpened={index === open_index}
+                    disabled={!item.enable}
+                    autoClose
+                    options={[{ text: '删除', style: { backgroundColor: '#FF4949' } }]}
+                  >
+                    <AtListItem
+                      className='item'
+                      title={item.title}
+                      note={item.date}
+                      disabled={!item.enable}
+                      extraText={item.state}
+                      arrow='right'
+                      thumb='https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png'
+                      onClick={this.onTicketClick.bind(this, item)}
+                    />
+                  </AtSwipeAction>
+                )) :
+                <AtListItem className='item' title='本周还未领取优惠券' />
+              }
+            </AtList>
+          </View>
+          <View class='ticket-apply'>
+            <AtButton
+              type='secondary'
+              circle
+              disabled={ticket_list.length >= 3}
+              onClick={this.modalTicketPurchaseShow.bind(this)}
+            >
+              {ticket_list.length >= 3 ? '没有领取额度了' : `本周还可领取${3 - ticket_list.length}张`}
+            </AtButton>
+          </View>
         </View>
-        <View class='ticket-apply'>
-          <AtButton
-            type='secondary'
-            circle
-            disabled={ticket_list.length >= 3}
-            onClick={this.modalTicketPurchaseShow.bind(this)}
-          >
-            {ticket_list.length >= 3 ? '没有领取额度了' : `本周还可领取${3 - ticket_list.length}张`}
-          </AtButton>
-        </View>
+        <TicketTabBar />
       </View>
     )
   }
