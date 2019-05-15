@@ -1,9 +1,9 @@
 import Taro from '@tarojs/taro'
-import {Image, View} from '@tarojs/components'
-import {AtList, AtListItem} from 'taro-ui';
+import { Image, View } from '@tarojs/components'
+import { AtList, AtListItem } from 'taro-ui';
 import './index.scss'
 import bg from '../../img/bg.png'
-import {getAvailableTickets} from "../../apis";
+import { getAvailableTickets } from "../../apis";
 
 export default class Index extends Taro.Component {
   config = {
@@ -51,24 +51,24 @@ export default class Index extends Taro.Component {
   };
 
   render() {
-    const {tickets} = this.state;
+    const { tickets } = this.state;
 
     return (
       <View className='page page-index'>
         <View className='module-list at-row'>
-          <Image className='module-list__bg' mode='widthFix' src={bg}/>
+          <Image className='module-list__bg' mode='widthFix' src={bg} />
           <View className='module-list__item at-col'>
-            <View className='module-list__item__icon at-icon at-icon-shopping-bag'/>
+            <View className='module-list__item__icon at-icon at-icon-shopping-bag' />
             <View className='module-list__item__title'>领取</View>
           </View>
           <View className='module-list__item at-col' onClick={this.onScanClick.bind(this)}>
-            <View className='module-list__item__icon at-icon at-icon-search'/>
+            <View className='module-list__item__icon at-icon at-icon-search' />
             <View className='module-list__item__title'>使用</View>
           </View>
         </View>
         <View className='ticket-link'>
           <AtListItem className='ticket-link__item' title='我的票券' hasBorder={false} arrow='right'
-                      iconInfo={{size: 25, color: '#78A4FA', value: 'tags',}}/>
+            iconInfo={{ size: 25, color: '#78A4FA', value: 'tags', }} />
         </View>
         <View className='ticket-list'>
           <View className='ticket-list__title'>可用票券</View>

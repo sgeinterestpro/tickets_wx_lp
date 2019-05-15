@@ -11,7 +11,6 @@ import { login } from "./common/getUserInfo";
 // }
 
 class App extends Component {
-
   config = {
     pages: [
       'pages/index/index',
@@ -30,6 +29,14 @@ class App extends Component {
     }
   }
 
+  constructor() {
+    super(...arguments);
+    Taro.cloud.init();
+  }
+
+  componentDidShow() {
+    this.getOpenId()
+  }
 
   getOpenId = () => {
     login(`/${this.$router.params.path}`)
@@ -43,16 +50,6 @@ class App extends Component {
         })
       })
   }
-
-  componentWillMount() {
-    Taro.cloud.init();
-    this.getOpenId()
-  }
-
-  componentDidMount() { }
-  componentDidShow() { }
-  componentDidHide() { }
-  componentDidCatchError() { }
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数
