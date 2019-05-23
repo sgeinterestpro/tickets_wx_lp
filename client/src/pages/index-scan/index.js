@@ -1,10 +1,9 @@
 import Taro from '@tarojs/taro'
-import { View } from '@tarojs/components'
-import { AtButton, AtInput, AtToast } from 'taro-ui'
+import {View} from '@tarojs/components'
+import {AtButton, AtInput} from 'taro-ui'
 import './index.scss'
 import TicketTabBar from '../../component/tab_bar'
 import ModalTicketDisplay from "../../component/modal_ticket_checked";
-import { useTicket } from "../../apis";
 
 export default class Index extends Taro.Component {
   config = {
@@ -27,7 +26,7 @@ export default class Index extends Taro.Component {
    * @param value
    */
   handleInputChange = (value) => {
-    this.setState({ ticket_id: value })
+    this.setState({ticket_id: value})
   };
 
   /**
@@ -60,7 +59,7 @@ export default class Index extends Taro.Component {
   };
 
   render() {
-    const { ticket_id, modal_ticket_display_show } = this.state;
+    const {ticket_id, modal_ticket_display_show} = this.state;
     return (
       <View class='container'>
         <ModalTicketDisplay
@@ -71,7 +70,7 @@ export default class Index extends Taro.Component {
         <View class='main'>
           <View class='input-container'>
             <AtInput border={false} value={ticket_id} onChange={this.handleInputChange.bind(this)}
-              placeholder='手动输入电子票券'
+                     placeholder='手动输入电子票券'
             >
               <AtButton type='primary' onClick={this.onBtnScanClick.bind(this)}>扫描</AtButton>
             </AtInput>
@@ -80,7 +79,7 @@ export default class Index extends Taro.Component {
             <AtButton type='primary' onClick={this.modalTicketDisplayShow.bind(this, ticket_id)}>手动提交</AtButton>
           </View>
         </View>
-        <TicketTabBar />
+        <TicketTabBar/>
       </View>
     )
   }

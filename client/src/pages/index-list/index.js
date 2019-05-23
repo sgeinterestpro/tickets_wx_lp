@@ -1,16 +1,13 @@
 import Taro from '@tarojs/taro'
-import { View } from '@tarojs/components'
-import { AtButton, AtList, AtListItem, AtSwipeAction, AtToast } from "taro-ui";
+import {View} from '@tarojs/components'
+import {AtButton, AtList, AtListItem, AtSwipeAction, AtToast} from "taro-ui";
 import './index.scss'
+import config from "../../config.json";
 import TicketTabBar from '../../component/tab_bar'
 import ModalTicketPurchase from '../../component/modal_ticket_purchase'
-import { deleteTicket, getTicketList } from "../../apis";
+import {deleteTicket, getTicketList} from "../../apis";
 
-const state_table = {
-  'unused': '未使用',
-  'expired': '已过期',
-  'used': '已使用'
-}
+const state_table = config['ticketState'];
 
 export default class Index extends Taro.Component {
   config = {
@@ -57,12 +54,12 @@ export default class Index extends Taro.Component {
           })
       });
       Taro.stopPullDownRefresh();
-      Taro.showToast({ title: '加载成功', icon: 'none', duration: 500 });
-      this.setState({ ticket_list: ticket_list_new, open_index: -1, toast_loading: false });
+      Taro.showToast({title: '加载成功', icon: 'none', duration: 500});
+      this.setState({ticket_list: ticket_list_new, open_index: -1, toast_loading: false});
     }).catch(err => {
       console.error(err);
       Taro.stopPullDownRefresh();
-      Taro.showToast({ title: '加载失败', icon: 'none', duration: 500 });
+      Taro.showToast({title: '加载失败', icon: 'none', duration: 500});
     });
   };
 
@@ -71,7 +68,7 @@ export default class Index extends Taro.Component {
    * @param item 票券参数
    */
   onTicketClick = (item) => {
-    this.setState({ open_index: -1 });
+    this.setState({open_index: -1});
     Taro.navigateTo({
       url: `/pages/ticket-show/index?id=${item._id}`
     })
@@ -84,7 +81,7 @@ export default class Index extends Taro.Component {
    */
   onSwipeActionOpened = (index) => {
     console.log('onSwipeActionOpened', index);
-    this.setState({ open_index: index })
+    this.setState({open_index: index})
   };
 
   /**
@@ -94,7 +91,7 @@ export default class Index extends Taro.Component {
    */
   onSwipeActionClick = (index) => {
     //todo 增加删除确认
-    const { ticket_list } = this.state;
+    const {ticket_list} = this.state;
     const ticket = ticket_list[index];
     Taro.showModal({
       title: '删除确认',
@@ -114,7 +111,7 @@ export default class Index extends Taro.Component {
               toast_text: '删除失败',
               toast_status: 'error',
             });
-            Taro.showModal({ content: res.message, showCancel: false });
+            Taro.showModal({content: res.message, showCancel: false});
           } else {
             this.setState({
               toast_loading: true,
@@ -137,7 +134,7 @@ export default class Index extends Taro.Component {
    * 领取新票券按钮点击
    */
   modalTicketPurchaseShow = () => {
-    this.setState({ open_index: -1, modal_ticket_purchase_show: true });
+    this.setState({open_index: -1, modal_ticket_purchase_show: true});
   };
 
   /**
@@ -147,17 +144,17 @@ export default class Index extends Taro.Component {
   modalTicketPurchaseHide = (res) => {
     console.log('res', res);
     if (res) this.updateTicketList();
-    this.setState({ modal_ticket_purchase_show: false })
+    this.setState({modal_ticket_purchase_show: false})
   };
 
   render() {
-    const { ticket_list, modal_ticket_purchase_show, open_index } = this.state;
-    const { toast_loading, toast_text, toast_status } = this.state;
+    const {ticket_list, modal_ticket_purchase_show, open_index} = this.state;
+    const {toast_loading, toast_text, toast_status} = this.state;
 
     return (
       <View>
         <View class='container'>
-          <AtToast isOpened={toast_loading} text={toast_text} status={toast_status} duration={0} hasMask />
+          <AtToast isOpened={toast_loading} text={toast_text} status={toast_status} duration={0} hasMask/>
           <ModalTicketPurchase
             isOpened={modal_ticket_purchase_show}
             onHide={this.modalTicketPurchaseHide.bind(this)}
@@ -173,7 +170,7 @@ export default class Index extends Taro.Component {
                     isOpened={index === open_index}
                     disabled={!item.enable}
                     autoClose
-                    options={[{ text: '删除', style: { backgroundColor: '#FF4949' } }]}
+                    options={[{text: '删除', style: {backgroundColor: '#FF4949'}}]}
                   >
                     <AtListItem
                       className='item'
@@ -187,7 +184,7 @@ export default class Index extends Taro.Component {
                     />
                   </AtSwipeAction>
                 )) :
-                <AtListItem className='item' title='本周还未领取优惠券' />
+                <AtListItem className='item' title='本周还未领取优惠券'/>
               }
             </AtList>
           </View>
@@ -202,7 +199,7 @@ export default class Index extends Taro.Component {
             </AtButton>
           </View>
         </View>
-        <TicketTabBar />
+        <TicketTabBar/>
       </View>
     )
   }

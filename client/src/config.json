@@ -1,0 +1,36 @@
+{
+  "roleList": {
+    "user": "组员",
+    "admin": "管理员",
+    "checker": "一兆韦德"
+  },
+  "roleTabUrls": {
+    "other": [
+      {"id": "Ticket_User","url": "/pages/index-user/index","title": "我","iconType": "user","text": "new"}
+    ],
+    "user": [
+      {"id": "Ticket_List","url": "/pages/index-list/index","title": "票券夹","iconType": "tags","text": "1","max": "99"},
+      {"id": "Ticket_User","url": "/pages/index-user/index","title": "我","iconType": "user","text": "new"}
+    ],
+    "admin": [
+      {"id": "Ticket_Manage","url": "/pages/index-manage/index","title": "管理","iconType": "search"},
+      {"id": "Ticket_User","url": "/pages/index-user/index","title": "我","iconType": "user","text": "new"}
+    ],
+    "checker": [
+      {"id": "Ticket_Scan","url": "/pages/index-scan/index","title": "使用","iconType": "search"},
+      {"id": "Ticket_User","url": "/pages/index-user/index","title": "我","iconType": "user","text": "new"}
+    ]
+  },
+  "authUrl": "/pages/user-auth/index",
+  "defaultRoleUrl":{
+    "other": "/pages/index-user/index",
+    "user": "/pages/index-list/index",
+    "admin": "/pages/index-manage/index",
+    "checker": "/pages/index-scan/index"
+  },
+  "ticketState": {
+    "unused": "未使用",
+    "expired": "已过期",
+    "used": "已使用"
+  }
+}

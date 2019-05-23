@@ -16,6 +16,7 @@ class App extends Component {
       'pages/index/index',
       'pages/user-auth/index',
       'pages/index-list/index',
+      'pages/index-manage/index',
       'pages/index-scan/index',
       'pages/index-user/index',
       'pages/ticket-show/index',

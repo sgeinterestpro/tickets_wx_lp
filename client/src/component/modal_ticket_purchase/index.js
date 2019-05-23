@@ -2,8 +2,9 @@ import Taro, {Component} from '@tarojs/taro'
 import {Button, Picker, Text, View} from '@tarojs/components'
 import {AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from 'taro-ui'
 import './index.scss'
-import getWeek from "../../common/getWeek";
+import {getWeekDay, getNowDay} from "../../common/getWeek";
 import {applyNewTicket} from "../../apis";
+import {ClassType} from "../../common/conv";
 
 export default class Index extends Component {
 
@@ -19,8 +20,8 @@ export default class Index extends Component {
       toast_loading: false,
       toast_text: '加载中...',
       toast_status: 'loading',
-      eventShow: ['羽毛球', '乒乓球', '游泳'],
-      eventValue: ['badminton', 'pingpang', 'swim'],
+      eventShow: ClassType.getNameList(),
+      eventValue: ClassType.getCodeList(),
       eventSelect: 1,
       dateSel: [year, month, day].join('-')
     }
@@ -65,8 +66,8 @@ export default class Index extends Component {
     const {isOpened} = this.props;
     const {eventShow, eventSelect, dateSel} = this.state;
     const {toast_loading, toast_text, toast_status} = this.state;
-    const dateStart = getWeek(0);
-    const dateEnd = getWeek(6);
+    const dateStart = getNowDay();
+    const dateEnd = getWeekDay(6);
     return (
       isOpened &&
       <View class='container'>
