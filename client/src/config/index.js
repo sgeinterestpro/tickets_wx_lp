@@ -1,8 +1,21 @@
+/**
+ * muumlover@2019-05-27
+ * 配置文件
+ */
+
+/**
+ * 角色列表
+ * @type {{admin: string, checker: string, user: string}}
+ */
 export const roleList = {
   "user": "组员",
   "admin": "管理员",
   "checker": "一兆韦德"
 };
+/**
+ * 每个角色的可访问页面
+ * @type {{other: {iconType: string, id: string, title: string, url: string}[], admin: *[], checker: *[], user: *[]}}
+ */
 export const roleTabUrls = {
   "other": [
     {"id": "UserInfo", "url": "/pages/user-info/index", "title": "用户中心", "iconType": "user"}
@@ -21,13 +34,36 @@ export const roleTabUrls = {
     {"id": "UserInfo", "url": "/pages/user-info/index", "title": "用户中心", "iconType": "user"}
   ]
 };
+/**
+ * 用户授权页面
+ * @type {string}
+ */
 export const defaultAuthUrl = "/pages/user-auth/index";
+/**
+ * 每个角色的默认页面路径
+ * @type {{other: string, admin: string, checker: string, user: string}}
+ */
 export const defaultRoleUrl = {
   "other": "/pages/user-info/index",
   "user": "/pages/ticket-package/index",
   "admin": "/pages/ticket-manage/index",
   "checker": "/pages/ticker-scan/index"
 };
+/**
+ * 运动项目类型代码显示
+ * @type {{"100": string, "101": string, "102": string, "103": string, "104": string}}
+ */
+export const ticketClass = {
+  100: '羽毛球',
+  101: '篮球',
+  102: '足球',
+  103: '游泳',
+  104: '瑜伽',
+};
+/**
+ * 票券状态代码显示
+ * @type {{expired: string, unused: string, used: string}}
+ */
 export const ticketState = {
   "unused": "未使用",
   "expired": "已过期",

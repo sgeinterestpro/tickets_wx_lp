@@ -7,9 +7,9 @@ import Taro, {Component} from '@tarojs/taro'
 import {Button, Picker, Text, View} from '@tarojs/components'
 import {AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from 'taro-ui'
 import './index.scss'
-import {getWeekDay, getNowDay} from "../../common/getWeek";
+import {ticketClass} from "../../config";
+import {getNowDay, getWeekDay} from "../../common/getWeek";
 import {applyNewTicket} from "../../apis";
-import {ClassType} from "../../common/conv";
 
 export default class Index extends Component {
 
@@ -25,8 +25,8 @@ export default class Index extends Component {
       toast_loading: false,
       toast_text: '加载中...',
       toast_status: 'loading',
-      eventShow: ClassType.getNameList(),
-      eventValue: ClassType.getCodeList(),
+      eventShow: Object.values(ticketClass),
+      eventValue: Object.keys(ticketClass),
       eventSelect: 1,
       dateSel: [year, month, day].join('-')
     }
