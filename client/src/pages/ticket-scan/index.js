@@ -1,9 +1,16 @@
+/**
+ * muumlover@2019-05-27
+ * 票券扫描页面
+ * 1、提供扫描票券功能
+ * 2、显示票券信息供人工核实
+ * 3、TODO 显示扫描历史
+ */
 import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import {AtButton, AtInput} from 'taro-ui'
 import './index.scss'
-import TicketTabBar from '../../component/tab_bar'
-import ModalTicketDisplay from "../../component/modal_ticket_checked";
+import TicketTabBar from '../../component/tab-bar'
+import ModalTicketDisplay from "../../component/modal-ticket-checked";
 
 export default class Index extends Taro.Component {
   config = {
@@ -16,8 +23,8 @@ export default class Index extends Taro.Component {
   constructor() {
     super(...arguments);
     this.state = {
-      ticket_id: "",
-      modal_ticket_display_show: false
+      ticketId: "",
+      modalTicketDisplayShow: false
     }
   }
 
@@ -26,7 +33,7 @@ export default class Index extends Taro.Component {
    * @param value
    */
   handleInputChange = (value) => {
-    this.setState({ticket_id: value})
+    this.setState({ticketId: value})
   };
 
   /**
@@ -37,46 +44,45 @@ export default class Index extends Taro.Component {
   };
 
   /**
-   * 显示券详情
-   * @constructor
+   * 显示票券详情对话框
+   * @param ticketId 票券ID
    */
-  modalTicketDisplayShow = (ticket_id) => {
+  modalTicketDisplayShow = (ticketId) => {
     this.setState({
-      ticket_id: ticket_id,
-      modal_ticket_display_show: true,
+      ticketId: ticketId,
+      modalTicketDisplayShow: true,
     })
   };
 
   /**
-   * 关闭券详情
-   * @constructor
+   * 关闭券详情对话框操作
    */
   modalTicketDisplayHide = () => {
     this.setState({
-      ticket_id: '',
-      modal_ticket_display_show: false
+      ticketId: '',
+      modalTicketDisplayShow: false
     })
   };
 
   render() {
-    const {ticket_id, modal_ticket_display_show} = this.state;
+    const {ticketId, modalTicketDisplayShow} = this.state;
     return (
       <View class='container'>
         <ModalTicketDisplay
-          isOpened={modal_ticket_display_show}
+          isOpened={modalTicketDisplayShow}
           onReturn={this.modalTicketDisplayHide.bind(this)}
-          ticket_id={ticket_id}
+          ticketId={ticketId}
         />
         <View class='main'>
           <View class='input-container'>
-            <AtInput border={false} value={ticket_id} onChange={this.handleInputChange.bind(this)}
+            <AtInput border={false} value={ticketId} onChange={this.handleInputChange.bind(this)}
                      placeholder='手动输入电子票券'
             >
               <AtButton type='primary' onClick={this.onBtnScanClick.bind(this)}>扫描</AtButton>
             </AtInput>
           </View>
           <View class='btn-submit'>
-            <AtButton type='primary' onClick={this.modalTicketDisplayShow.bind(this, ticket_id)}>手动提交</AtButton>
+            <AtButton type='primary' onClick={this.modalTicketDisplayShow.bind(this, ticketId)}>手动提交</AtButton>
           </View>
         </View>
         <TicketTabBar/>

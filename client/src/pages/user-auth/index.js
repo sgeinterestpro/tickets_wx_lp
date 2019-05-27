@@ -1,6 +1,11 @@
-import Taro, { redirectTo } from '@tarojs/taro'
-import { View } from '@tarojs/components'
-import { AtButton } from 'taro-ui'
+/**
+ * muumlover@2019-05-27
+ * 用户授权页面
+ * 1、用户授权按钮
+ */
+import Taro, {redirectTo} from '@tarojs/taro'
+import {View} from '@tarojs/components'
+import {AtButton} from 'taro-ui'
 import './index.scss'
 
 export default class Index extends Taro.Component {
@@ -13,15 +18,13 @@ export default class Index extends Taro.Component {
 
   constructor() {
     super(...arguments);
-    this.state = {
-
-    }
+    this.state = {}
   }
 
   onGetUserInfo = (res) => {
     console.debug(res);
-    redirectTo({url:'/pages/index/index'})
-  }
+    redirectTo({url: '/pages/index/index'})
+  };
 
   render() {
     return (
@@ -35,7 +38,7 @@ export default class Index extends Taro.Component {
           size='normal'
           onGetUserInfo={this.onGetUserInfo.bind(this)}
         >
-          按钮文案
+          点击登陆
         </AtButton>
       </View>
     )

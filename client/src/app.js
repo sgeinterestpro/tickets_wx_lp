@@ -14,12 +14,13 @@ class App extends Component {
   config = {
     pages: [
       'pages/index/index',
-      'pages/user-auth/index',
-      'pages/index-list/index',
-      'pages/index-manage/index',
-      'pages/index-scan/index',
-      'pages/index-user/index',
+      'pages/ticket-package/index',
+      'pages/ticket-manage/index',
+      'pages/ticket-scan/index',
       'pages/ticket-show/index',
+      'pages/user-auth/index',
+      'pages/user-info/index',
+      'pages/user-manage/index',
     ],
     window: {
       backgroundColor: "#356284",

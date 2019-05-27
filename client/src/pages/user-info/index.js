@@ -2,10 +2,8 @@ import Taro from '@tarojs/taro'
 import {OpenData, Picker, View} from '@tarojs/components'
 import {AtAvatar} from 'taro-ui'
 import './index.scss'
-import config from "../../config.json";
-import TicketTabBar from '../../component/tab_bar'
-
-const roleList = config['roleList'];
+import {roleList} from "../../config";
+import TicketTabBar from '../../component/tab-bar'
 
 export default class Index extends Taro.Component {
   config = {
@@ -18,8 +16,8 @@ export default class Index extends Taro.Component {
   constructor() {
     super(...arguments);
     this.state = {
-      ticket_num: '',
-      role_select: ''
+      ticketNum: '',
+      roleSelect: ''
     }
   }
 
@@ -30,7 +28,7 @@ export default class Index extends Taro.Component {
     const role = Taro.getStorageSync('role') || 'other';
     const role_keys = Object.keys(roleList);
     this.setState({
-      role_select: role_keys.indexOf(role)
+      roleSelect: role_keys.indexOf(role)
     })
   }
 
@@ -44,18 +42,18 @@ export default class Index extends Taro.Component {
   }
 
   onRoleChange = e => {
-    const role_select = e.detail.value;
+    const roleSelect = e.detail.value;
     const role_keys = Object.keys(roleList);
     const role_key = role_keys[e.detail.value];
     Taro.setStorageSync('role', role_key);
-    this.setState({role_select});
-    Taro.reLaunch({url: '/pages/index-user/index'});
+    this.setState({roleSelect});
+    Taro.reLaunch({url: '/pages/user-info/index'});
   };
 
   render() {
-    const {role_select} = this.state;
+    const {roleSelect} = this.state;
     const role_values = Object.values(roleList);
-    console.log(role_select);
+    console.log(roleSelect);
     return (
       <View class='container'>
         <View class='main'>
@@ -68,10 +66,10 @@ export default class Index extends Taro.Component {
         </View>
         <View class='item-list'>
           <View class='item'>
-            <Picker mode='selector' range={role_values} value={role_select}
+            <Picker mode='selector' range={role_values} value={roleSelect}
                     onChange={this.onRoleChange.bind(this)}>
               <View className='picker'>
-                当前选择：{role_values[role_select]}
+                当前选择：{role_values[roleSelect]}
               </View>
             </Picker>
           </View>

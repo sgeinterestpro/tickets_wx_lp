@@ -3,9 +3,7 @@ import {View} from '@tarojs/components'
 import {AtTabBar} from "taro-ui";
 import './index.scss'
 import getCurrentPageUrl from '../../common/getCurrentPageUrl'
-import config from '../../config.json'
-
-const roleTabUrls = config['roleTabUrls'];
+import {roleTabUrls} from '../../config'
 
 export default class Index extends Taro.Component {
   config = {};

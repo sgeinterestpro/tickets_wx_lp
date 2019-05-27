@@ -2,12 +2,10 @@ import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import {AtButton, AtList, AtListItem, AtSwipeAction, AtToast} from "taro-ui";
 import './index.scss'
-import config from "../../config.json";
-import TicketTabBar from '../../component/tab_bar'
-import ModalTicketPurchase from '../../component/modal_ticket_purchase'
+import {ticketState} from "../../config";
+import TicketTabBar from '../../component/tab-bar'
+import ModalTicketPurchase from '../../component/modal-ticket-purchase'
 import {deleteTicket, getTicketList} from "../../apis";
-
-const state_table = config['ticketState'];
 
 export default class Index extends Taro.Component {
   config = {
@@ -49,7 +47,7 @@ export default class Index extends Taro.Component {
             _id: item._id,
             title: item.title,
             date: item.date,
-            state: state_table[item.state],
+            state: ticketState[item.state],
             enable: item.state === 'unused',
           })
       });
