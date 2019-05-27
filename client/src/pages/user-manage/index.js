@@ -1,3 +1,9 @@
+/**
+ * muumlover@2019-05-27
+ * 用户信息页面
+ * 1、TODO 查看所有用户
+ * 2、TODO 新增用户、删除用户
+ */
 import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import {AtButton, AtList, AtListItem, AtSwipeAction, AtToast} from "taro-ui";

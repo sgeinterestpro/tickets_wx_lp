@@ -1,3 +1,8 @@
+/**
+ * muumlover@2019-05-27
+ * 票券领取对话框
+ * 1、显示日期和可领取项目
+ */
 import Taro, {Component} from '@tarojs/taro'
 import {Button, Picker, Text, View} from '@tarojs/components'
 import {AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from 'taro-ui'

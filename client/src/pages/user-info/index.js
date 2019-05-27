@@ -1,3 +1,10 @@
+/**
+ * muumlover@2019-05-27
+ * 用户信息页面
+ * 1、用户信息显示
+ * 2、用户信息修改功能
+ * 3、用户角色切换
+ */
 import Taro from '@tarojs/taro'
 import {OpenData, Picker, View} from '@tarojs/components'
 import {AtAvatar} from 'taro-ui'

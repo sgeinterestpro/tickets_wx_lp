@@ -1,3 +1,8 @@
+/**
+ * muumlover@2019-05-27
+ * 票券检查对话框
+ * 1、显示票券和领取用户的基本信息
+ */
 import Taro, {Component} from '@tarojs/taro'
 import {Button, Text, View} from '@tarojs/components'
 import {AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from 'taro-ui'

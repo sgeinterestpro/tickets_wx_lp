@@ -1,3 +1,10 @@
+/**
+ * muumlover@2019-05-27
+ * 底部导航栏模块
+ * 1、根据用户角色动态切换导航栏
+ * 2、导航栏链接跳转
+ */
+
 import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import {AtTabBar} from "taro-ui";
@@ -16,6 +23,9 @@ export default class Index extends Taro.Component {
     }
   }
 
+  /**
+   * 导航栏即将加载事件，更新图标激活显示
+   */
   componentWillMount() {
     const {role} = this.state;
     const currentUrl = `/${getCurrentPageUrl()}`;
@@ -29,6 +39,10 @@ export default class Index extends Taro.Component {
     });
   }
 
+  /**
+   * 处理导航栏点击事件
+   * @param currentNext 目标导航页面
+   */
   handleClick = currentNext => {
     const {current, role} = this.state;
     if (currentNext !== current) {

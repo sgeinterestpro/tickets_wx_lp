@@ -2,6 +2,7 @@
  * muumlover@2019-05-27
  * 用户授权页面
  * 1、用户授权按钮
+ * 2、TODO 用户信息获取
  */
 import Taro, {redirectTo} from '@tarojs/taro'
 import {View} from '@tarojs/components'
