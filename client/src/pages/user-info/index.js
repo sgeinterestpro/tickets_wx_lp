@@ -28,24 +28,12 @@ export default class Index extends Taro.Component {
     }
   }
 
-  componentWillMount() {
-  }
-
   componentDidMount() {
     const role = Taro.getStorageSync('role') || 'other';
     const role_keys = Object.keys(roleList);
     this.setState({
       roleSelect: role_keys.indexOf(role)
     })
-  }
-
-  componentWillUnmount() {
-  }
-
-  componentDidShow() {
-  }
-
-  componentDidHide() {
   }
 
   onRoleChange = e => {
@@ -60,7 +48,6 @@ export default class Index extends Taro.Component {
   render() {
     const {roleSelect} = this.state;
     const role_values = Object.values(roleList);
-    console.log(roleSelect);
     return (
       <View class='container'>
         <View class='main'>

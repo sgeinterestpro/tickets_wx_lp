@@ -9,7 +9,7 @@ import {AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from 'ta
 import './index.scss'
 import {ticketClass} from "../../config";
 import {getNowDay, getWeekDay} from "../../common/getWeek";
-import {applyNewTicket} from "../../apis";
+import {purchaseTicket} from "../../apis";
 
 export default class Index extends Component {
 
@@ -22,9 +22,9 @@ export default class Index extends Component {
     month = (month.length === 1) ? '0' + month : month;
     day = (day.length === 1) ? '0' + day : day;
     this.state = {
-      toast_loading: false,
-      toast_text: '加载中...',
-      toast_status: 'loading',
+      toastLoading: false,
+      toastText: '加载中...',
+      toastStatus: 'loading',
       eventShow: Object.values(ticketClass),
       eventValue: Object.keys(ticketClass),
       eventSelect: 1,
@@ -52,9 +52,9 @@ export default class Index extends Component {
       title: eventShow[eventSelect],
       date: dateSel,
     };
-    this.setState({toast_loading: true, toast_text: '领取中...', toast_status: 'loading'});
-    applyNewTicket(data).then(res => {
-      this.setState({toast_loading: false});
+    this.setState({toastLoading: true, toastText: '领取中...', toastStatus: 'loading'});
+    purchaseTicket(data).then(res => {
+      this.setState({toastLoading: false});
       if (res.code !== 0) {
         Taro.showModal({content: res.message, showCancel: false});
       } else {
@@ -70,13 +70,13 @@ export default class Index extends Component {
   render() {
     const {isOpened} = this.props;
     const {eventShow, eventSelect, dateSel} = this.state;
-    const {toast_loading, toast_text, toast_status} = this.state;
+    const {toastLoading, toastText, toastStatus} = this.state;
     const dateStart = getNowDay();
     const dateEnd = getWeekDay(6);
     return (
       isOpened &&
       <View class='container'>
-        <AtToast isOpened={toast_loading} text={toast_text} status={toast_status} duration={0} hasMask/>
+        <AtToast isOpened={toastLoading} text={toastText} status={toastStatus} duration={0} hasMask/>
         <AtModal isOpened={isOpened}>
           <AtModalHeader>领券中心</AtModalHeader>
           <AtModalContent>

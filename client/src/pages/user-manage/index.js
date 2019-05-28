@@ -11,7 +11,7 @@ import './index.scss'
 import {ticketState} from "../../config";
 import TicketTabBar from '../../component/tab-bar'
 import ModalTicketPurchase from '../../component/modal-ticket-purchase'
-import {deleteTicket, getTicketList} from "../../apis";
+import {refundTicket, ticketPackage} from "../../apis";
 
 export default class Index extends Taro.Component {
   config = {
@@ -45,7 +45,7 @@ export default class Index extends Taro.Component {
    * 更新票券列表显示
    */
   updateTicketList = () => {
-    getTicketList().then(res => {
+    ticketPackage().then(res => {
       let ticket_list_new = [];
       res.items.map((item) => {
         ticket_list_new.push(
@@ -107,7 +107,7 @@ export default class Index extends Taro.Component {
     }).then(res => !res.confirm && res.cancel).then(confirm => {
       if (confirm) {
         console.log(ticket._id);
-        deleteTicket(ticket._id).then(res => {
+        refundTicket(ticket._id).then(res => {
           this.updateTicketList();
           if (res.code !== 0) {
             this.setState({

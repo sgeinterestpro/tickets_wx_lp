@@ -70,7 +70,7 @@ export default class Index extends Taro.Component {
       <View class='container'>
         <ModalTicketDisplay
           isOpened={modalTicketDisplayShow}
-          onReturn={this.modalTicketDisplayHide.bind(this)}
+          onHide={this.modalTicketDisplayHide.bind(this)}
           ticketId={ticketId}
         />
         <View class='main'>

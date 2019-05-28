@@ -47,18 +47,18 @@ export const defaultRoleUrl = {
   "other": "/pages/user-info/index",
   "user": "/pages/ticket-package/index",
   "admin": "/pages/ticket-manage/index",
-  "checker": "/pages/ticker-scan/index"
+  "checker": "/pages/ticket-scan/index"
 };
 /**
  * 运动项目类型代码显示
  * @type {{"100": string, "101": string, "102": string, "103": string, "104": string}}
  */
 export const ticketClass = {
-  100: '羽毛球',
-  101: '篮球',
-  102: '足球',
-  103: '游泳',
-  104: '瑜伽',
+  'badminton': '羽毛球',
+  'basketball': '篮球',
+  'football': '足球',
+  'swim': '游泳',
+  'yoga': '瑜伽',
 };
 /**
  * 票券状态代码显示

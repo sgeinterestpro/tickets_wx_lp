@@ -1,29 +1,29 @@
 import Taro from '@tarojs/taro'
-import {View} from '@tarojs/components'
-import {AtButton, AtList, AtListItem, AtSwipeAction, AtToast} from "taro-ui";
+import {Text, View} from '@tarojs/components'
+import {AtButton, AtProgress, AtToast} from "taro-ui";
 import './index.scss'
 import {ticketState} from "../../config";
 import TicketTabBar from '../../component/tab-bar'
 import ModalTicketPurchase from '../../component/modal-ticket-purchase'
-import {deleteTicket, getTicketList} from "../../apis";
+import {refundTicket, ticketGenerate, ticketPackage} from "../../apis";
 
 export default class Index extends Taro.Component {
   config = {
     navigationBarBackgroundColor: '#383c42',
     navigationBarTextStyle: 'white',
-    navigationBarTitleText: '票券列表',
+    navigationBarTitleText: '票券管理',
     enablePullDownRefresh: true,
   };
 
   constructor() {
     super(...arguments);
     this.state = {
-      toast_loading: false,
-      toast_text: '加载中...',
-      toast_status: 'loading',
-      modal_ticket_purchase_show: false,
-      open_index: -1,
-      ticket_list: []
+      toastLoading: false,
+      toastText: '加载中...',
+      toastStatus: 'loading',
+      modalTicketPurchaseShow: false,
+      openIndex: -1,
+      ticketList: []
     }
   }
 
@@ -39,10 +39,10 @@ export default class Index extends Taro.Component {
    * 更新票券列表显示
    */
   updateTicketList = () => {
-    getTicketList().then(res => {
-      let ticket_list_new = [];
+    ticketPackage().then(res => {
+      let ticketList_new = [];
       res.items.map((item) => {
-        ticket_list_new.push(
+        ticketList_new.push(
           {
             _id: item._id,
             title: item.title,
@@ -53,7 +53,7 @@ export default class Index extends Taro.Component {
       });
       Taro.stopPullDownRefresh();
       Taro.showToast({title: '加载成功', icon: 'none', duration: 500});
-      this.setState({ticket_list: ticket_list_new, open_index: -1, toast_loading: false});
+      this.setState({ticketList: ticketList_new, openIndex: -1, toastLoading: false});
     }).catch(err => {
       console.error(err);
       Taro.stopPullDownRefresh();
@@ -66,7 +66,7 @@ export default class Index extends Taro.Component {
    * @param item 票券参数
    */
   onTicketClick = (item) => {
-    this.setState({open_index: -1});
+    this.setState({openIndex: -1});
     Taro.navigateTo({
       url: `/pages/ticket-show/index?id=${item._id}`
     })
@@ -79,7 +79,7 @@ export default class Index extends Taro.Component {
    */
   onSwipeActionOpened = (index) => {
     console.log('onSwipeActionOpened', index);
-    this.setState({open_index: index})
+    this.setState({openIndex: index})
   };
 
   /**
@@ -89,8 +89,8 @@ export default class Index extends Taro.Component {
    */
   onSwipeActionClick = (index) => {
     //todo 增加删除确认
-    const {ticket_list} = this.state;
-    const ticket = ticket_list[index];
+    const {ticketList} = this.state;
+    const ticket = ticketList[index];
     Taro.showModal({
       title: '删除确认',
       content: '是否删除该票券？',
@@ -101,28 +101,28 @@ export default class Index extends Taro.Component {
     }).then(res => !res.confirm && res.cancel).then(confirm => {
       if (confirm) {
         console.log(ticket._id);
-        deleteTicket(ticket._id).then(res => {
+        refundTicket(ticket._id).then(res => {
           this.updateTicketList();
           if (res.code !== 0) {
             this.setState({
-              toast_loading: false,
-              toast_text: '删除失败',
-              toast_status: 'error',
+              toastLoading: false,
+              toastText: '删除失败',
+              toastStatus: 'error',
             });
             Taro.showModal({content: res.message, showCancel: false});
           } else {
             this.setState({
-              toast_loading: true,
-              toast_text: '删除成功',
-              toast_status: 'success',
+              toastLoading: true,
+              toastText: '删除成功',
+              toastStatus: 'success',
             });
           }
         });
         this.setState({
-          open_index: -1,
-          toast_loading: true,
-          toast_text: '删除中...',
-          toast_status: 'loading',
+          openIndex: -1,
+          toastLoading: true,
+          toastText: '删除中...',
+          toastStatus: 'loading',
         });
       }
     });
@@ -132,7 +132,8 @@ export default class Index extends Taro.Component {
    * 领取新票券按钮点击
    */
   modalTicketPurchaseShow = () => {
-    this.setState({open_index: -1, modal_ticket_purchase_show: true});
+    ticketGenerate(10).then(console.log)
+    // this.setState({openIndex: -1, modalTicketPurchaseShow: true});
   };
 
   /**
@@ -142,58 +143,47 @@ export default class Index extends Taro.Component {
   modalTicketPurchaseHide = (res) => {
     console.log('res', res);
     if (res) this.updateTicketList();
-    this.setState({modal_ticket_purchase_show: false})
+    this.setState({modalTicketPurchaseShow: false})
   };
 
   render() {
-    const {ticket_list, modal_ticket_purchase_show, open_index} = this.state;
-    const {toast_loading, toast_text, toast_status} = this.state;
+    const {ticketList, modalTicketPurchaseShow, openIndex} = this.state;
+    const {toastLoading, toastText, toastStatus} = this.state;
 
     return (
       <View>
         <View class='container'>
-          <AtToast isOpened={toast_loading} text={toast_text} status={toast_status} duration={0} hasMask/>
+          <AtToast isOpened={toastLoading} text={toastText} status={toastStatus} duration={0} hasMask/>
           <ModalTicketPurchase
-            isOpened={modal_ticket_purchase_show}
+            isOpened={modalTicketPurchaseShow}
             onHide={this.modalTicketPurchaseHide.bind(this)}
           />
-          <View class='ticket-list'>
-            <AtList>
-              {ticket_list.length > 0 ?
-                ticket_list.map((item, index) => (
-                  <AtSwipeAction
-                    key={index}
-                    onClick={this.onSwipeActionClick.bind(this, index)}
-                    onOpened={this.onSwipeActionOpened.bind(this, index)}
-                    isOpened={index === open_index}
-                    disabled={!item.enable}
-                    autoClose
-                    options={[{text: '删除', style: {backgroundColor: '#FF4949'}}]}
-                  >
-                    <AtListItem
-                      className='item'
-                      title={item.title}
-                      note={item.date}
-                      disabled={!item.enable}
-                      extraText={item.state}
-                      arrow='right'
-                      thumb='https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png'
-                      onClick={this.onTicketClick.bind(this, item)}
-                    />
-                  </AtSwipeAction>
-                )) :
-                <AtListItem className='item' title='本周还未领取优惠券'/>
-              }
-            </AtList>
+          <View class='tickets-info'>
+            <AtProgress className='info-progress' percent={50} isHidePercent status='progress' strokeWidth={20}/>
+            <View className='at-row '>
+              <View className='at-col info-item'>
+                <View className='item-title'>当月剩余数量</View>
+                <View className='item-body'>
+                  <Text className='item-text'>3058</Text><Text className='item-unit'>张</Text>
+                </View>
+              </View>
+              <View className='at-col info-item'>
+                <View className='item-title'>当月领取数量</View>
+                <View className='item-body'>
+                  <Text className='item-text'>3058</Text><Text className='item-unit'>张</Text>
+                </View>
+              </View>
+            </View>
           </View>
           <View class='ticket-apply'>
             <AtButton
               type='secondary'
               circle
-              disabled={ticket_list.length >= 3}
+              // disabled={ticketList.length >= 3}
               onClick={this.modalTicketPurchaseShow.bind(this)}
             >
-              {ticket_list.length >= 3 ? '没有领取额度了' : `本周还可领取${3 - ticket_list.length}张`}
+              增发票券
+              {/*{ticketList.length >= 3 ? '没有领取额度了' : `本周还可领取${3 - ticketList.length}张`}*/}
             </AtButton>
           </View>
         </View>

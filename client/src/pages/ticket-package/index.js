@@ -9,10 +9,10 @@ import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import {AtButton, AtList, AtListItem, AtSwipeAction, AtToast} from "taro-ui";
 import './index.scss'
-import {ticketState} from "../../config";
+import {ticketClass, ticketState} from "../../config";
 import TicketTabBar from '../../component/tab-bar'
 import ModalTicketPurchase from '../../component/modal-ticket-purchase'
-import {deleteTicket, getTicketList} from "../../apis";
+import {refundTicket, ticketPackage} from "../../apis";
 
 export default class Index extends Taro.Component {
   config = {
@@ -53,17 +53,10 @@ export default class Index extends Taro.Component {
    * 出发下拉刷新加载动画
    */
   updateTicketList = () => {
-    getTicketList().then(res => {
+    ticketPackage().then(res => {
       let ticketListNew = [];
       res.items.map((item) => {
-        ticketListNew.push(
-          {
-            _id: item._id,
-            title: item.title,
-            date: item.date,
-            state: ticketState[item.state],
-            enable: item.state === 'unused',
-          })
+        ticketListNew.push(item)
       });
       Taro.stopPullDownRefresh();
       Taro.showToast({title: '加载成功', icon: 'none', duration: 500});
@@ -114,7 +107,7 @@ export default class Index extends Taro.Component {
     }).then(res => !res.confirm && res.cancel).then(confirm => {
       if (confirm) {
         console.log(ticket._id);
-        deleteTicket(ticket._id).then(res => {
+        refundTicket(ticket._id).then(res => {
           this.updateTicketList();
           if (res.code !== 0) {
             this.setState({
@@ -179,16 +172,16 @@ export default class Index extends Taro.Component {
                     onClick={this.onSwipeActionClick.bind(this, index)}
                     onOpened={this.onSwipeActionOpened.bind(this, index)}
                     isOpened={index === openIndex}
-                    disabled={!item.enable}
+                    disabled={item.state !== 'valid'}
                     autoClose
                     options={[{text: '删除', style: {backgroundColor: '#FF4949'}}]}
                   >
                     <AtListItem
                       className='item'
-                      title={item.title}
-                      note={item.date}
-                      disabled={!item.enable}
-                      extraText={item.state}
+                      title={ticketClass[item.class]}
+                      note={item.expiry_date}
+                      disabled={item.state !== 'valid'}
+                      extraText={ticketState[item.state]}
                       arrow='right'
                       thumb='https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png'
                       onClick={this.onTicketClick.bind(this, item)}
