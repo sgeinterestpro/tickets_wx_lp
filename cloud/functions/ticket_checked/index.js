@@ -20,13 +20,13 @@ exports.main = async (event, context) => {
 
   return await db.collection('ticket').doc(event.ticket_id).get().then(res => {
     console.log(res);
-    const ticket_doc = res.data;
-    if (ticket_doc == null)
+    const ticketDoc = res.data;
+    if (ticketDoc == null)
       return {'code': -1, 'message': '票券不存在'};
-    if (ticket_doc['state'] !== 'unused')
+    if (ticketDoc['state'] !== 'unused')
       return {'code': -1, 'message': '票券状态异常'};
-    const date_now = dateToString(now);
-    if (ticket_doc['date'] !== date_now)
+    const dateNow = dateToString(now);
+    if (ticketDoc['date'] !== dateNow)
       return {'code': -1, 'message': '票券使用日期有误'};
     return db.collection('ticket').doc(event.ticket_id).update({
       data: {

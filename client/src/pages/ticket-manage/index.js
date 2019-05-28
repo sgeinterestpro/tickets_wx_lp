@@ -40,9 +40,9 @@ export default class Index extends Taro.Component {
    */
   updateTicketList = () => {
     ticketPackage().then(res => {
-      let ticketList_new = [];
+      let ticketListNew = [];
       res.items.map((item) => {
-        ticketList_new.push(
+        ticketListNew.push(
           {
             _id: item._id,
             title: item.title,
@@ -53,7 +53,7 @@ export default class Index extends Taro.Component {
       });
       Taro.stopPullDownRefresh();
       Taro.showToast({title: '加载成功', icon: 'none', duration: 500});
-      this.setState({ticketList: ticketList_new, openIndex: -1, toastLoading: false});
+      this.setState({ticketList: ticketListNew, openIndex: -1, toastLoading: false});
     }).catch(err => {
       console.error(err);
       Taro.stopPullDownRefresh();

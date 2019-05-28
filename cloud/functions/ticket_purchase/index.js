@@ -17,8 +17,8 @@ const _ = db.command;
 exports.main = async (event, context) => {
   const userInfo = event.userInfo;
   const now = new Date();
-  const this_weeks = [0, 1, 2, 3, 4, 5, 6].map(item => getWeekDay(item));
-  const date_now = dateToString(now);
+  const thisWeeks = [0, 1, 2, 3, 4, 5, 6].map(item => getWeekDay(item));
+  const dateNow = dateToString(now);
 
   let data = {
     class: event.class,
@@ -45,13 +45,13 @@ exports.main = async (event, context) => {
       } else {
         return db.collection('ticket').where({
           purchaser: userInfo.openId,
-          date: _.in(this_weeks)
+          date: _.in(thisWeeks)
         }).count().then(res => {
           if (res.total >= 3)
             return {'code': -1, 'message': '无法领取更多票券'};
           else if (!('date' in data))
             return {'code': -2, 'message': '请求参数出错'};
-          else if (!(date_now <= data.date && data.date <= this_weeks[6]))
+          else if (!(dateNow <= data.date && data.date <= thisWeeks[6]))
             return {'code': -1, 'message': '所选日期无法领取'};
 
           try {

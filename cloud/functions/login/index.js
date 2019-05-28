@@ -9,7 +9,7 @@ const _ = db.command;
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
-  const this_weeks = [0, 1, 2, 3, 4, 5, 6].map(item => getWeekDay(item));
+  const thisWeeks = [0, 1, 2, 3, 4, 5, 6].map(item => getWeekDay(item));
 
   return await db.collection('user').where({
     _id: wxContext.OPENID
@@ -25,7 +25,7 @@ exports.main = async (event, context) => {
     console.log('ticket.total');
     return db.collection('ticket').where({
       purchaser: wxContext.OPENID,
-      date: _.in(this_weeks)
+      date: _.in(thisWeeks)
     }).count();
   }).then(res => {
     console.log('ticket.total',res.total);

@@ -17,7 +17,7 @@ const _ = db.command;
 exports.main = async (event, context) => {
   const userInfo = event.userInfo;
   const now = new Date();
-  const date_now = dateToString(now);
+  const dateNow = dateToString(now);
 
   return await db.collection('user').doc(userInfo.openId).update({
     data: {quota_used: _.inc(-1)}
@@ -31,7 +31,7 @@ exports.main = async (event, context) => {
           return {'code': -1, 'message': '票券不存在'};
         if (ticket.state !== 'unused')
           return {'code': -1, 'message': '禁止删除此状态的票券'};
-        if (ticket.date < date_now)
+        if (ticket.date < dateNow)
           return {'code': -1, 'message': '禁止删除过期票券'};
         return db.collection('ticket').doc(event.ticket_id).remove().then(res => {
           if (res.stats.removed === 0)

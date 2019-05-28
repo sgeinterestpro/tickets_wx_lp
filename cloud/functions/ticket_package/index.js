@@ -16,11 +16,11 @@ const _ = db.command;
 // 云函数入口函数
 exports.main = async (event, context) => {
   const userInfo = event.userInfo;
-  const this_weeks = [0, 1, 2, 3, 4, 5, 6].map(item => getWeekDay(item));
+  const thisWeeks = [0, 1, 2, 3, 4, 5, 6].map(item => getWeekDay(item));
 
   return await db.collection('ticket').where({
     purchaser: userInfo.openId,
-    date: _.in(this_weeks)
+    date: _.in(thisWeeks)
   }).get().then(res => {
     console.log(res);
     return {count: res.data.length, message: res.errMsg, items: res.data};
