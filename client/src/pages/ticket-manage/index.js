@@ -2,10 +2,9 @@ import Taro from '@tarojs/taro'
 import {Text, View} from '@tarojs/components'
 import {AtButton, AtProgress, AtToast} from "taro-ui";
 import './index.scss'
-import {ticketState} from "../../config";
 import TicketTabBar from '../../component/tab-bar'
 import ModalTicketPurchase from '../../component/modal-ticket-purchase'
-import {refundTicket, ticketGenerate, ticketPackage} from "../../apis";
+import {ticketGenerate, ticketUsage} from "../../apis";
 
 export default class Index extends Taro.Component {
   config = {
@@ -23,7 +22,8 @@ export default class Index extends Taro.Component {
       toastStatus: 'loading',
       modalTicketPurchaseShow: false,
       openIndex: -1,
-      ticketList: []
+      defaultCount: 0,
+      activeCount: 0
     }
   }
 
@@ -39,92 +39,20 @@ export default class Index extends Taro.Component {
    * 更新票券列表显示
    */
   updateTicketList = () => {
-    ticketPackage().then(res => {
-      let ticketListNew = [];
-      res.items.map((item) => {
-        ticketListNew.push(
-          {
-            _id: item._id,
-            title: item.title,
-            date: item.date,
-            state: ticketState[item.state],
-            enable: item.state === 'unused',
-          })
-      });
+    ticketUsage().then(res => {
+      console.log(res);
+      if (res.code === 0) {
+        this.setState({
+          defaultCount: res.data.default,
+          activeCount: res.data.active
+        });
+      }
       Taro.stopPullDownRefresh();
       Taro.showToast({title: '加载成功', icon: 'none', duration: 500});
-      this.setState({ticketList: ticketListNew, openIndex: -1, toastLoading: false});
     }).catch(err => {
       console.error(err);
       Taro.stopPullDownRefresh();
       Taro.showToast({title: '加载失败', icon: 'none', duration: 500});
-    });
-  };
-
-  /**
-   * 券点击事件，跳转到票券详情
-   * @param item 票券参数
-   */
-  onTicketClick = (item) => {
-    this.setState({openIndex: -1});
-    Taro.navigateTo({
-      url: `/pages/ticket-show/index?id=${item._id}`
-    })
-  };
-
-  /**
-   * 滑动功能区打开
-   * 限制只能打开一个滑动功能区
-   * @param index
-   */
-  onSwipeActionOpened = (index) => {
-    console.log('onSwipeActionOpened', index);
-    this.setState({openIndex: index})
-  };
-
-  /**
-   * 滑动功能区点击
-   * 删除票券
-   * @param index
-   */
-  onSwipeActionClick = (index) => {
-    //todo 增加删除确认
-    const {ticketList} = this.state;
-    const ticket = ticketList[index];
-    Taro.showModal({
-      title: '删除确认',
-      content: '是否删除该票券？',
-      confirmText: '取消',
-      confirmColor: '#000000',
-      cancelText: '删除',
-      cancelColor: '#FF0000'
-    }).then(res => !res.confirm && res.cancel).then(confirm => {
-      if (confirm) {
-        console.log(ticket._id);
-        refundTicket(ticket._id).then(res => {
-          this.updateTicketList();
-          if (res.code !== 0) {
-            this.setState({
-              toastLoading: false,
-              toastText: '删除失败',
-              toastStatus: 'error',
-            });
-            Taro.showModal({content: res.message, showCancel: false});
-          } else {
-            this.setState({
-              toastLoading: true,
-              toastText: '删除成功',
-              toastStatus: 'success',
-            });
-          }
-        });
-        this.setState({
-          openIndex: -1,
-          toastLoading: true,
-          toastText: '删除中...',
-          toastStatus: 'loading',
-        });
-      }
     });
   };
 
@@ -147,9 +75,10 @@ export default class Index extends Taro.Component {
   };
 
   render() {
-    const {ticketList, modalTicketPurchaseShow, openIndex} = this.state;
+    const {modalTicketPurchaseShow} = this.state;
     const {toastLoading, toastText, toastStatus} = this.state;
-
+    const {defaultCount, activeCount} = this.state;
+    const percent = 100 * (defaultCount / ((activeCount + defaultCount) || 1));
     return (
       <View>
         <View class='container'>
@@ -159,18 +88,18 @@ export default class Index extends Taro.Component {
             onHide={this.modalTicketPurchaseHide.bind(this)}
           />
           <View class='tickets-info'>
-            <AtProgress className='info-progress' percent={50} isHidePercent status='progress' strokeWidth={20}/>
+            <AtProgress className='info-progress' percent={percent} isHidePercent status='progress' strokeWidth={20}/>
             <View className='at-row '>
               <View className='at-col info-item'>
                 <View className='item-title'>当月剩余数量</View>
                 <View className='item-body'>
-                  <Text className='item-text'>3058</Text><Text className='item-unit'>张</Text>
+                  <Text className='item-text'>{defaultCount}</Text><Text className='item-unit'>张</Text>
                 </View>
               </View>
               <View className='at-col info-item'>
                 <View className='item-title'>当月领取数量</View>
                 <View className='item-body'>
-                  <Text className='item-text'>3058</Text><Text className='item-unit'>张</Text>
+                  <Text className='item-text'>{activeCount}</Text><Text className='item-unit'>张</Text>
                 </View>
               </View>
             </View>

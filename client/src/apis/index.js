@@ -3,8 +3,8 @@ import {CloudCall} from "../common/wxCloud";
 import cloudRequest from "../common/cloudRequest";
 
 const cloudFunction = false;
-// const urlBase = "http://127.0.0.1:10000";
-const urlBase = "http://45.62.125.195:10000";
+// const urlBase = "http://127.0.0.1:10000"; //本地调试
+const urlBase = "http://45.62.125.195:10000"; //本地中转调试
 // const urlBase = "http://108.160.133.130:10000";
 
 const request = (method, url, data) => cloudRequest({
@@ -67,13 +67,30 @@ const checkedTicket = (ticket_id) => {
   }
 };
 const ticketGenerate = (count) => {
-  console.log(`checkedTicket(${count})`);
+  console.log(`ticketGenerate(${count})`);
   if (cloudFunction) {
-    return CloudCall('ticket_generate', {count: count});
+    // return CloudCall('ticket_generate', {count: count});
   } else {
     return POST(`${urlBase}/ticket_generate`, {count: count});
   }
 };
+const ticketUsage = (count) => {
+  console.log(`ticketUsage(${count})`);
+  if (cloudFunction) {
+    // return CloudCall('ticket_usage');
+  } else {
+    return POST(`${urlBase}/ticket_usage`);
+  }
+};
 const getHistoryTickets = () => GET(`${urlBase}/ticket_history`);
 
-export {ticketPackage, purchaseTicket, refundTicket, inspectTicket, checkedTicket, ticketGenerate, getHistoryTickets}
+export {
+  ticketPackage,
+  purchaseTicket,
+  refundTicket,
+  inspectTicket,
+  checkedTicket,
+  ticketGenerate,
+  ticketUsage,
+  getHistoryTickets
+}
