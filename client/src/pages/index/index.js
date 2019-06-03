@@ -1,64 +1,38 @@
+/**
+ * muumlover@2019-05-27
+ * 小程序默认页面
+ * 1、检验用户是否授权小程序获取信息
+ * 2、根据用户角色进行默认页面的跳转
+ */
 import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
-import {AtTabBar} from "taro-ui";
 import './index.scss'
-import TicketList from '../../component/ticket_list/index'
-import TicketScan from '../../component/ticket_scan/index'
-import UserInfo from '../../component/user_info/index'
+import {defaultAuthUrl, defaultRoleUrl} from "../../config";
 
 export default class Index extends Taro.Component {
   config = {
-    navigationBarBackgroundColor: '#383c42',
-    navigationBarTextStyle: 'white',
+    navigationBarBackgroundColor: '#FFFFFF',
+    navigationBarTextStyle: 'black',
     navigationBarTitleText: '票券助手',
-    // enablePullDownRefresh: true,
+    enablePullDownRefresh: false,
   };
 
   constructor() {
     super(...arguments)
-
-    this.state = {
-      current: 0
-    }
   }
 
-  componentDidMount() {
+  componentWillMount() {
+    const role = Taro.getStorageSync('role') || 'other';
+    Taro.getUserInfo().then(res => {
+      console.log(res);
+      Taro.redirectTo({url: defaultRoleUrl[role]})
+    }).catch(err => {
+      console.log(err);
+      Taro.redirectTo({url: defaultAuthUrl})
+    })
   }
-
-  onShareAppMessage() {
-    return {
-      title: 'Tickets',
-      path: '/pages/index/index',
-    }
-  }
-
-  tabList = [
-    {id: 'Ticket_List', title: '票券夹', iconType: 'tags', text: '1', max: '99'},
-    {id: 'Ticket_Scan', title: '使用', iconType: 'search'},
-    {id: 'Ticket_User', title: '我', iconType: 'user', text: 'new'}
-  ];
-
-  handleClick = current => {
-    this.setState({current})
-  };
 
   render() {
-    const {current} = this.state;
-
-    return (
-      <View>
-        {current === 0 && <TicketList>票券列表</TicketList>}
-        {current === 1 && <TicketScan>票券扫描</TicketScan>}
-        {current === 2 && <UserInfo>个人信息</UserInfo>}
-        <AtTabBar
-          backgroundColor='#ececec'
-          color='#ea6bb8'
-          tabList={this.tabList}
-          onClick={this.handleClick.bind(this)}
-          current={current}
-          fixed
-        />
-      </View>
-    )
+    return (<View/>)
   }
 }

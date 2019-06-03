@@ -1,0 +1,109 @@
+$qrCodeSize: 400px;
+$qrCodeMaxSize: 666px;
+
+page {
+  background-color: #383c42;
+  height: 100%;
+}
+
+.container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+
+  .main {
+    box-sizing: border-box;
+    box-shadow: 0 0 2px 0 rgba(25, 29, 33, 0.15);
+    position: relative;
+    width: 670px;
+    margin: 40px auto 0;
+    padding: 0 40px;
+    background: #fff;
+    border-radius: 12px;
+
+    .item {
+      border-bottom: 2px solid #f4f5f7;
+    }
+  }
+}
+
+.qrCode {
+  width: 590px;
+  margin: 0 auto;
+  padding: 50px 0 59px;
+  border-top: 2px solid #f4f5f7;
+  text-align: center;
+
+  .code {
+    width: $qrCodeSize;
+    height: $qrCodeSize;
+    margin: 58px auto 0;
+  }
+
+  .tips {
+    margin-top: 40px;
+    font-size: 24px;
+    color: #999ba1;
+    line-height: 28px;
+  }
+}
+
+.qrCodeMax {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+
+  .code {
+    width: $qrCodeMaxSize;
+    height: $qrCodeMaxSize;
+    margin: 0 auto 100px;
+  }
+}
+
+.round {
+  position: absolute;
+  top: 620px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #383c42;
+
+  &.left {
+    left: -12px;
+  }
+
+  &.right {
+    right: -12px;
+  }
+}
+
+.intro {
+  width: 590px;
+  margin: 20px 0;
+
+  > view {
+    margin-bottom: 8px;
+    color: #999ba1;
+    font-size: 28px;
+    line-height: 48px;
+    word-wrap: break-word;
+  }
+
+  .title {
+    font-size: 32px;
+    color: #191d21;
+    line-height: 50px;
+  }
+}
+
+.input-container {
+  padding: 10px 0 0 0;
+  width: 590px;
+  margin: 0 auto;
+}
