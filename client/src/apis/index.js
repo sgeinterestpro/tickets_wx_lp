@@ -4,23 +4,25 @@ import cloudRequest from "../common/cloudRequest";
 
 const cloudFunction = false;
 // const urlBase = "http://127.0.0.1:10000"; //本地调试
-const urlBase = "http://45.62.125.195:10000"; //本地中转调试
-// const urlBase = "http://108.160.133.130:10000";
+const urlBase = "http://ticket.sge-tech.com:10000";
 
-const request = (method, url, data) => cloudRequest({
-  url: url,
-  data: data,
-  header: {
-    'content-type': 'application/json',
-    'open-id': Taro.getStorageSync('OpenId') || ''
-  },
-  method: method,
-  dataType: "json"
-}).then(res => {
-  console.debug(res.data);
-  return res.data;
-});
-
+const request = (method, url, data) => {
+  let request = cloudRequest;
+  if (url.indexOf('127.0.0.1') !== -1) request = Taro.request;
+  return request({
+    url: url,
+    data: data,
+    header: {
+      'content-type': 'application/json',
+      'open-id': Taro.getStorageSync('OpenId') || ''
+    },
+    method: method,
+    dataType: "json"
+  }).then(res => {
+    console.debug(res.data);
+    return res.data;
+  });
+}
 const GET = (url) => request("GET", url);
 const POST = (url, data) => request("POST", url, data);
 const DELETE = (url) => request("DELETE", url);
@@ -74,8 +76,8 @@ const ticketGenerate = (count) => {
     return POST(`${urlBase}/ticket_generate`, {count: count});
   }
 };
-const ticketUsage = (count) => {
-  console.log(`ticketUsage(${count})`);
+const ticketUsage = () => {
+  console.log(`ticketUsage()`);
   if (cloudFunction) {
     // return CloudCall('ticket_usage');
   } else {

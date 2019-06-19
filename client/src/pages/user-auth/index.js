@@ -30,16 +30,13 @@ export default class Index extends Taro.Component {
   render() {
     return (
       <View class='container'>
-        <View class='icon'>
-          ICON
-        </View>
         <AtButton
           type='primary'
           openType='getUserInfo'
           size='normal'
           onGetUserInfo={this.onGetUserInfo.bind(this)}
         >
-          点击登陆
+          授权获取个人信息
         </AtButton>
       </View>
     )
