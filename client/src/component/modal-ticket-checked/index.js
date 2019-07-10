@@ -71,7 +71,7 @@ export default class Index extends Component {
 
   render() {
     const {isOpened, ticketId} = this.props;
-    const {ticketShow, ticketTitle, ticketDate, ticketState, userOpenId, toastLoading} = this.state;
+    const {ticketShow, ticketTitle, ticketDate, ticketState, userOpenId, toastLoading, toastText} = this.state;
     return (
       isOpened &&
       <View class='container'>

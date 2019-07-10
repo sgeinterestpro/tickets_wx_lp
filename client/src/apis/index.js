@@ -1,15 +1,15 @@
 import Taro from "@tarojs/taro";
-import {CloudCall} from "../common/wxCloud";
+import CloudCall from "../common/wxCloud";
 import cloudRequest from "../common/cloudRequest";
 
 const cloudFunction = false;
-// const urlBase = "http://127.0.0.1:10000"; //本地调试
-const urlBase = "http://ticket.sge-tech.com:10000";
+const urlBase = "http://127.0.0.1:10000"; //本地调试
+// const urlBase = "http://ticket.sge-tech.com:10000";
 
 const request = (method, url, data) => {
-  let request = cloudRequest;
-  if (url.indexOf('127.0.0.1') !== -1) request = Taro.request;
-  return request({
+  let _request = cloudRequest;
+  if (url.indexOf('127.0.0.1') !== -1) _request = Taro.request;
+  return _request({
     url: url,
     data: data,
     header: {
@@ -23,6 +23,7 @@ const request = (method, url, data) => {
     return res.data;
   });
 }
+
 const GET = (url) => request("GET", url);
 const POST = (url, data) => request("POST", url, data);
 const DELETE = (url) => request("DELETE", url);

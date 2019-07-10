@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import {CloudCall} from "./wxCloud";
+import CloudCall from "./wxCloud";
 
 const getUserInfo = () => new Promise((resolve, reject) => {
   Taro.getUserInfo().then(res => {
