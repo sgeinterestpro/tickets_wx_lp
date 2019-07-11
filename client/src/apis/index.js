@@ -84,6 +84,14 @@ const ticketUsage = () => {
     return POST(`${urlBase}/ticket_usage`);
   }
 };
+const ticketLog = () => {
+  console.log(`ticketUsage()`);
+  if (cloudFunction) {
+    // return CloudCall('ticket_usage');
+  } else {
+    return POST(`${urlBase}/ticket_log`);
+  }
+};
 const getHistoryTickets = () => GET(`${urlBase}/ticket_history`);
 
 export {
@@ -94,5 +102,6 @@ export {
   checkedTicket,
   ticketGenerate,
   ticketUsage,
+  ticketLog,
   getHistoryTickets
 }
