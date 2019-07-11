@@ -1,8 +1,8 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro, {Component} from '@tarojs/taro'
 import Index from './pages/index'
 
 import './app.scss'
-import { login } from "./common/getUserInfo";
+import {login} from "./common/getUserInfo";
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -19,6 +19,7 @@ class App extends Component {
       'pages/ticket-scan/index',
       'pages/ticket-show/index',
       'pages/user-auth/index',
+      'pages/user-bind/index',
       'pages/user-info/index',
       'pages/user-manage/index',
     ],
@@ -47,15 +48,15 @@ class App extends Component {
         Taro.eventCenter.trigger('UnionId')
       })
       .catch(err => {
-        Taro.showModal({ confirmColor: '#FF0000', content: err, showCancel: false }).then(() => {
-          this.getUid()
-        })
+        console.error(err);
       })
   }
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数
-  render() { return (<Index />) }
+  render() {
+    return (<Index/>)
+  }
 }
 
-Taro.render(<App />, document.getElementById('app'))
+Taro.render(<App/>, document.getElementById('app'))

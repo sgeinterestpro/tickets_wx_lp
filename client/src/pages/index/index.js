@@ -7,7 +7,7 @@
 import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import './index.scss'
-import {defaultAuthUrl, defaultRoleUrl} from "../../config";
+import {defaultBindUrl, defaultRoleUrl} from "../../config";
 
 export default class Index extends Taro.Component {
   config = {
@@ -28,7 +28,7 @@ export default class Index extends Taro.Component {
       Taro.redirectTo({url: defaultRoleUrl[role]})
     }).catch(err => {
       console.log(err);
-      Taro.redirectTo({url: defaultAuthUrl})
+      Taro.redirectTo({url: defaultBindUrl})
     })
   }
 

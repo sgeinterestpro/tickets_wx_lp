@@ -22,9 +22,9 @@ export default class Index extends Component {
     month = (month.length === 1) ? '0' + month : month;
     day = (day.length === 1) ? '0' + day : day;
     this.state = {
-      toastLoading: false,
-      toastText: '加载中...',
-      toastStatus: 'loading',
+      tOpened: false,
+      tText: '加载中...',
+      tStatus: 'loading',
       eventShow: Object.values(ticketClass),
       eventValue: Object.keys(ticketClass),
       eventSelect: 1,
@@ -52,9 +52,9 @@ export default class Index extends Component {
       title: eventShow[eventSelect],
       date: dateSel,
     };
-    this.setState({toastLoading: true, toastText: '领取中...', toastStatus: 'loading'});
+    this.setState({tOpened: true, tText: '领取中...', tStatus: 'loading'});
     purchaseTicket(data).then(res => {
-      this.setState({toastLoading: false});
+      this.setState({tOpened: false});
       if (res.code !== 0) {
         Taro.showModal({content: res.message, showCancel: false});
       } else {
@@ -70,13 +70,13 @@ export default class Index extends Component {
   render() {
     const {isOpened} = this.props;
     const {eventShow, eventSelect, dateSel} = this.state;
-    const {toastLoading, toastText, toastStatus} = this.state;
+    const {tOpened, tText, tStatus} = this.state;
     const dateStart = getNowDay();
     const dateEnd = getWeekDay(6);
     return (
       isOpened &&
       <View class='container'>
-        <AtToast isOpened={toastLoading} text={toastText} status={toastStatus} duration={0} hasMask/>
+        <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask/>
         <AtModal isOpened={isOpened}>
           <AtModalHeader>领券中心</AtModalHeader>
           <AtModalContent>

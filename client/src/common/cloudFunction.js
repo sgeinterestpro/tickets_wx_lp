@@ -1,6 +1,6 @@
 import Taro from "@tarojs/taro";
 
-const CloudCall = (name, data) => new Promise((resolve, reject) => {
+export const callFunction = (name, data) => new Promise((resolve, reject) => {
   Taro.cloud.callFunction({name, data}).then(res => {
     console.log(res.result);
     resolve(res.result);
@@ -9,5 +9,3 @@ const CloudCall = (name, data) => new Promise((resolve, reject) => {
     reject(e)
   });
 });
-
-export default CloudCall;

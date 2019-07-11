@@ -18,9 +18,9 @@ export default class Index extends Taro.Component {
   constructor() {
     super(...arguments);
     this.state = {
-      toastLoading: false,
-      toastText: '加载中...',
-      toastStatus: 'loading',
+      tOpened: false,
+      tText: '加载中...',
+      tStatus: 'loading',
       modalTicketPurchaseShow: false,
       openIndex: -1,
       defaultCount: 0,
@@ -69,7 +69,7 @@ export default class Index extends Taro.Component {
       });
       Taro.stopPullDownRefresh();
       Taro.showToast({title: '加载成功', icon: 'none', duration: 500});
-      this.setState({ticketList: ticketListNew, openIndex: -1, toastLoading: false});
+      this.setState({ticketList: ticketListNew, openIndex: -1, tOpened: false});
     }).catch(err => {
       console.error(err);
       Taro.stopPullDownRefresh();
@@ -97,13 +97,13 @@ export default class Index extends Taro.Component {
 
   render() {
     const {modalTicketPurchaseShow} = this.state;
-    const {toastLoading, toastText, toastStatus} = this.state;
+    const {tOpened, tText, tStatus} = this.state;
     const {defaultCount, activeCount} = this.state;
     const percent = 100 * (defaultCount / ((activeCount + defaultCount) || 1));
     return (
       <View>
         <View class='container'>
-          <AtToast isOpened={toastLoading} text={toastText} status={toastStatus} duration={0} hasMask/>
+          <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask/>
           <ModalTicketPurchase
             isOpened={modalTicketPurchaseShow}
             onHide={this.modalTicketPurchaseHide.bind(this)}

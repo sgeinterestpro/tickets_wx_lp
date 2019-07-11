@@ -25,9 +25,9 @@ export default class Index extends Taro.Component {
   constructor() {
     super(...arguments);
     this.state = {
-      toastLoading: false,
-      toastText: '加载中...',
-      toastStatus: 'loading',
+      tOpened: false,
+      tText: '加载中...',
+      tStatus: 'loading',
       modalTicketPurchaseState: false,
       openIndex: -1,
       ticketList: []
@@ -60,7 +60,7 @@ export default class Index extends Taro.Component {
       });
       Taro.stopPullDownRefresh();
       Taro.showToast({title: '加载成功', icon: 'none', duration: 500});
-      this.setState({ticketList: ticketListNew, openIndex: -1, toastLoading: false});
+      this.setState({ticketList: ticketListNew, openIndex: -1, tOpened: false});
     }).catch(err => {
       console.error(err);
       Taro.stopPullDownRefresh();
@@ -111,24 +111,24 @@ export default class Index extends Taro.Component {
           this.updateTicketList();
           if (res.code !== 0) {
             this.setState({
-              toastLoading: false,
-              toastText: '删除失败',
-              toastStatus: 'error',
+              tOpened: false,
+              tText: '删除失败',
+              tStatus: 'error',
             });
             Taro.showModal({content: res.message, showCancel: false});
           } else {
             this.setState({
-              toastLoading: true,
-              toastText: '删除成功',
-              toastStatus: 'success',
+              tOpened: true,
+              tText: '删除成功',
+              tStatus: 'success',
             });
           }
         });
         this.setState({
           openIndex: -1,
-          toastLoading: true,
-          toastText: '删除中...',
-          toastStatus: 'loading',
+          tOpened: true,
+          tText: '删除中...',
+          tStatus: 'loading',
         });
       }
     });
@@ -153,12 +153,12 @@ export default class Index extends Taro.Component {
 
   render() {
     const {ticketList, modalTicketPurchaseState, openIndex} = this.state;
-    const {toastLoading, toastText, toastStatus} = this.state;
+    const {tOpened, tText, tStatus} = this.state;
 
     return (
       <View>
         <View class='container'>
-          <AtToast isOpened={toastLoading} text={toastText} status={toastStatus} duration={0} hasMask/>
+          <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask/>
           <ModalTicketPurchase
             isOpened={modalTicketPurchaseState}
             onHide={this.modalTicketPurchaseHide.bind(this)}

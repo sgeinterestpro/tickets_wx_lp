@@ -34,8 +34,25 @@ page {
   }
 
   .item-list {
-    .item {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    box-shadow: 0 0 2px 0 rgba(25, 29, 33, 0.15);
+    position: relative;
+    width: 670px;
+    margin: 40px auto 0;
+    padding: 20px 0;
+    background: #fff;
+    border-radius: 12px;
 
+    .item {
+      //margin: 0 0 40px 0;
+      border-radius: 12px;
+    }
+
+    .picker {
+      padding: 24px;
+      font-size: 32px;
     }
   }
 }

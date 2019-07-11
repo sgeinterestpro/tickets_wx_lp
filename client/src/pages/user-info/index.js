@@ -7,7 +7,7 @@
  */
 import Taro from '@tarojs/taro'
 import {OpenData, Picker, View} from '@tarojs/components'
-import {AtAvatar} from 'taro-ui'
+import {AtAvatar, AtList, AtListItem} from 'taro-ui'
 import './index.scss'
 import {roleList} from "../../config";
 import TicketTabBar from '../../component/tab-bar'
@@ -58,12 +58,20 @@ export default class Index extends Taro.Component {
             <OpenData type='userNickName'/>
           </View>
         </View>
+
         <View class='item-list'>
           <View class='item'>
-            <Picker mode='selector' range={role_values} value={roleSelect}
-                    onChange={this.onRoleChange.bind(this)}>
+            <AtList>
+              <AtListItem title='姓名' extraText='张三'/>
+              <AtListItem title='电话' extraText='13303332033'/>
+              <AtListItem title='工号' extraText='2156'/>
+              <AtListItem title='邮箱' extraText='zs@qq.com'/>
+            </AtList>
+          </View>
+          <View class='item'>
+            <Picker mode='selector' range={role_values} value={roleSelect} onChange={this.onRoleChange.bind(this)}>
               <View className='picker'>
-                当前选择：{role_values[roleSelect]}
+                角色选择：{role_values[roleSelect]}
               </View>
             </Picker>
           </View>

@@ -8,13 +8,14 @@ import Taro, {redirectTo} from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import {AtButton} from 'taro-ui'
 import './index.scss'
+import {userInfoUpdate} from "../../apis";
 
 export default class Index extends Taro.Component {
 
   config = {
     navigationBarBackgroundColor: '#FFFFFF',
     navigationBarTextStyle: 'black',
-    navigationBarTitleText: '二维码详情',
+    navigationBarTitleText: '授权页面',
   };
 
   constructor() {
@@ -24,6 +25,7 @@ export default class Index extends Taro.Component {
 
   onGetUserInfo = (res) => {
     console.debug(res);
+    userInfoUpdate(res.detail);
     redirectTo({url: '/pages/index/index'})
   };
 

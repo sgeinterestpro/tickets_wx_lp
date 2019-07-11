@@ -4,7 +4,8 @@
  * @param options
  * @returns {Promise<any>}
  */
-const cloudRequest = function (options) {
+import Taro from "@tarojs/taro";
+export const cloudRequest = function (options) {
   // 默认配置
   const OPT = Object.assign({
     method: 'GET',
@@ -28,7 +29,7 @@ const cloudRequest = function (options) {
 
   // 开始请求
   return new Promise((RES, REJ) => {
-    wx.cloud.callFunction({
+    Taro.cloud.callFunction({
       name: 'cloud_request',
       data: {
         options: Object.assign({
@@ -74,4 +75,3 @@ const cloudRequest = function (options) {
     })
   })
 };
-export default cloudRequest;

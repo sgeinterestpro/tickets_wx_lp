@@ -35,6 +35,11 @@ export const roleTabUrls = {
   ]
 };
 /**
+ * 用户绑定页面
+ * @type {string}
+ */
+export const defaultBindUrl = "/pages/user-bind/index";
+/**
  * 用户授权页面
  * @type {string}
  */

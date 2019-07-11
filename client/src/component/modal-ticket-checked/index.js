@@ -15,8 +15,8 @@ export default class Index extends Component {
   constructor() {
     super(...arguments);
     this.state = {
-      toastLoading: true,
-      toastText: '票券信息加载中...',
+      tOpened: true,
+      tText: '票券信息加载中...',
       ticketShow: false,
       ticketTitle: '',
       ticketDate: '',
@@ -30,7 +30,7 @@ export default class Index extends Component {
       const {ticketId} = this.props;
       //查询并显示票券详细信息
       inspectTicket(ticketId).then((res) => {
-        this.setState({toastLoading: false});
+        this.setState({tOpened: false});
         if (res.code !== 0) {
           Taro.showModal({content: res.message, showCancel: false});
           this.onReturn();
@@ -52,9 +52,9 @@ export default class Index extends Component {
    */
   onConfirm = (ticketId) => {
     const {onHide} = this.props;
-    this.setState({toastLoading: true, toastText: '使用请求中..'});
+    this.setState({tOpened: true, tText: '使用请求中..'});
     checkedTicket(ticketId).then((res) => {
-      this.setState({toastLoading: false});
+      this.setState({tOpened: false});
       if (res.code !== 0) {
         Taro.showModal({content: res.message, showCancel: false});
       } else {
@@ -65,17 +65,17 @@ export default class Index extends Component {
   };
 
   onReturn = () => {
-    this.setState({toastLoading: true, ticketShow: false});
+    this.setState({tOpened: true, ticketShow: false});
     this.props.onReturn();
   };
 
   render() {
     const {isOpened, ticketId} = this.props;
-    const {ticketShow, ticketTitle, ticketDate, ticketState, userOpenId, toastLoading, toastText} = this.state;
+    const {ticketShow, ticketTitle, ticketDate, ticketState, userOpenId, tOpened, tText} = this.state;
     return (
       isOpened &&
       <View class='container'>
-        <AtToast isOpened={toastLoading} text={toastText} status='loading' duration={0} hasMask/>
+        <AtToast isOpened={tOpened} text={tText} status='loading' duration={0} hasMask/>
         <AtModal isOpened={ticketShow} onClose={this.onReturn.bind(this)}>
           <AtModalHeader>详情</AtModalHeader>
           <AtModalContent>
