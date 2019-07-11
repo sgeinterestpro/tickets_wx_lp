@@ -32,11 +32,12 @@ export default class Index extends Taro.Component {
       console.log(res);
       userInfoRequest().then(res => {
         console.log(res);
+        // todo 根据 res.data.email 是否有值判断用户是否已经绑定
+        Taro.redirectTo({url: defaultRoleUrl[role]})
+        // Taro.redirectTo({url: defaultBindUrl})
       }).catch(err => {
         console.log(err);
       });
-      Taro.redirectTo({url: defaultRoleUrl[role]})
-      // Taro.redirectTo({url: defaultBindUrl})
     }).catch(err => {
       console.warn(err);
       Taro.redirectTo({url: defaultAuthUrl})
