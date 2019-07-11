@@ -1,10 +1,11 @@
 import Taro from '@tarojs/taro'
 import {Text, View} from '@tarojs/components'
-import {AtButton, AtProgress, AtToast} from "taro-ui";
+import {AtButton, AtList, AtListItem, AtProgress, AtSwipeAction, AtToast} from "taro-ui";
 import './index.scss'
 import TicketTabBar from '../../component/tab-bar'
 import ModalTicketPurchase from '../../component/modal-ticket-purchase'
-import {ticketGenerate, ticketUsage} from "../../apis";
+import {ticketGenerate, ticketLog, ticketUsage} from "../../apis";
+// import {ticketClass, ticketState} from "../../config";
 
 export default class Index extends Taro.Component {
   config = {
@@ -23,7 +24,8 @@ export default class Index extends Taro.Component {
       modalTicketPurchaseShow: false,
       openIndex: -1,
       defaultCount: 0,
-      activeCount: 0
+      activeCount: 0,
+      ticketList: []
     }
   }
 
@@ -33,6 +35,7 @@ export default class Index extends Taro.Component {
 
   onPullDownRefresh() {
     this.updateTicketList();
+    this.updateTicketLog();
   }
 
   /**
@@ -49,6 +52,24 @@ export default class Index extends Taro.Component {
       }
       Taro.stopPullDownRefresh();
       Taro.showToast({title: '加载成功', icon: 'none', duration: 500});
+    }).catch(err => {
+      console.error(err);
+      Taro.stopPullDownRefresh();
+      Taro.showToast({title: '加载失败', icon: 'none', duration: 500});
+    });
+  };
+  /**
+   * 更新票券列表记录
+   */
+  updateTicketLog = () => {
+    ticketLog().then(res => {
+      let ticketListNew = [];
+      res.items.map((item) => {
+        ticketListNew.push(item)
+      });
+      Taro.stopPullDownRefresh();
+      Taro.showToast({title: '加载成功', icon: 'none', duration: 500});
+      this.setState({ticketList: ticketListNew, openIndex: -1, toastLoading: false});
     }).catch(err => {
       console.error(err);
       Taro.stopPullDownRefresh();
@@ -114,6 +135,16 @@ export default class Index extends Taro.Component {
               增发票券
               {/*{ticketList.length >= 3 ? '没有领取额度了' : `本周还可领取${3 - ticketList.length}张`}*/}
             </AtButton>
+          </View>
+          <View class='ticket-log'>
+            <AtList>
+              {ticketList.length > 0 ?
+                ticketList.map((item, index) => (
+                  <AtListItem key={index} className='item' title={item}/>
+                )) :
+                <AtListItem className='item' title='没有记录'/>
+              }
+            </AtList>
           </View>
         </View>
         <TicketTabBar/>
