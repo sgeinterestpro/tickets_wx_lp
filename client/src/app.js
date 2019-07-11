@@ -45,7 +45,7 @@ class App extends Component {
     login(`/${this.$router.params.path}`)
       .then(() => {
         // console.debug(userInfo)
-        Taro.eventCenter.trigger('UnionId')
+        Taro.eventCenter.trigger('OpenID')
       })
       .catch(err => {
         console.error(err);
@@ -59,4 +59,4 @@ class App extends Component {
   }
 }
 
-Taro.render(<App/>, document.getElementById('app'))
+Taro.render(<App/>, document.getElementById('app'));

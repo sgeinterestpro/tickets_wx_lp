@@ -7,7 +7,8 @@
 import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import './index.scss'
-import {defaultBindUrl, defaultRoleUrl} from "../../config";
+import {defaultAuthUrl, defaultRoleUrl} from "../../config";
+import {userInfoRequest} from "../../apis";
 
 export default class Index extends Taro.Component {
   config = {
@@ -29,10 +30,16 @@ export default class Index extends Taro.Component {
     // todo 已绑定用户
     Taro.getUserInfo().then(res => {
       console.log(res);
+      userInfoRequest().then(res => {
+        console.log(res);
+      }).catch(err => {
+        console.log(err);
+      });
       Taro.redirectTo({url: defaultRoleUrl[role]})
+      // Taro.redirectTo({url: defaultBindUrl})
     }).catch(err => {
-      console.log(err);
-      Taro.redirectTo({url: defaultBindUrl})
+      console.warn(err);
+      Taro.redirectTo({url: defaultAuthUrl})
     })
   }
 

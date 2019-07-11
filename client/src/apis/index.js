@@ -76,6 +76,10 @@ const userInfoUpdate = (data) => {
   console.log(`userInfoUpdate(${data})`);
   return POST(`${urlBase}/user_info`, data);
 };
+const userInfoRequest = () => {
+  console.log(`userInfoRequest()`);
+  return GET(`${urlBase}/user_info`);
+};
 const getHistoryTickets = () => GET(`${urlBase}/ticket_history`);
 
 export {
@@ -89,5 +93,6 @@ export {
   ticketLog,
   userBind,
   userInfoUpdate,
+  userInfoRequest,
   getHistoryTickets
 }
