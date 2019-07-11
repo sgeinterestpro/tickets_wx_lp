@@ -23,6 +23,10 @@ export default class Index extends Taro.Component {
 
   componentWillMount() {
     const role = Taro.getStorageSync('role') || 'other';
+    // todo 获取用户状态，根据用户状态决定
+    // todo 未授权用户 授权才能拿到 openid，才能确定是谁的微信
+    // todo 未绑定用户 绑定了才能对应到具体人员，拿到具体人员信息
+    // todo 已绑定用户
     Taro.getUserInfo().then(res => {
       console.log(res);
       Taro.redirectTo({url: defaultRoleUrl[role]})
