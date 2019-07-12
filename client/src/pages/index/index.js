@@ -7,7 +7,7 @@
 import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import './index.scss'
-import {defaultAuthUrl, defaultRoleUrl} from "../../config";
+import {defaultAuthUrl, defaultBindUrl, defaultRoleUrl} from "../../config";
 import {userInfoRequest} from "../../apis";
 
 export default class Index extends Taro.Component {
@@ -24,17 +24,20 @@ export default class Index extends Taro.Component {
 
   componentWillMount() {
     const role = Taro.getStorageSync('role') || 'other';
-    // todo 获取用户状态，根据用户状态决定
-    // todo 未授权用户 授权才能拿到 openid，才能确定是谁的微信
-    // todo 未绑定用户 绑定了才能对应到具体人员，拿到具体人员信息
-    // todo 已绑定用户
+    // 获取用户状态，根据用户状态决定
+    // 未授权用户 授权才能拿到 openid，才能确定是谁的微信
+    // 未绑定用户 绑定了才能对应到具体人员，拿到具体人员信息
+    // 已绑定用户
     Taro.getUserInfo().then(res => {
       console.log(res);
       userInfoRequest().then(res => {
         console.log(res);
-        // todo 根据 res.data.email 是否有值判断用户是否已经绑定
-        Taro.redirectTo({url: defaultRoleUrl[role]})
-        // Taro.redirectTo({url: defaultBindUrl})
+        // 根据 res.data.email 是否有值判断用户是否已经绑定
+        if (res.data.email) {
+          Taro.redirectTo({url: defaultRoleUrl[role]})
+        } else {
+          Taro.redirectTo({url: defaultBindUrl})
+        }
       }).catch(err => {
         console.log(err);
       });
