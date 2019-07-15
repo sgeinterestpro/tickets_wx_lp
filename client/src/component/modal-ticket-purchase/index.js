@@ -64,7 +64,10 @@ export default class Index extends Component {
     });
   };
 
-  onClose = () => this.props["onHide"](false);
+  onClose = () => {
+    const {onHide} = this.props;
+    onHide(false)
+  };
 
 
   render() {
