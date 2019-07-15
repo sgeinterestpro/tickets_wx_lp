@@ -52,8 +52,18 @@ page {
     }
 
     .picker {
+      display: flex;
       padding: 24px;
       font-size: 32px;
+
+      .title {
+        display: block;
+      }
+
+      .text {
+        display: inline-block;
+        color: #999;
+      }
     }
   }
 }

@@ -37,7 +37,7 @@ export default class Index extends Taro.Component {
 
   onPullDownRefresh() {
     this.updateTicketUsage();
-    this.updateTicketLog();
+    this.updateTicketLogList();
   }
 
   /**
@@ -63,7 +63,7 @@ export default class Index extends Taro.Component {
   /**
    * 更新票券列表记录
    */
-  updateTicketLog = (append = false, limit = 5) => {
+  updateTicketLogList = (append = false, limit = 5) => {
     let {ticketLogList} = this.state;
     let skip = 0;
     if (append) {
@@ -110,7 +110,7 @@ export default class Index extends Taro.Component {
 
   handleClick = () => {
     this.setState({status: "loading"});
-    this.updateTicketLog(true).then((res) => {
+    this.updateTicketLogList(true).then((res) => {
       console.log(res);
       if (res)
         this.setState({status: "more"});
@@ -172,7 +172,7 @@ export default class Index extends Taro.Component {
                     <View key={index} class="item">
                       <View class="time">{item.time}</View>
                       <View class="text">
-                        {`${item["real_name"]} ${ticketOption[item["option"]]} ${item["ticket_id"]}`}
+                        {`${item["real_name"]} ${ticketOption[item["option"]]} ${item["ticket_id"].substr(0, 20)}`}
                       </View>
                     </View>
                   ))}

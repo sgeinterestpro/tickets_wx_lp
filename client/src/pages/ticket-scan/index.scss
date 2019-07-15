@@ -11,7 +11,7 @@ page {
   height: 100%;
   margin-bottom: 160px;
 
-  .main {
+  .tickets-scan {
     box-sizing: border-box;
     box-shadow: 0 0 2px 0 rgba(25, 29, 33, 0.15);
     position: relative;
@@ -25,6 +25,45 @@ page {
       border-bottom: 2px solid #F4F5F7;
     }
   }
+
+  .ticket-log {
+    background: #fff;
+    border-radius: 12px;
+    box-sizing: border-box;
+    box-shadow: 0 0 0 0 rgba(25, 29, 33, 0.15);
+    font-size: 32px;
+    margin: 50px auto 0;
+    padding: 20px;
+    width: 670px;
+
+    .list {
+      padding: 0 20px;
+    }
+
+
+    .item {
+      border-bottom: 1px solid #C5D9E8;;
+      padding: 5px 0;
+
+      .time {
+        font-size: 32px;
+        color: #AAA;
+      }
+
+      .text {
+      }
+    }
+
+    .none {
+      border-bottom: none;
+    }
+
+    .load-more {
+      height: 80px;
+      border: none;
+      //border-top: 1px solid #C5D9E8;;
+    }
+  }
 }
 
 .input-container {
@@ -34,7 +73,7 @@ page {
 }
 
 .btn-submit {
-  padding: 10px 0 ;
+  padding: 10px 0;
   width: 590px;
   margin: 0 auto 25px;
 }

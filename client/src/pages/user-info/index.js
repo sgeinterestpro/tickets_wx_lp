@@ -86,8 +86,9 @@ export default class Index extends Taro.Component {
           <View class="item">
             <Picker mode="selector" range={roleValueList} value={roleSelectIndex}
                     onChange={this.onRoleChange.bind(this)}>
-              <View className="picker">
-                角色选择：{roleValueList[roleSelectIndex]}
+              <View class="picker">
+                <View class="title">角色选择</View>
+                <View class="text">{roleValueList[roleSelectIndex]}</View>
               </View>
             </Picker>
           </View>}
