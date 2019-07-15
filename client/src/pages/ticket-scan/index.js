@@ -5,18 +5,18 @@
  * 2、显示票券信息供人工核实
  * 3、TODO 显示扫描历史
  */
-import Taro from '@tarojs/taro'
-import {View} from '@tarojs/components'
-import {AtButton, AtInput} from 'taro-ui'
-import './index.scss'
-import TicketTabBar from '../../component/tab-bar'
+import Taro from "@tarojs/taro"
+import {View} from "@tarojs/components"
+import {AtButton, AtInput} from "taro-ui"
+import "./index.scss"
+import TicketTabBar from "../../component/tab-bar"
 import ModalTicketDisplay from "../../component/modal-ticket-checked";
 
 export default class Index extends Taro.Component {
   config = {
-    navigationBarBackgroundColor: '#383c42',
-    navigationBarTextStyle: 'white',
-    navigationBarTitleText: '票券使用',
+    navigationBarBackgroundColor: "#383c42",
+    navigationBarTextStyle: "white",
+    navigationBarTitleText: "票券使用",
     enablePullDownRefresh: false,
   };
 
@@ -59,30 +59,31 @@ export default class Index extends Taro.Component {
    */
   modalTicketDisplayHide = () => {
     this.setState({
-      ticketId: '',
+      ticketId: "",
       modalTicketDisplayShow: false
     })
   };
 
   render() {
     const {ticketId, modalTicketDisplayShow} = this.state;
+    // noinspection JSXNamespaceValidation
     return (
-      <View class='container'>
+      <View class="container">
         <ModalTicketDisplay
           isOpened={modalTicketDisplayShow}
           onHide={this.modalTicketDisplayHide.bind(this)}
           ticketId={ticketId}
         />
-        <View class='main'>
-          <View class='input-container'>
+        <View class="main">
+          <View class="input-container">
             <AtInput border={false} value={ticketId} onChange={this.handleInputChange.bind(this)}
-                     placeholder='手动输入电子票券'
+                     placeholder="手动输入电子票券"
             >
-              <AtButton type='primary' onClick={this.onBtnScanClick.bind(this)}>扫描</AtButton>
+              <AtButton type="primary" onClick={this.onBtnScanClick.bind(this)}>扫描</AtButton>
             </AtInput>
           </View>
-          <View class='btn-submit'>
-            <AtButton type='primary' onClick={this.modalTicketDisplayShow.bind(this, ticketId)}>手动提交</AtButton>
+          <View class="btn-submit">
+            <AtButton type="primary" onClick={this.modalTicketDisplayShow.bind(this, ticketId)}>手动提交</AtButton>
           </View>
         </View>
         <TicketTabBar/>

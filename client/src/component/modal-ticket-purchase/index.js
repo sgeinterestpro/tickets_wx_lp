@@ -3,10 +3,10 @@
  * 票券领取对话框
  * 1、显示日期和可领取项目
  */
-import Taro, {Component} from '@tarojs/taro'
-import {Button, Picker, Text, View} from '@tarojs/components'
-import {AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from 'taro-ui'
-import './index.scss'
+import Taro, {Component} from "@tarojs/taro"
+import {Button, Picker, Text, View} from "@tarojs/components"
+import {AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from "taro-ui"
+import "./index.scss"
 import {ticketClass} from "../../config";
 import {getNowDay, getWeekDay} from "../../common/getWeek";
 import {purchaseTicket} from "../../apis";
@@ -19,16 +19,16 @@ export default class Index extends Component {
     const year = date.getFullYear().toString();
     let month = (date.getMonth() + 1).toString();
     let day = date.getDate().toString();
-    month = (month.length === 1) ? '0' + month : month;
-    day = (day.length === 1) ? '0' + day : day;
+    month = (month.length === 1) ? "0" + month : month;
+    day = (day.length === 1) ? "0" + day : day;
     this.state = {
       tOpened: false,
-      tText: '加载中...',
-      tStatus: 'loading',
+      tText: "加载中...",
+      tStatus: "loading",
       eventShow: Object.values(ticketClass),
       eventValue: Object.keys(ticketClass),
       eventSelect: 1,
-      dateSel: [year, month, day].join('-')
+      dateSel: [year, month, day].join("-")
     }
   }
 
@@ -40,7 +40,7 @@ export default class Index extends Component {
 
   onDateChange = e => {
     const val = e.detail.value;
-    const dateSel = Array.isArray(val) ? val.join('-') : val;
+    const dateSel = Array.isArray(val) ? val.join("-") : val;
     this.setState({dateSel})
   };
 
@@ -52,19 +52,19 @@ export default class Index extends Component {
       title: eventShow[eventSelect],
       date: dateSel,
     };
-    this.setState({tOpened: true, tText: '领取中...', tStatus: 'loading'});
+    this.setState({tOpened: true, tText: "领取中...", tStatus: "loading"});
     purchaseTicket(data).then(res => {
       this.setState({tOpened: false});
       if (res.code !== 0) {
         Taro.showModal({content: res.message, showCancel: false});
       } else {
-        Taro.showModal({content: '领取成功', showCancel: false});
+        Taro.showModal({content: "领取成功", showCancel: false});
         onHide(true);
       }
     });
   };
 
-  onClose = () => this.props.onHide(false);
+  onClose = () => this.props["onHide"](false);
 
 
   render() {
@@ -73,33 +73,34 @@ export default class Index extends Component {
     const {tOpened, tText, tStatus} = this.state;
     const dateStart = getNowDay();
     const dateEnd = getWeekDay(6);
+    // noinspection JSXNamespaceValidation
     return (
       isOpened &&
-      <View class='container'>
+      <View class="container">
         <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask/>
         <AtModal isOpened={isOpened}>
           <AtModalHeader>领券中心</AtModalHeader>
           <AtModalContent>
-            <View className='page-section'>
-              <View className='page-section-title'>
+            <View className="page-section">
+              <View className="page-section-title">
                 <Text>项目选择</Text>
               </View>
               <View>
-                <Picker mode='selector' range={eventShow} value={eventSelect} onChange={this.onChange.bind(this)}>
-                  <View className='picker'>
+                <Picker mode="selector" range={eventShow} value={eventSelect} onChange={this.onChange.bind(this)}>
+                  <View className="picker">
                     当前选择：{eventShow[eventSelect]}
                   </View>
                 </Picker>
               </View>
             </View>
-            <View className='page-section'>
-              <View className='page-section-title'>
+            <View className="page-section">
+              <View className="page-section-title">
                 <Text>日期选择</Text>
               </View>
               <View>
-                <Picker mode='date' start={dateStart} end={dateEnd} value={dateSel}
+                <Picker mode="date" start={dateStart} end={dateEnd} value={dateSel}
                         onChange={this.onDateChange.bind(this)}>
-                  <View className='picker'>当前选择：{dateSel}</View>
+                  <View className="picker">当前选择：{dateSel}</View>
                 </Picker>
               </View>
             </View>

@@ -56,14 +56,14 @@ export const defaultRoleUrl = {
 };
 /**
  * 运动项目类型代码显示
- * @type {{"100": string, "101": string, "102": string, "103": string, "104": string}}
+ * @type {{basketball: string, yoga: string, badminton: string, football: string, swim: string}}
  */
 export const ticketClass = {
-  'badminton': '羽毛球',
-  'basketball': '篮球',
-  'football': '足球',
-  'swim': '游泳',
-  'yoga': '瑜伽',
+  "badminton": "羽毛球",
+  "basketball": "篮球",
+  "football": "足球",
+  "swim": "游泳",
+  "yoga": "瑜伽",
 };
 /**
  * 票券状态代码显示

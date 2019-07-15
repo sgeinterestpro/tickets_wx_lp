@@ -4,18 +4,18 @@
  * 1、用户授权按钮
  * 2、TODO 用户信息获取
  */
-import Taro, {redirectTo} from '@tarojs/taro'
-import {View} from '@tarojs/components'
-import {AtButton} from 'taro-ui'
-import './index.scss'
+import Taro, {redirectTo} from "@tarojs/taro"
+import {View} from "@tarojs/components"
+import {AtButton} from "taro-ui"
+import "./index.scss"
 import {userInfoUpdate} from "../../apis";
 
 export default class Index extends Taro.Component {
 
   config = {
-    navigationBarBackgroundColor: '#FFFFFF',
-    navigationBarTextStyle: 'black',
-    navigationBarTitleText: '授权页面',
+    navigationBarBackgroundColor: "#FFFFFF",
+    navigationBarTextStyle: "black",
+    navigationBarTitleText: "授权页面",
   };
 
   constructor() {
@@ -26,16 +26,17 @@ export default class Index extends Taro.Component {
   onGetUserInfo = (res) => {
     console.debug(res);
     userInfoUpdate(res.detail);
-    redirectTo({url: '/pages/index/index'})
+    redirectTo({url: "/pages/index/index"})
   };
 
   render() {
+    // noinspection JSXNamespaceValidation
     return (
-      <View class='container'>
+      <View class="container">
         <AtButton
-          type='primary'
-          openType='getUserInfo'
-          size='normal'
+          type="primary"
+          openType="getUserInfo"
+          size="normal"
           onGetUserInfo={this.onGetUserInfo.bind(this)}
         >
           授权获取个人信息
