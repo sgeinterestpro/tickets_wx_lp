@@ -57,12 +57,22 @@ page {
       font-size: 32px;
 
       .title {
-        display: block;
+        display: inline-block;
+        width: 348px;
+        margin-right: 40px;
       }
 
       .text {
         display: inline-block;
         color: #999;
+        padding-right: 30px;
+
+        -webkit-flex: 0 0 235px;
+        -ms-flex: 0 0 235px;
+        flex: 0 0 235px;
+        -webkit-box-flex: 0;
+        width: 235px;
+        text-align: right;
       }
     }
   }

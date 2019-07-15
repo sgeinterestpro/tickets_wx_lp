@@ -56,8 +56,14 @@ export default class Index extends Taro.Component {
         console.log(err);
         // 服务器连接失败——重试5次，每次间隔2秒
         const retry = Taro.getStorageSync("UesrInfoRetry");
-        if (retry < 5) {
+        if (retry === 0) {
+          Taro.setStorageSync("UesrInfoRetry", retry + 1);
+          setTimeout(() => {
+            Taro.reLaunch({url: "/pages/index/index"})
+          }, 1000)
+        } else if (retry < 5) {
           this.setState({info: "用户认证失败，两秒后重试..."});
+          Taro.setStorageSync("UesrInfoRetry", retry + 1);
           setTimeout(() => {
             Taro.reLaunch({url: "/pages/index/index"})
           }, 2000)
@@ -65,7 +71,6 @@ export default class Index extends Taro.Component {
           this.setState({info: "用户认证失败，服务器暂时被结界封印了..."});
           Taro.setStorageSync("UesrInfoRetry", 0);
         }
-        Taro.setStorageSync("UesrInfoRetry", retry + 1);
       });
     }).catch(err => {
       // 需要用户授权——跳转到用户授权页面

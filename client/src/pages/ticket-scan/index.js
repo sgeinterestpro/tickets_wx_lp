@@ -7,12 +7,12 @@
  */
 import Taro from "@tarojs/taro"
 import {View} from "@tarojs/components"
-import {AtButton, AtInput} from "taro-ui"
+import {AtButton, AtInput, AtLoadMore} from "taro-ui"
 import "./index.scss"
 import TicketTabBar from "../../component/tab-bar"
 import ModalTicketDisplay from "../../component/modal-ticket-checked";
-import {ticketOption} from "../../config";
-import {ticketLog} from "../../apis";
+import {ticketClass} from "../../config";
+import {ticketCheckLog} from "../../apis";
 import {getNowDay} from "../../common/getWeek";
 
 export default class Index extends Taro.Component {
@@ -28,7 +28,7 @@ export default class Index extends Taro.Component {
     this.state = {
       ticketId: "",
       modalTicketDisplayShow: false,
-      ticketCheckList: []
+      ticketCheckLogList: []
     }
   }
 
@@ -37,21 +37,21 @@ export default class Index extends Taro.Component {
   }
 
   onPullDownRefresh() {
-    this.updateTicketCheckList();
+    this.updateTicketCheckLogList();
   }
 
   /**
    * 更新票券列表记录
    */
-  updateTicketCheckList = () => {
-    let {ticketCheckList} = this.state;
+  updateTicketCheckLogList = () => {
+    let {ticketCheckLogList} = this.state;
     const nowDate = getNowDay();
-    ticketLog(0, 5).then(res => {
+    ticketCheckLog(nowDate).then(res => {
       console.log(res);
-      ticketCheckList = res.items;
+      ticketCheckLogList = res.items;
       Taro.stopPullDownRefresh();
       Taro.showToast({title: "加载成功", icon: "none", duration: 500});
-      this.setState({ticketCheckList, openIndex: -1, tOpened: false});
+      this.setState({ticketCheckLogList, openIndex: -1, tOpened: false});
     }).catch(err => {
       console.error(err);
       Taro.stopPullDownRefresh();
@@ -96,7 +96,7 @@ export default class Index extends Taro.Component {
   };
 
   render() {
-    const {ticketId, modalTicketDisplayShow, ticketCheckList} = this.state;
+    const {ticketId, modalTicketDisplayShow, ticketCheckLogList} = this.state;
     // noinspection JSXNamespaceValidation
     return (
       <View class="container">
@@ -119,13 +119,18 @@ export default class Index extends Taro.Component {
         </View>
         <View class="ticket-log">
           <View class="list">
-            {ticketCheckList.length > 0 ?
+            {ticketCheckLogList.length > 0 ?
               <View>
-                {ticketCheckList.map((item, index) => (
+                <View class="item">
+                  <View class="text">
+                    {`今日已扫描 ${ticketCheckLogList.length} 张`}
+                  </View>
+                </View>
+                {ticketCheckLogList.map((item, index) => (
                   <View key={index} class="item">
-                    <View class="time">{item.time}</View>
+                    <View class="time">{item["check_time"]}</View>
                     <View class="text">
-                      {`${item["real_name"]} ${ticketOption[item["option"]]} ${item["ticket_id"].substr(0, 20)}`}
+                      {`${item["_id"].substr(0, 20)} 【${ticketClass[item["class"]]}】`}
                     </View>
                   </View>
                 ))}

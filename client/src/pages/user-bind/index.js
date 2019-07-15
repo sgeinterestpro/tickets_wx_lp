@@ -21,7 +21,7 @@ export default class Index extends Taro.Component {
   constructor() {
     super(...arguments);
     this.state = {
-      email_value: "wangsen@primeton.com",
+      email_value: "",
       email_valid: false,
       email_waiting: false,
       email_timeout: -1,
@@ -160,7 +160,7 @@ export default class Index extends Taro.Component {
             <AtButton
               type="primary"
               size="normal"
-              disabled={!email_valid}
+              disabled={!email_valid || email_timeout > 0}
               onClick={this.submitEmail.bind(this)}
             >
               重新发送验证邮件

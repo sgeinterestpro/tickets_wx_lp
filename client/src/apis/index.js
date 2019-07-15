@@ -1,8 +1,8 @@
 import Taro from "@tarojs/taro";
 import {cloudRequest} from "../common/cloudRequest";
 
-const urlBase = "http://127.0.0.1:10000"; //本地调试
-// const urlBase = "http://ticket.sge-tech.com:10000";
+// const urlBase = "http://127.0.0.1:10000"; //本地调试
+const urlBase = "http://ticket.sge-tech.com:10000";
 
 const request = (method, url, data) => {
   let _request = cloudRequest;
@@ -65,8 +65,12 @@ const ticketUsage = () => {
   return POST(`${urlBase}/ticket_usage`);
 };
 const ticketLog = (skip, limit) => {
-  console.log(`API: ticketUsage(${skip}, ${limit})`);
+  console.log(`API: ticketLog(${skip}, ${limit})`);
   return POST(`${urlBase}/ticket_log`, {skip, limit});
+};
+const ticketCheckLog = (skip, limit) => {
+  console.log(`API: ticketCheckLog(${skip}, ${limit})`);
+  return POST(`${urlBase}/ticket_check_log`, {skip, limit});
 };
 const userBind = (data) => {
   console.log(`API: userBind(${JSON.stringify(data)})`);
@@ -74,11 +78,15 @@ const userBind = (data) => {
 };
 const userInfoUpdate = (data) => {
   console.log(`API: userInfoUpdate(${JSON.stringify(data)})`);
-  return POST(`${urlBase}/user_info`, data);
+  return POST(`${urlBase}/user_info_update`, data);
 };
 const userInfoRequest = () => {
   console.log(`API: userInfoRequest()`);
-  return GET(`${urlBase}/user_info`);
+  return POST(`${urlBase}/user_info`);
+};
+const userList = () => {
+  console.log(`API: userList()`);
+  return POST(`${urlBase}/user_list`);
 };
 // const getHistoryTickets = () => GET(`${urlBase}/ticket_history`);
 
@@ -91,8 +99,10 @@ export {
   ticketGenerate,
   ticketUsage,
   ticketLog,
+  ticketCheckLog,
   userBind,
   userInfoUpdate,
   userInfoRequest,
+  userList,
   // getHistoryTickets
 }
