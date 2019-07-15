@@ -19,7 +19,7 @@ export default class Index extends Taro.Component {
     super(...arguments);
     this.state = {
       current: -1,
-      role: Taro.getStorageSync('role') || 'other'
+      role: Taro.getStorageSync('Role') || 'other'
     }
   }
 

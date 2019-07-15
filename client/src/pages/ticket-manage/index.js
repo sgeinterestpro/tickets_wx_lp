@@ -1,10 +1,11 @@
 import Taro from '@tarojs/taro'
 import {Text, View} from '@tarojs/components'
-import {AtButton, AtList, AtListItem, AtProgress, AtSwipeAction, AtToast} from "taro-ui";
+import {AtButton, AtLoadMore, AtProgress, AtToast} from "taro-ui";
 import './index.scss'
 import TicketTabBar from '../../component/tab-bar'
 import ModalTicketPurchase from '../../component/modal-ticket-purchase'
 import {ticketGenerate, ticketLog, ticketUsage} from "../../apis";
+import {ticketOption} from "../../config";
 // import {ticketClass, ticketState} from "../../config";
 
 export default class Index extends Taro.Component {
@@ -25,7 +26,8 @@ export default class Index extends Taro.Component {
       openIndex: -1,
       defaultCount: 0,
       activeCount: 0,
-      ticketList: []
+      ticketList: [],
+      status: 'more'
     }
   }
 
@@ -95,10 +97,25 @@ export default class Index extends Taro.Component {
     this.setState({modalTicketPurchaseShow: false})
   };
 
+  handleClick = () => {
+    // 开始加载
+    this.setState({
+      status: 'loading'
+    })
+    // 模拟异步请求数据
+    setTimeout(() => {
+      // 没有更多了
+      this.setState({
+        status: 'noMore'
+      })
+    }, 2000)
+  }
+
   render() {
     const {modalTicketPurchaseShow} = this.state;
     const {tOpened, tText, tStatus} = this.state;
     const {defaultCount, activeCount} = this.state;
+    const {ticketList} = this.state;
     const percent = 100 * (defaultCount / ((activeCount + defaultCount) || 1));
     return (
       <View>
@@ -137,14 +154,25 @@ export default class Index extends Taro.Component {
             </AtButton>
           </View>
           <View class='ticket-log'>
-            <AtList>
+            <View class='list'>
               {ticketList.length > 0 ?
-                ticketList.map((item, index) => (
-                  <AtListItem key={index} className='item' title={item}/>
-                )) :
-                <AtListItem className='item' title='没有记录'/>
+                <View>
+                  {ticketList.map((item, index) => (
+                    <View key={index} class='item'>
+                      <View class='time'>{item.time}</View>
+                      <View class='text'>{`${item.real_name} ${ticketOption[item.option]} ${item.ticket_id}`}</View>
+                    </View>
+                  ))}
+                  <AtLoadMore
+                    className={'load-more'}
+                    onClick={this.handleClick.bind(this)}
+                    status={this.state.status}
+                  />
+                </View>
+                :
+                <View class='item'>没有记录</View>
               }
-            </AtList>
+            </View>
           </View>
         </View>
         <TicketTabBar/>

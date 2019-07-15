@@ -7,7 +7,7 @@
  * 角色列表
  * @type {{admin: string, checker: string, user: string}}
  */
-export const roleList = {
+export const roleAllList = {
   "user": "组员",
   "admin": "管理员",
   "checker": "一兆韦德"
@@ -73,5 +73,11 @@ export const ticketState = {
   "unused": "未使用",
   "expired": "已过期",
   "used": "已使用"
+};
+
+export const ticketOption = {
+  "purchase": "领取",
+  "refund": "退还",
+  "checked": "使用"
 };
 
