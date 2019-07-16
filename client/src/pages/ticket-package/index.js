@@ -85,7 +85,7 @@ export default class Index extends Taro.Component {
    * @param index
    */
   onSwipeActionOpened = (index) => {
-    console.log("onSwipeActionOpened", index);
+    console.debug("onSwipeActionOpened", index);
     this.setState({openIndex: index})
   };
 
@@ -106,7 +106,7 @@ export default class Index extends Taro.Component {
       cancelColor: "#FF0000"
     }).then(res => !res.confirm && res.cancel).then(confirm => {
       if (confirm) {
-        // console.log(ticket._id);
+        // console.debug(ticket._id);
         refundTicket(ticket._id).then(res => {
           this.updateTicketList();
           if (res.code !== 0) {
@@ -145,8 +145,7 @@ export default class Index extends Taro.Component {
    * 领取票券弹窗返回处理
    * @param res True:用户领取新的票券;False:未领取新的票券
    */
-  modalTicketPurchaseHide = (res) => {
-    // console.log("res", res);
+  modalTicketPurchaseReturn = (res) => {
     if (res) this.updateTicketList();
     this.setState({modalTicketPurchaseState: false})
   };
@@ -162,7 +161,7 @@ export default class Index extends Taro.Component {
           <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask/>
           <ModalTicketPurchase
             isOpened={modalTicketPurchaseState}
-            onHide={this.modalTicketPurchaseHide.bind(this)}
+            onReturn={this.modalTicketPurchaseReturn.bind(this)}
           />
           <View class="ticket-list">
             <AtList>

@@ -67,12 +67,12 @@ export const ticketClass = {
 };
 /**
  * 票券状态代码显示
- * @type {{expired: string, unused: string, used: string}}
+ * @type {{valid: string, expired: string, verified: string}}
  */
 export const ticketState = {
-  "unused": "未使用",
+  "valid": "未使用",
   "expired": "已过期",
-  "used": "已使用"
+  "verified": "已使用"
 };
 
 export const ticketOption = {

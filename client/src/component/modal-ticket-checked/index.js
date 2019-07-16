@@ -25,17 +25,21 @@ export default class Index extends Component {
     }
   }
 
+  onReturn = (res) => {
+    this.setState({tOpened: true, ticketShow: false});
+    this.props.onReturn(res);
+  };
+
   componentDidUpdate(prevProps, prevState, prevContext) {
     if (this.props["isOpened"] === true && prevProps["isOpened"] === false) {
-      const {ticketId, onHide} = this.props;
+      const {ticketId} = this.props;
       //查询并显示票券详细信息
       inspectTicket(ticketId).then((res) => {
         this.setState({tOpened: false});
         if (res.code !== 0) {
           Taro.showModal({content: res.message, showCancel: false}).then(() => {
-            onHide();
+            this.onReturn(false);
           });
-          this.onReturn();
         } else {
           this.setState({
             ticketShow: true,
@@ -53,25 +57,19 @@ export default class Index extends Component {
    * 提交使用票券
    */
   onConfirm = (ticketId) => {
-    const {onHide} = this.props;
     this.setState({tOpened: true, tText: "使用请求中.."});
     checkedTicket(ticketId).then((res) => {
       this.setState({tOpened: false});
       if (res.code !== 0) {
         Taro.showModal({content: res.message, showCancel: false}).then(() => {
-          onHide();
+          this.onReturn(false);
         })
       } else {
         Taro.showModal({content: "使用成功", showCancel: false}).then(() => {
-          onHide();
+          this.onReturn(true);
         })
       }
     })
-  };
-
-  onReturn = () => {
-    this.setState({tOpened: true, ticketShow: false});
-    this.props.onReturn();
   };
 
   render() {
@@ -106,9 +104,7 @@ export default class Index extends Component {
           </AtModalContent>
           <AtModalAction>
             {ticketState === "valid" &&
-            <Button
-              onClick={this.onConfirm.bind(this, ticketId)}
-            >立即使用</Button>}
+            <Button onClick={this.onConfirm.bind(this, ticketId)}>立即使用</Button>}
           </AtModalAction>
         </AtModal>
       </View>

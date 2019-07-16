@@ -22,11 +22,12 @@ const request = (method, url, data) => {
         console.error(res);
         reject(res.data);
       } else {
+        console.debug(res);
         resolve(res.data);
       }
-    }).catch(e => {
-      console.error(e);
-      reject(e)
+    }).catch(err => {
+      console.error(err);
+      reject(err)
     });
   });
 };
@@ -68,9 +69,9 @@ const ticketLog = (skip, limit) => {
   console.log(`API: ticketLog(${skip}, ${limit})`);
   return POST(`${urlBase}/ticket_log`, {skip, limit});
 };
-const ticketCheckLog = (skip, limit) => {
-  console.log(`API: ticketCheckLog(${skip}, ${limit})`);
-  return POST(`${urlBase}/ticket_check_log`, {skip, limit});
+const ticketCheckLog = (date) => {
+  console.log(`API: ticketCheckLog(${date})`);
+  return POST(`${urlBase}/ticket_check_log`, {date});
 };
 const userBind = (data) => {
   console.log(`API: userBind(${JSON.stringify(data)})`);

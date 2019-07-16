@@ -38,6 +38,7 @@ export default class Index extends Taro.Component {
   onPullDownRefresh() {
     this.updateTicketUsage();
     this.updateTicketLogList();
+    this.setState({status: "more"});
   }
 
   /**
@@ -45,7 +46,6 @@ export default class Index extends Taro.Component {
    */
   updateTicketUsage = () => {
     ticketUsage().then(res => {
-      console.log(res);
       if (res.code === 0) {
         this.setState({
           defaultCount: res.data.default,
@@ -71,7 +71,6 @@ export default class Index extends Taro.Component {
     }
     return new Promise((resolve, reject) => {
       ticketLog(skip, limit).then(res => {
-        console.log(res);
         if (append) {
           ticketLogList = ticketLogList.concat(res.items);
         } else {
@@ -94,7 +93,7 @@ export default class Index extends Taro.Component {
    * 领取新票券按钮点击
    */
   modalTicketPurchaseShow = () => {
-    ticketGenerate(10).then(console.log)
+    ticketGenerate(10).then(console.debug)
     // this.setState({openIndex: -1, modalTicketPurchaseShow: true});
   };
 
@@ -102,8 +101,8 @@ export default class Index extends Taro.Component {
   //  * 领券中心弹窗返回
   //  * @constructor
   //  */
-  // modalTicketPurchaseHide = (res) => {
-  //   console.log("res", res);
+  // modalTicketPurchaseReturn = (res) => {
+  //   console.debug("res", res);
   //   // if (res) this.updateTicketUsage();
   //   this.setState({modalTicketPurchaseShow: false})
   // };
@@ -111,12 +110,12 @@ export default class Index extends Taro.Component {
   handleClick = () => {
     this.setState({status: "loading"});
     this.updateTicketLogList(true).then((res) => {
-      console.log(res);
       if (res)
         this.setState({status: "more"});
       else
         this.setState({status: "noMore"});
-    }).catch(() => {
+    }).catch(err => {
+      console.error(err);
       this.setState({status: "more"})
     });
   };
@@ -134,7 +133,7 @@ export default class Index extends Taro.Component {
           <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask/>
           <ModalTicketPurchase
             isOpened={modalTicketPurchaseShow}
-            // onHide={this.modalTicketPurchaseHide.bind(this)}
+            // onHide={this.modalTicketPurchaseReturn.bind(this)}
           />
           <View class="tickets-info">
             <AtProgress className="info-progress" percent={percent} isHidePercent status="progress" strokeWidth={20}/>

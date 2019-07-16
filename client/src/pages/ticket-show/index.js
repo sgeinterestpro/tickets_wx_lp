@@ -40,7 +40,7 @@ export default class Index extends Component {
         const scale = screenWidth / (deviceWidth / 2);
         this.showQrCode(id, scale);
       }
-    }).then(res => console.log(res));
+    }).then(res => console.debug(res));
 
   }
 
@@ -71,7 +71,7 @@ export default class Index extends Component {
    */
   onQrCodeClick = () => {
     const {qrShow} = this.state;
-    console.log(`QR FullScreen ${!qrShow}`);
+    console.debug(`QR FullScreen ${!qrShow}`);
     this.setState({qrShow: !qrShow})
   };
 

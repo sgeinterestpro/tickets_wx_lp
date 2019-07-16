@@ -1,11 +1,12 @@
 import Taro from "@tarojs/taro";
 
 export const callFunction = (name, data) => new Promise((resolve, reject) => {
+  console.info(`callFunction(${name},${JSON.stringify(data)})`);
   Taro.cloud.callFunction({name, data}).then(res => {
-    console.log(res.result);
+    console.debug(res.result);
     resolve(res.result);
-  }).catch(e => {
-    console.log(e);
-    reject(e)
+  }).catch(err => {
+    console.error(err);
+    reject(err)
   });
 });

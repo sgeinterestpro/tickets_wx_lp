@@ -37,14 +37,14 @@ class App extends Component {
     Taro.cloud.init();
   }
 
-  componentDidShow() {
+  componentDidMount() {
     this.getOpenId()
   }
 
   getOpenId = () => {
+    console.log('getOpenId()');
     login(`/${this.$router.params.path}`)
       .then(() => {
-        // console.debug(userInfo)
         Taro.eventCenter.trigger("OpenID")
       })
       .catch(err => {

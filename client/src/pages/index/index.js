@@ -33,10 +33,9 @@ export default class Index extends Taro.Component {
     // 已绑定用户
     Taro.getUserInfo().then(res => {
       // 已经得到用户授权
-      console.log(res);
+      console.debug(res);
       userInfoRequest().then(res => {
         // 请求用户数据成功
-        console.log(res);
         Taro.setStorageSync("UesrInfoRetry", 0);
         // 根据 res.data.email 是否有值判断用户是否已经绑定
         if (res.data && res.data.email) {
@@ -53,7 +52,7 @@ export default class Index extends Taro.Component {
           Taro.redirectTo({url: defaultBindUrl})
         }
       }).catch(err => {
-        console.log(err);
+        console.error(err);
         // 服务器连接失败——重试5次，每次间隔2秒
         const retry = Taro.getStorageSync("UesrInfoRetry");
         if (retry === 0) {

@@ -37,10 +37,10 @@ export default class Index extends Taro.Component {
     const email = Taro.getStorageSync("EmailValue");
     const timespan = Date.now() - time;
     if (timespan > 600 * 1000) {
-      console.log("验证链接已过期");
+      console.debug("验证链接已过期");
       this.setState({email_waiting: false});
     } else {
-      console.log("验证链接未过期");
+      console.debug("验证链接未过期");
       this.setState({email_value: email, email_waiting: true, email_timeout: 600 - timespan / 1000});
       this.handleChange(email);
       this.checkUserState();
@@ -77,7 +77,6 @@ export default class Index extends Taro.Component {
     userBind({
       email: email_value
     }).then(res => {
-      console.log(res);
       if (res.code === 0) {
         this.setState({tOpened: true, tText: "邮件发送成功", tStatus: "success", tDuration: 3000});
         Taro.setStorageSync("EmailSendTime", Date.now());
@@ -106,13 +105,12 @@ export default class Index extends Taro.Component {
     if (this.checkLoop != null)
       clearTimeout(this.checkLoop);
     userInfoRequest().then(res => {
-      console.debug(res);
       if (res.data.email) {
-        console.log("用户完成认证");
+        console.debug("用户完成认证");
         Taro.reLaunch({url: "/pages/index/index"});
       }
     }).catch(err => {
-      console.log(err);
+      console.error(err);
     });
     this.checkLoop = setTimeout(() => {
       this.checkUserState()

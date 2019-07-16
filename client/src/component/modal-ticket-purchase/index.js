@@ -32,7 +32,11 @@ export default class Index extends Component {
     }
   }
 
-  onChange = e => {
+  onReturn = (res) => {
+    this.props.onReturn(res);
+  };
+
+  onClassChange = e => {
     this.setState({
       eventSelect: e.detail.value
     })
@@ -45,7 +49,6 @@ export default class Index extends Component {
   };
 
   onConfirm = () => {
-    const {onHide} = this.props;
     const {eventShow, eventValue, eventSelect, dateSel} = this.state;
     const data = {
       class: eventValue[eventSelect],
@@ -59,14 +62,9 @@ export default class Index extends Component {
         Taro.showModal({content: res.message, showCancel: false});
       } else {
         Taro.showModal({content: "领取成功", showCancel: false});
-        onHide(true);
+        this.onReturn(true);
       }
     });
-  };
-
-  onClose = () => {
-    const {onHide} = this.props;
-    onHide(false)
   };
 
 
@@ -89,7 +87,8 @@ export default class Index extends Component {
                 <Text>项目选择</Text>
               </View>
               <View>
-                <Picker mode="selector" range={eventShow} value={eventSelect} onChange={this.onChange.bind(this)}>
+                <Picker mode="selector" range={eventShow} value={eventSelect}
+                        onChange={this.onClassChange.bind(this)}>
                   <View className="picker">
                     当前选择：{eventShow[eventSelect]}
                   </View>
@@ -109,7 +108,7 @@ export default class Index extends Component {
             </View>
           </AtModalContent>
           <AtModalAction>
-            <Button onClick={this.onClose.bind(this)}>取消</Button>
+            <Button onClick={this.onReturn.bind(this, false)}>取消</Button>
             <Button onClick={this.onConfirm.bind(this)}>确定</Button>
           </AtModalAction>
         </AtModal>

@@ -32,7 +32,7 @@ export default class Index extends Taro.Component {
     }
   }
 
-  componentDidShow() {
+  componentDidMount() {
     Taro.startPullDownRefresh();
   }
 
@@ -47,7 +47,6 @@ export default class Index extends Taro.Component {
     let {ticketCheckLogList} = this.state;
     const nowDate = getNowDay();
     ticketCheckLog(nowDate).then(res => {
-      console.log(res);
       ticketCheckLogList = res.items;
       Taro.stopPullDownRefresh();
       Taro.showToast({title: "加载成功", icon: "none", duration: 500});
@@ -79,20 +78,15 @@ export default class Index extends Taro.Component {
    * @param ticketId 票券ID
    */
   modalTicketDisplayShow = (ticketId) => {
-    this.setState({
-      ticketId: ticketId,
-      modalTicketDisplayShow: true,
-    })
+    this.setState({ticketId, modalTicketDisplayShow: true,})
   };
 
   /**
    * 关闭券详情对话框操作
    */
-  modalTicketDisplayHide = () => {
-    this.setState({
-      ticketId: "",
-      modalTicketDisplayShow: false
-    })
+  modalTicketDisplayReturn = (res) => {
+    if (res) this.updateTicketCheckLogList();
+    this.setState({ticketId: "", modalTicketDisplayShow: false});
   };
 
   render() {
@@ -102,7 +96,7 @@ export default class Index extends Taro.Component {
       <View class="container">
         <ModalTicketDisplay
           isOpened={modalTicketDisplayShow}
-          onHide={this.modalTicketDisplayHide.bind(this)}
+          onReturn={this.modalTicketDisplayReturn.bind(this)}
           ticketId={ticketId}
         />
         <View class="tickets-scan">
