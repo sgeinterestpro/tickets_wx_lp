@@ -122,7 +122,7 @@ export default class Index extends Taro.Component {
                 {ticketCheckLogList.map((item, index) => (
                   <View key={index} class="item">
                     <View class="text">{`编号：${item["_id"].substr(0, 20)}`}</View>
-                    <View class="text">{`用户：${item["user_init"]["real_name"]} || "已注销"}`}</View>
+                    <View class="text">{`用户：${item["user_init"]["real_name"] || "已注销"}`}</View>
                     <View class="text">{`项目：${ticketClass[item["class"]]}`}</View>
                     <View class="time">{`时间：${item["check_time"]}`}</View>
                   </View>
