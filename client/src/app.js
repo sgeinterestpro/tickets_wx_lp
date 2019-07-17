@@ -14,12 +14,15 @@ class App extends Component {
   config = {
     pages: [
       "pages/index/index",
+      "pages/scan-history/index",
       "pages/ticket-package/index",
       "pages/ticket-manage/index",
       "pages/ticket-scan/index",
       "pages/ticket-show/index",
+      "pages/user-add/index",
       "pages/user-auth/index",
       "pages/user-bind/index",
+      "pages/user-edit/index",
       "pages/user-info/index",
       "pages/user-manage/index",
     ],
@@ -35,6 +38,11 @@ class App extends Component {
   constructor() {
     super(...arguments);
     Taro.cloud.init();
+  }
+
+  componentDidShow() {
+    if (Taro.getStorageSync("OpenId") === null)
+      this.getOpenId()
   }
 
   componentDidMount() {

@@ -6,8 +6,9 @@
  */
 import Taro from "@tarojs/taro"
 import {View} from "@tarojs/components"
-import {AtCard, AtListItem} from "taro-ui";
+import {AtButton, AtCard, AtListItem} from "taro-ui";
 import "./index.scss"
+import {ticketClass} from "../../config";
 import TicketTabBar from "../../component/tab-bar"
 import {userList} from "../../apis";
 
@@ -52,6 +53,8 @@ export default class Index extends Taro.Component {
     });
   };
 
+  handleUserClick = (init_id) => Taro.navigateTo({url: `/pages/user-edit/index?id=${init_id}`});
+  handleAddUser = () => Taro.navigateTo({url: `/pages/user-add/index`});
 
   render() {
     const {user_list, none_text} = this.state;
@@ -60,17 +63,30 @@ export default class Index extends Taro.Component {
     return (
       <View>
         <View class="container">
-          <View class="ticket-list">
+          <View class="add">
+            <AtButton
+              type="secondary"
+              circle
+              onClick={this.handleAddUser.bind(this)}
+            >
+              新增用户
+            </AtButton>
+          </View>
+          <View class="list">
             {user_list.length > 0 ?
-              user_list.map((item, index) => (
+              user_list.map((user_item, index) => (
                 <AtCard
                   key={index}
+                  className={"item"}
                   isFull={true}
-                  note={item["email"]}
-                  extra={`工号：${item["work_no"]}`}
-                  title={`姓名：${item["real_name"]}`}
-                  // thumb='http://www.logoquan.com/upload/list/20180421/logoquan15259400209.PNG'
+                  note={user_item["email"]}
+                  extra={`工号：${user_item["work_no"]}`}
+                  title={`姓名：${user_item["real_name"]}`}
+                  onClick={this.handleUserClick.bind(this, user_item["init_id"])}
+                  thumb={user_item["avatarUrl"] || 'https://jdc.jd.com/img/13'}
                 >
+                  {user_item["user_id"] ? "" : <View>提示：用户未绑定微信</View>}
+                  <View>项目：{user_item["sports"].map((sport_item) => ticketClass[sport_item] || '未知')}</View>
                 </AtCard>
               )) :
               <AtListItem className="item" title={none_text}/>

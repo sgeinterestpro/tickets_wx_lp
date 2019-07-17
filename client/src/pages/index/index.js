@@ -8,7 +8,7 @@ import Taro from "@tarojs/taro"
 import {View} from "@tarojs/components"
 import "./index.scss"
 import {defaultAuthUrl, defaultBindUrl, defaultRoleUrl} from "../../config";
-import {userInfoRequest} from "../../apis";
+import {userInfo} from "../../apis";
 
 export default class Index extends Taro.Component {
   config = {
@@ -34,7 +34,7 @@ export default class Index extends Taro.Component {
     Taro.getUserInfo().then(res => {
       // 已经得到用户授权
       console.debug(res);
-      userInfoRequest().then(res => {
+      userInfo().then(res => {
         // 请求用户数据成功
         Taro.setStorageSync("UesrInfoRetry", 0);
         // 根据 res.data.email 是否有值判断用户是否已经绑定

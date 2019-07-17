@@ -21,12 +21,21 @@ export default class Index extends Component {
     let day = date.getDate().toString();
     month = (month.length === 1) ? "0" + month : month;
     day = (day.length === 1) ? "0" + day : day;
+    let sportList = [];
+    const {sports} = Taro.getStorageSync("UesrInfo");
+    if (sports) {
+      for (let sport of sports) {
+        if (ticketClass[sport]) {
+          sportList[sport] = ticketClass[sport]
+        }
+      }
+    }
     this.state = {
       tOpened: false,
       tText: "加载中...",
       tStatus: "loading",
-      eventShow: Object.values(ticketClass),
-      eventValue: Object.keys(ticketClass),
+      eventShow: Object.values(sportList),
+      eventValue: Object.keys(sportList),
       eventSelect: 1,
       dateSel: [year, month, day].join("-")
     }

@@ -6,10 +6,10 @@
  * 3、用户角色切换
  */
 import Taro from "@tarojs/taro"
-import {OpenData, Picker, View} from "@tarojs/components"
-import {AtAvatar, AtList, AtListItem} from "taro-ui"
+import {Picker, View} from "@tarojs/components"
+import {AtAvatar, AtButton, AtList, AtListItem} from "taro-ui"
 import "./index.scss"
-import {roleAllList} from "../../config";
+import {roleAllList, ticketClass} from "../../config";
 import TicketTabBar from "../../component/tab-bar"
 
 export default class Index extends Taro.Component {
@@ -57,6 +57,10 @@ export default class Index extends Taro.Component {
     Taro.reLaunch({url: "/pages/user-info/index"});
   };
 
+  handleSyncUser = () => {
+    Taro.navigateTo({url: "/pages/user-auth/index"});
+  };
+
   render() {
     const {roleSelectIndex, roleList, userInfo} = this.state;
     const roleValueList = Object.values(roleList);
@@ -66,13 +70,24 @@ export default class Index extends Taro.Component {
       <View class="container">
         <View class="main">
           <View class="avatar">
-            <AtAvatar openData={{type: "userAvatarUrl"}}/>
+            {/*<AtAvatar openData={{type: "userAvatarUrl"}}/>*/}
+            <AtAvatar image={userInfo["avatarUrl"] || 'https://jdc.jd.com/img/200'}/>
           </View>
           <View class="info">
-            <OpenData type="userNickName"/>
+            {/*<OpenData type="userNickName"/>*/}
+            <View>{userInfo["nickName"] || "同步微信信息失败"}</View>
+
           </View>
         </View>
-
+        {userInfo["avatarUrl"] ? "" : <View class="ticket-apply">
+          <AtButton
+            type="secondary"
+            circle
+            onClick={this.handleSyncUser.bind(this, userInfo['init_id'])}
+          >
+            同步用户信息
+          </AtButton>
+        </View>}
         <View class="item-list">
           <View class="item">
             <AtList>
@@ -80,6 +95,9 @@ export default class Index extends Taro.Component {
               <AtListItem title="电话" extraText={userInfo["phone"]}/>
               <AtListItem title="工号" extraText={userInfo["work_no"]}/>
               <AtListItem title="邮箱" extraText={userInfo["email"]}/>
+              <AtListItem
+                title="项目"
+                extraText={(userInfo["sports"] || []).map((sport_item) => ticketClass[sport_item] || '未知')}/>
             </AtList>
           </View>
           {roleValueList.length > 1 &&

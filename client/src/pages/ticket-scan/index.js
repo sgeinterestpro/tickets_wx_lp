@@ -7,13 +7,12 @@
  */
 import Taro from "@tarojs/taro"
 import {View} from "@tarojs/components"
-import {AtButton, AtInput, AtLoadMore} from "taro-ui"
+import {AtButton, AtInput} from "taro-ui"
 import "./index.scss"
 import TicketTabBar from "../../component/tab-bar"
 import ModalTicketDisplay from "../../component/modal-ticket-checked";
 import {ticketClass} from "../../config";
 import {ticketCheckLog} from "../../apis";
-import {getNowDay} from "../../common/getWeek";
 
 export default class Index extends Taro.Component {
   config = {
@@ -45,8 +44,8 @@ export default class Index extends Taro.Component {
    */
   updateTicketCheckLogList = () => {
     let {ticketCheckLogList} = this.state;
-    const nowDate = getNowDay();
-    ticketCheckLog(nowDate).then(res => {
+    // const nowDate = getNowDay();
+    ticketCheckLog().then(res => {
       ticketCheckLogList = res.items;
       Taro.stopPullDownRefresh();
       Taro.showToast({title: "加载成功", icon: "none", duration: 500});
@@ -122,17 +121,12 @@ export default class Index extends Taro.Component {
                 </View>
                 {ticketCheckLogList.map((item, index) => (
                   <View key={index} class="item">
-                    <View class="time">{item["check_time"]}</View>
-                    <View class="text">
-                      {`${item["_id"].substr(0, 20)} 【${ticketClass[item["class"]]}】`}
-                    </View>
+                    <View class="text">{`编号：${item["_id"].substr(0, 20)}`}</View>
+                    <View class="text">{`用户：${item["user_init"]["real_name"]} || "已注销"}`}</View>
+                    <View class="text">{`项目：${ticketClass[item["class"]]}`}</View>
+                    <View class="time">{`时间：${item["check_time"]}`}</View>
                   </View>
                 ))}
-                <AtLoadMore
-                  className={"load-more"}
-                  onClick={this.handleClick.bind(this)}
-                  status={this.state.status}
-                />
               </View>
               :
               <View class="item none">没有记录</View>

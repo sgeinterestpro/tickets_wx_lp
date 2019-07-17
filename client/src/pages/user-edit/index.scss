@@ -2,10 +2,6 @@ page {
   background-color: #383c42;
 }
 
-.at-list__item .item-extra {
-  width: 500px;
-}
-
 .container {
   box-sizing: border-box;
   display: flex;
@@ -35,17 +31,11 @@ page {
       margin: auto 0;
       justify-content: center;
       align-items: center;
-      font-size: 32px;
+      font-size:32px;
     }
   }
 
-  .ticket-apply {
-    padding: 50px 0 0 0;
-    width: 670px;
-    margin: 0 auto;
-  }
-
-  .item-list {
+  .list {
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -53,38 +43,24 @@ page {
     position: relative;
     width: 670px;
     margin: 40px auto 0;
-    padding: 20px 0;
+    padding: 40px 0 20px;
     background: #fff;
     border-radius: 12px;
 
     .item {
-      //margin: 0 0 40px 0;
-      border-radius: 12px;
-    }
-
-    .picker {
-      display: flex;
-      padding: 24px;
+      padding: 0 40px;
+      margin: 0 0 20px;
       font-size: 32px;
+    }
+  }
 
-      .title {
-        display: inline-block;
-        width: 348px;
-        margin-right: 40px;
-      }
+  .delete {
+    padding: 50px 0 0 0;
+    width: 670px;
+    margin: 0 auto;
 
-      .text {
-        display: inline-block;
-        color: #999;
-        padding-right: 30px;
-
-        -webkit-flex: 0 0 235px;
-        -ms-flex: 0 0 235px;
-        flex: 0 0 235px;
-        -webkit-box-flex: 0;
-        width: 235px;
-        text-align: right;
-      }
+    .delete-button {
+      color: red;
     }
   }
 }

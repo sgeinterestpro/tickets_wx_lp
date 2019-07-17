@@ -160,7 +160,6 @@ export default class Index extends Taro.Component {
               onClick={this.modalTicketPurchaseShow.bind(this)}
             >
               增发票券
-              {/*{ticketLogList.length >= 3 ? "没有领取额度了" : `本周还可领取${3 - ticketLogList.length}张`}*/}
             </AtButton>
           </View>
           <View class="ticket-log">

@@ -8,7 +8,7 @@ import Taro from "@tarojs/taro"
 import {View} from "@tarojs/components"
 import {AtButton, AtCountdown, AtInput, AtToast} from "taro-ui"
 import "./index.scss"
-import {userBind, userInfoRequest} from "../../apis";
+import {userBind, userInfo} from "../../apis";
 
 export default class Index extends Taro.Component {
 
@@ -104,7 +104,7 @@ export default class Index extends Taro.Component {
   checkUserState = () => {
     if (this.checkLoop != null)
       clearTimeout(this.checkLoop);
-    userInfoRequest().then(res => {
+    userInfo().then(res => {
       if (res.data.email) {
         console.debug("用户完成认证");
         Taro.reLaunch({url: "/pages/index/index"});

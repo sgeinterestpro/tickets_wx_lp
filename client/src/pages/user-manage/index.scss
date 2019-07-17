@@ -16,18 +16,25 @@ page {
   height: 100%;
   margin-bottom: 160px;
 
-  .ticket-list {
+  .add {
+    padding: 50px 0 0 0;
+    width: 670px;
+    margin: 0 auto;
+  }
+
+  .list {
     box-sizing: border-box;
     box-shadow: 0 0 0 0 rgba(25, 29, 33, 0.15);
     position: relative;
     width: 670px;
     margin: 40px auto 0;
-    padding: 0 20px;
+    padding: 12px 0;
     background: #fff;
     border-radius: 12px;
 
     .item {
-      border-bottom: 2px solid #F4F5F7;
+      border: 1px solid #F4F5F7;
+      border-radius: 0;
     }
   }
 

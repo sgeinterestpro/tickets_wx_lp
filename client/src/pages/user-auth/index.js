@@ -8,7 +8,7 @@ import Taro, {redirectTo} from "@tarojs/taro"
 import {View} from "@tarojs/components"
 import {AtButton} from "taro-ui"
 import "./index.scss"
-import {userInfoUpdate} from "../../apis";
+import {userUpdate} from "../../apis";
 
 export default class Index extends Taro.Component {
 
@@ -25,7 +25,7 @@ export default class Index extends Taro.Component {
 
   onGetUserInfo = (res) => {
     console.debug(res);
-    userInfoUpdate(res.detail);
+    userUpdate(res.detail);
     redirectTo({url: "/pages/index/index"})
   };
 

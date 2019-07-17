@@ -69,41 +69,56 @@ const ticketLog = (skip, limit) => {
   console.log(`API: ticketLog(${skip}, ${limit})`);
   return POST(`${urlBase}/ticket_log`, {skip, limit});
 };
-const ticketCheckLog = (date) => {
-  console.log(`API: ticketCheckLog(${date})`);
-  return POST(`${urlBase}/ticket_check_log`, {date});
+const ticketCheckLog = (start, end) => {
+  console.log(`API: ticketCheckLog(${start}, ${end})`);
+  return POST(`${urlBase}/ticket_check_log`, {start, end});
 };
 const userBind = (data) => {
   console.log(`API: userBind(${JSON.stringify(data)})`);
   return POST(`${urlBase}/user_bind`, data);
 };
-const userInfoUpdate = (data) => {
-  console.log(`API: userInfoUpdate(${JSON.stringify(data)})`);
-  return POST(`${urlBase}/user_info_update`, data);
-};
-const userInfoRequest = () => {
-  console.log(`API: userInfoRequest()`);
+const userInfo = () => {
+  console.log(`API: userInfo()`);
   return POST(`${urlBase}/user_info`);
+};
+const userUpdate = (data) => {
+  console.log(`API: userUpdate(${JSON.stringify(data)})`);
+  return POST(`${urlBase}/user_update`, data);
+};
+const userAdd = (data) => {
+  console.log(`API: userAdd(${data})`);
+  return POST(`${urlBase}/member_add`, data);
+};
+const userDelete = (init_id) => {
+  console.log(`API: userDelete(${init_id})`);
+  return POST(`${urlBase}/member_delete`, {init_id});
+};
+const userFind = (init_id) => {
+  console.log(`API: userFind(${init_id})`);
+  return POST(`${urlBase}/member_find`, {init_id});
 };
 const userList = () => {
   console.log(`API: userList()`);
-  return POST(`${urlBase}/user_list`);
+  return POST(`${urlBase}/member_list`);
 };
 // const getHistoryTickets = () => GET(`${urlBase}/ticket_history`);
 
 export {
-  ticketPackage,
+  checkedTicket,
+  inspectTicket,
   purchaseTicket,
   refundTicket,
-  inspectTicket,
-  checkedTicket,
-  ticketGenerate,
-  ticketUsage,
-  ticketLog,
+  ticketPackage,
   ticketCheckLog,
+  ticketGenerate,
+  ticketLog,
+  ticketUsage,
+  userAdd,
   userBind,
-  userInfoUpdate,
-  userInfoRequest,
+  userDelete,
+  userFind,
+  userInfo,
   userList,
+  userUpdate,
   // getHistoryTickets
 }
