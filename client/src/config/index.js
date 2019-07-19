@@ -38,6 +38,24 @@ export const roleAllList = {
   "admin": "管理员",
   "checker": "一兆韦德"
 };
+export const reportList = [{
+  "api": "ReportUsedDtl",
+  "title": "领用登记明细表",
+  "type": "timespan",
+}, {
+  "api": "ReportUsedDay",
+  "title": "领用登记日报表",
+  "type": "timespan",
+}, {
+  "api": "ReportUsedMonth",
+  "title": "领用登记月报表",
+  "type": "timespan",
+}, {
+  "api": "ReportUsedSportMonth",
+  "title": "活动券分项领用月报表",
+  "type": "time",
+}
+];
 /**
  * 每个角色的可访问页面
  * @type {{other: {iconType: string, id: string, title: string, url: string}[], admin: *[], checker: *[], user: *[]}}
@@ -52,6 +70,7 @@ export const roleTabUrls = {
   ],
   "admin": [
     {"id": "TicketManage", "url": "/pages/ticket-manage/index", "title": "票券管理", "iconType": "money"},
+    {"id": "ReportManage", "url": "/pages/report-manage/index", "title": "报表管理", "iconType": "calendar"},
     {"id": "UserManage", "url": "/pages/user-manage/index", "title": "用户管理", "iconType": "folder"},
     {"id": "UserInfo", "url": "/pages/user-info/index", "title": "用户中心", "iconType": "user"}
   ],

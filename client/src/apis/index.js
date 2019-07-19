@@ -1,12 +1,12 @@
 import Taro from "@tarojs/taro";
 import {cloudRequest} from "../common/cloudRequest";
 
-// const urlBase = "http://127.0.0.1:10000"; //本地调试
-const urlBase = "http://ticket.sge-tech.com:10000";
+const urlBase = "http://localhost:10000"; //本地调试
+// const urlBase = "http://ticket.sge-tech.com:10000";
 
 const request = (method, url, data) => {
   let _request = cloudRequest;
-  if (url.indexOf("127.0.0.1") !== -1) _request = Taro.request;
+  if (url.indexOf("localhost") !== -1) _request = Taro.request;
   return new Promise((resolve, reject) => {
     _request({
       url: url,
@@ -85,21 +85,25 @@ const userUpdate = (data) => {
   console.log(`API: userUpdate(${JSON.stringify(data)})`);
   return POST(`${urlBase}/user_update`, data);
 };
-const userAdd = (data) => {
+const memberAdd = (data) => {
   console.log(`API: userAdd(${data})`);
   return POST(`${urlBase}/member_add`, data);
 };
-const userDelete = (init_id) => {
+const memberDelete = (init_id) => {
   console.log(`API: userDelete(${init_id})`);
   return POST(`${urlBase}/member_delete`, {init_id});
 };
-const userFind = (init_id) => {
+const memberFind = (init_id) => {
   console.log(`API: userFind(${init_id})`);
   return POST(`${urlBase}/member_find`, {init_id});
 };
-const userList = () => {
+const memberList = () => {
   console.log(`API: userList()`);
   return POST(`${urlBase}/member_list`);
+};
+const reportExport = (type, start, end) => {
+  console.log(`API: reportExport(${type},${start}, ${end})`);
+  return POST(`${urlBase}/report_export`, {type, start, end});
 };
 // const getHistoryTickets = () => GET(`${urlBase}/ticket_history`);
 
@@ -113,12 +117,13 @@ export {
   ticketGenerate,
   ticketLog,
   ticketUsage,
-  userAdd,
   userBind,
-  userDelete,
-  userFind,
   userInfo,
-  userList,
   userUpdate,
+  memberAdd,
+  memberDelete,
+  memberFind,
+  memberList,
+  reportExport,
   // getHistoryTickets
 }

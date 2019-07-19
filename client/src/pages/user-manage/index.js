@@ -10,7 +10,7 @@ import {AtButton, AtCard, AtListItem} from "taro-ui";
 import "./index.scss"
 import {ticketClass} from "../../config";
 import TicketTabBar from "../../component/tab-bar"
-import {userList} from "../../apis";
+import {memberList} from "../../apis";
 
 export default class Index extends Taro.Component {
   config = {
@@ -40,7 +40,7 @@ export default class Index extends Taro.Component {
    * 更新用户列表显示
    */
   updateUserList = () => {
-    userList().then(res => {
+    memberList().then(res => {
       const user_list = res.items;
       Taro.stopPullDownRefresh();
       Taro.showToast({title: "加载成功", icon: "none", duration: 500});

@@ -14,6 +14,7 @@ class App extends Component {
   config = {
     pages: [
       "pages/index/index",
+      "pages/report-manage/index",
       "pages/scan-history/index",
       "pages/ticket-package/index",
       "pages/ticket-manage/index",

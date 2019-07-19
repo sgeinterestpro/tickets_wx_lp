@@ -10,7 +10,7 @@ import {View} from "@tarojs/components"
 import {AtAvatar, AtButton} from "taro-ui"
 import "./index.scss"
 import {roleAllList, ticketClass} from "../../config";
-import {userDelete, userFind} from "../../apis";
+import {memberDelete, memberFind} from "../../apis";
 
 export default class Index extends Taro.Component {
   config = {
@@ -31,7 +31,7 @@ export default class Index extends Taro.Component {
   componentDidMount() {
     const {id} = this.$router.params;
     const {roleList} = this.state;
-    userFind(id).then((res) => {
+    memberFind(id).then((res) => {
       if (res.code !== 0) {
       } else {
         const userInfo = res.data || {};
@@ -56,7 +56,7 @@ export default class Index extends Taro.Component {
       cancelColor: "#FF0000"
     }).then(res => !res.confirm && res.cancel).then(confirm => {
       if (confirm) {
-        userDelete(id).then(res => {
+        memberDelete(id).then(res => {
           if (res.code !== 0) {
             this.setState({
               tOpened: false,

@@ -10,7 +10,7 @@ import {View} from "@tarojs/components"
 import {AtButton, AtCheckbox, AtForm, AtInput} from "taro-ui"
 import "./index.scss"
 import {roleAllList, ticketClass} from "../../config";
-import {userAdd, userFind} from "../../apis";
+import {memberAdd, memberFind} from "../../apis";
 
 export default class Index extends Taro.Component {
   config = {
@@ -41,7 +41,7 @@ export default class Index extends Taro.Component {
   componentDidMount() {
     const {id} = this.$router.params;
     const {roleList} = this.state;
-    userFind(id).then((res) => {
+    memberFind(id).then((res) => {
       if (res.code !== 0) {
       } else {
         const userInfo = res.data || {};
@@ -64,7 +64,7 @@ export default class Index extends Taro.Component {
   };
   onSubmit = () => {
     const {userInfo} = this.state;
-    userAdd(userInfo).then(res => {
+    memberAdd(userInfo).then(res => {
       if (res.code !== 0) {
         console.error(res);
         Taro.showToast({title: res.message, icon: "none", duration: 2000});

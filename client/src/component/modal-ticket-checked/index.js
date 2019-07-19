@@ -18,10 +18,9 @@ export default class Index extends Component {
       tOpened: true,
       tText: "票券信息加载中...",
       ticketShow: false,
-      ticketTitle: "",
-      ticketDate: "",
-      ticketState: "",
-      userOpenId: ""
+      ticket: {},
+      user: {},
+      member: {}
     }
   }
 
@@ -43,10 +42,10 @@ export default class Index extends Component {
         } else {
           this.setState({
             ticketShow: true,
-            ticketTitle: ticketClass[res.ticket["class"]],
-            ticketDate: res.ticket["expiry_date"],
-            ticketState: res.ticket["state"],
-            userOpenId: res.user["wx_open_id"],
+            ticket: res['ticket'],
+            user: res['user'],
+            member: res['init'],
+
           });
         }
       });
@@ -74,36 +73,36 @@ export default class Index extends Component {
 
   render() {
     const {isOpened, ticketId} = this.props;
-    const {ticketShow, ticketTitle, ticketDate, ticketState, userOpenId, tOpened, tText} = this.state;
+    const {ticketShow, ticket, member, tOpened, tText} = this.state;
     // noinspection JSXNamespaceValidation
     return (
       isOpened &&
       <View class="container">
         <AtToast isOpened={tOpened} text={tText} status="loading" duration={0} hasMask/>
         <AtModal isOpened={ticketShow} onClose={this.onReturn.bind(this)}>
-          <AtModalHeader>详情</AtModalHeader>
+          <AtModalHeader>票券详情</AtModalHeader>
           <AtModalContent>
             <View className="page-section">
               <View className="page-section-title">
-                <Text>项目：{ticketTitle}</Text>
+                <Text>运动项目：{ticketClass[ticket["class"]]}</Text>
               </View>
               <View className="page-section-title">
-                <Text>券码：{ticketId}</Text>
+                <Text>电子券码：{ticketId.substr(0, 20)}</Text>
               </View>
               <View className="page-section-title">
-                <Text>使用日期：{ticketDate}</Text>
+                <Text>有效日期：{ticket["expiry_date"]}</Text>
               </View>
               <View className="page-section-title">
-                <Text>用户信息：{userOpenId}</Text>
+                <Text>用户姓名：{member['real_name']}</Text>
               </View>
-              {ticketState !== "valid" &&
+              {ticket["state"] !== "valid" &&
               <View className="page-section-title">
                 <Text>该票券无法使用</Text>
               </View>}
             </View>
           </AtModalContent>
           <AtModalAction>
-            {ticketState === "valid" &&
+            {ticket["state"] === "valid" &&
             <Button onClick={this.onConfirm.bind(this, ticketId)}>立即使用</Button>}
           </AtModalAction>
         </AtModal>
