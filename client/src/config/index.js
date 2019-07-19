@@ -4,14 +4,58 @@
  */
 
 /**
+ * 运动项目类型代码显示
+ * @type {{basketball: string, yoga: string, badminton: string, football: string, swim: string}}
+ */
+export const ticketClass = {
+  "badminton": "羽毛球",
+  "basketball": "篮球",
+  "football": "足球",
+  "swim": "游泳",
+  "yoga": "瑜伽",
+};
+/**
+ * 票券状态代码显示
+ * @type {{valid: string, expired: string, verified: string}}
+ */
+export const ticketState = {
+  "valid": "未使用",
+  "expired": "已过期",
+  "verified": "已使用"
+};
+
+export const ticketOption = {
+  "purchase": "领取",
+  "refund": "退还",
+  "checked": "使用"
+};
+/**
  * 角色列表
  * @type {{admin: string, checker: string, user: string}}
  */
-export const roleList = {
+export const roleAllList = {
   "user": "组员",
   "admin": "管理员",
   "checker": "一兆韦德"
 };
+export const reportList = [{
+  "api": "ReportUsedDtl",
+  "title": "领用登记明细表",
+  "type": "timespan",
+}, {
+  "api": "ReportUsedDay",
+  "title": "领用登记日报表",
+  "type": "timespan",
+}, {
+  "api": "ReportUsedMonth",
+  "title": "领用登记月报表",
+  "type": "timespan",
+}, {
+  "api": "ReportUsedSportMonth",
+  "title": "活动券分项领用月报表",
+  "type": "time",
+}
+];
 /**
  * 每个角色的可访问页面
  * @type {{other: {iconType: string, id: string, title: string, url: string}[], admin: *[], checker: *[], user: *[]}}
@@ -26,14 +70,21 @@ export const roleTabUrls = {
   ],
   "admin": [
     {"id": "TicketManage", "url": "/pages/ticket-manage/index", "title": "票券管理", "iconType": "money"},
+    {"id": "ReportManage", "url": "/pages/report-manage/index", "title": "报表管理", "iconType": "calendar"},
     {"id": "UserManage", "url": "/pages/user-manage/index", "title": "用户管理", "iconType": "folder"},
     {"id": "UserInfo", "url": "/pages/user-info/index", "title": "用户中心", "iconType": "user"}
   ],
   "checker": [
-    {"id": "TicketScan", "url": "/pages/ticket-scan/index", "title": "票券使用", "iconType": "search"},
+    {"id": "TicketScan", "url": "/pages/ticket-scan/index", "title": "票券扫描", "iconType": "search"},
+    {"id": "ScanHistory", "url": "/pages/scan-history/index", "title": "扫描历史", "iconType": "calendar"},
     {"id": "UserInfo", "url": "/pages/user-info/index", "title": "用户中心", "iconType": "user"}
   ]
 };
+/**
+ * 用户绑定页面
+ * @type {string}
+ */
+export const defaultBindUrl = "/pages/user-bind/index";
 /**
  * 用户授权页面
  * @type {string}
@@ -48,25 +99,5 @@ export const defaultRoleUrl = {
   "user": "/pages/ticket-package/index",
   "admin": "/pages/ticket-manage/index",
   "checker": "/pages/ticket-scan/index"
-};
-/**
- * 运动项目类型代码显示
- * @type {{"100": string, "101": string, "102": string, "103": string, "104": string}}
- */
-export const ticketClass = {
-  'badminton': '羽毛球',
-  'basketball': '篮球',
-  'football': '足球',
-  'swim': '游泳',
-  'yoga': '瑜伽',
-};
-/**
- * 票券状态代码显示
- * @type {{expired: string, unused: string, used: string}}
- */
-export const ticketState = {
-  "unused": "未使用",
-  "expired": "已过期",
-  "used": "已使用"
 };
 

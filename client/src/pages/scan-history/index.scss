@@ -21,9 +21,28 @@ page {
     background: #fff;
     border-radius: 12px;
 
-    .item {
-      border-bottom: 2px solid #F4F5F7;
+    .input-container {
+      padding: 10px 0 0 0;
+      width: 590px;
+      margin: 0 auto;
+
+      .text-view {
+        position: relative;
+        padding: 24px 0;
+        color: #333;
+        background-color: #FFF;
+        margin-left: 32px;
+        margin-bottom: 1px;
+        display: flex;
+
+        .text-value {
+          font-size: 32px;
+          width: 536px;
+          margin: auto;
+        }
+      }
     }
+
   }
 
   .ticket-log {
@@ -55,6 +74,10 @@ page {
 
     }
 
+    .pagination {
+      margin: 30px 0;
+    }
+
     .none {
       border-bottom: none;
     }
@@ -67,15 +90,4 @@ page {
   }
 }
 
-.input-container {
-  padding: 10px 0 0 0;
-  width: 590px;
-  margin: 0 auto;
-}
-
-.btn-submit {
-  padding: 10px 0;
-  width: 590px;
-  margin: 0 auto 25px;
-}
 
