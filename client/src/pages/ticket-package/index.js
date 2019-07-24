@@ -157,7 +157,7 @@ export default class Index extends Taro.Component {
     // noinspection JSXNamespaceValidation
     return (
       <View>
-        <View class="container">
+        <View class="bg bg-tab">
           <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask/>
           <ModalTicketPurchase
             isOpened={modalTicketPurchaseState}

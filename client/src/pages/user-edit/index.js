@@ -87,7 +87,7 @@ export default class Index extends Taro.Component {
     const {userInfo} = this.state;
     // noinspection JSXNamespaceValidation
     return (
-      <View class="container">
+      <View class="bg">
         <View class="main">
           <View class="avatar">
             <AtAvatar image={userInfo["avatarUrl"] || 'https://jdc.jd.com/img/200'}/>

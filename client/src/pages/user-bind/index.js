@@ -122,7 +122,7 @@ export default class Index extends Taro.Component {
     const {tOpened, tText, tStatus, tDuration} = this.state;
     // noinspection JSXNamespaceValidation
     return (
-      <View class="container">
+      <View class="bg bg-center">
         <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={tDuration} hasMask={tDuration === 0}
                  onClose={this.onToastClose.bind(this)}/>
         <View class="bind" hidden={email_waiting}>

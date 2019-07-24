@@ -79,7 +79,7 @@ export default class Index extends Component {
     const {qrShow} = this.state;
     // noinspection JSXNamespaceValidation
     return (
-      <View class="container">
+      <View class="bg">
         <View class="qrCodeMax" hidden={!qrShow} onClick={this.onQrCodeClick.bind(this)}>
           <Canvas className="code" canvasId="qrCodeMax"/>
         </View>

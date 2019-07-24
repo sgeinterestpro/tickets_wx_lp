@@ -67,7 +67,7 @@ export default class Index extends Taro.Component {
 
     // noinspection JSXNamespaceValidation
     return (
-      <View class="container">
+      <View class="bg bg-tab">
         <View class="main">
           <View class="avatar">
             {/*<AtAvatar openData={{type: "userAvatarUrl"}}/>*/}

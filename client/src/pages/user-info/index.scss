@@ -6,15 +6,6 @@ page {
   width: 500px;
 }
 
-.container {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  height: 100%;
-  margin-bottom: 160px;
-
   .main {
     display: flex;
     flex-direction: row;
@@ -87,6 +78,6 @@ page {
       }
     }
   }
-}
+
 
 

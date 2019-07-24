@@ -100,7 +100,7 @@ export default class Index extends Taro.Component {
     const {floatLayoutShow, startDate, endDate, ticketScanList} = this.state;
     // noinspection JSXNamespaceValidation
     return (
-      <View class="container">
+      <View class="bg bg-tab">
         <AtFloatLayout isOpened={floatLayoutShow} title="请选择查询日期" onClose={this.handleFloatLayoutClose.bind(this)}>
           <AtCalendar isMultiSelect onSelectDate={this.handleCalendarChange.bind(this)}/>
         </AtFloatLayout>

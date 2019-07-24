@@ -32,7 +32,7 @@ export default class Index extends Taro.Component {
   render() {
     // noinspection JSXNamespaceValidation
     return (
-      <View class="container">
+      <View class="bg bg-center">
         <AtButton
           type="primary"
           openType="getUserInfo"

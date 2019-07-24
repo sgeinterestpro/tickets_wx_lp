@@ -62,7 +62,7 @@ export default class Index extends Taro.Component {
     // noinspection JSXNamespaceValidation
     return (
       <View>
-        <View class="container">
+        <View class="bg bg-tab">
           <View class="add">
             <AtButton
               type="secondary"

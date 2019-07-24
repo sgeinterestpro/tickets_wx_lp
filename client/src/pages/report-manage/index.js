@@ -7,7 +7,7 @@
  */
 import Taro from "@tarojs/taro"
 import {View} from "@tarojs/components"
-import {AtButton, AtCalendar, AtTabs, AtTabsPane} from "taro-ui"
+import {AtButton, AtCalendar, AtTabs, AtTabsPane, AtToast} from "taro-ui"
 import "./index.scss"
 import {reportList} from "../../config";
 import {reportExport} from "../../apis";
@@ -45,21 +45,22 @@ export default class Index extends Taro.Component {
    */
   handleQueryClick = (report) => {
     let {startDate, endDate, ticketScanList} = this.state;
+    this.setState({tOpened: true, tText: "正在导出报表", tStatus: "loading", tDuration: 0});
     reportExport(report['api'], startDate, endDate).then(res => {
       if (res.code !== 0) {
         console.error(res);
         Taro.stopPullDownRefresh();
-        Taro.showToast({title: res.message, icon: "none", duration: 2000});
+        this.setState({tOpened: true, tText: res.message, tStatus: "error", tDuration: 3000});
       } else {
         ticketScanList = res.items;
         Taro.stopPullDownRefresh();
-        Taro.showToast({title: "加载成功", icon: "none", duration: 500});
+        this.setState({tOpened: true, tText: "报表导出成功", tStatus: "success", tDuration: 3000});
         this.setState({ticketScanList});
       }
     }).catch(err => {
       console.error(err);
       Taro.stopPullDownRefresh();
-      Taro.showToast({title: "加载失败", icon: "none", duration: 500});
+      this.setState({tOpened: true, tText: "服务器繁忙", tStatus: "error", tDuration: 3000});
     });
   };
 
@@ -71,9 +72,12 @@ export default class Index extends Taro.Component {
 
   render() {
     const {startDate, endDate} = this.state;
+    const {tOpened, tText, tStatus, tDuration} = this.state;
     // noinspection JSXNamespaceValidation
     return (
-      <View class="container">
+      <View class="bg bg-tab">
+        <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={tDuration} hasMask={tDuration === 0}
+                 onClose={this.onToastClose.bind(this)}/>
         <View class="tickets-scan">
           <AtTabs
             current={this.state.current}

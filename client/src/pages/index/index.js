@@ -82,7 +82,7 @@ export default class Index extends Taro.Component {
     const info = this.state;
     // noinspection JSXNamespaceValidation
     return (
-      <View> {info} </View>
+      <View class="bg bg-center"> {info} </View>
     )
   }
 }

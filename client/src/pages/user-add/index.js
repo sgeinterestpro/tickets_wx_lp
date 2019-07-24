@@ -86,7 +86,7 @@ export default class Index extends Taro.Component {
     const {userInfo} = this.state;
     // noinspection JSXNamespaceValidation
     return (
-      <View class="container">
+      <View class="bg">
         <View class="main">
           <View class="title">
             新增用户

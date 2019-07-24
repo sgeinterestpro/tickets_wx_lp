@@ -1,1 +1,19 @@
 @import "~taro-ui/dist/style/index.scss";
+
+.bg {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.bg-tab {
+  padding-bottom: 160px;
+}
+
+.bg-center {
+  align-items: center;
+  justify-content: center;
+}

@@ -1,9 +1,8 @@
 import Taro from "@tarojs/taro"
 import {Text, View} from "@tarojs/components"
-import {AtButton, AtLoadMore, AtProgress, AtToast} from "taro-ui";
+import {AtButton, AtFloatLayout, AtInputNumber, AtLoadMore, AtProgress, AtToast} from "taro-ui";
 import "./index.scss"
 import TicketTabBar from "../../component/tab-bar"
-import ModalTicketPurchase from "../../component/modal-ticket-purchase"
 import {ticketGenerate, ticketLog, ticketUsage} from "../../apis";
 import {ticketOption} from "../../config";
 // import {ticketClass, ticketState} from "../../config";
@@ -22,8 +21,8 @@ export default class Index extends Taro.Component {
       tOpened: false,
       tText: "加载中...",
       tStatus: "loading",
-      modalTicketPurchaseShow: false,
-      openIndex: -1,
+      layoutGenerateShow: false,
+      generateCount: 0,
       defaultCount: 0,
       activeCount: 0,
       ticketLogList: [],
@@ -33,6 +32,7 @@ export default class Index extends Taro.Component {
 
   componentDidShow() {
     Taro.startPullDownRefresh();
+    Taro.showTabBar()
   }
 
   onPullDownRefresh() {
@@ -90,22 +90,35 @@ export default class Index extends Taro.Component {
   };
 
   /**
-   * 领取新票券按钮点击
+   * 增发票券按钮点击
    */
-  modalTicketPurchaseShow = () => {
-    ticketGenerate(10).then(console.debug)
-    // this.setState({openIndex: -1, modalTicketPurchaseShow: true});
+  handleLayoutGenerateShow = () => {
+    this.setState({generateCount: 0, layoutGenerateShow: true});
   };
 
-  // /**
-  //  * 领券中心弹窗返回
-  //  * @constructor
-  //  */
-  // modalTicketPurchaseReturn = (res) => {
-  //   console.debug("res", res);
-  //   // if (res) this.updateTicketUsage();
-  //   this.setState({modalTicketPurchaseShow: false})
-  // };
+  /**
+   * 增发数量修改
+   */
+  handleCountChange = (generateCount) => {
+    this.setState({generateCount: parseInt(generateCount)})
+  };
+
+  /**
+   * 确定增发
+   */
+  handleTacketGenerate = () => {
+    const {generateCount} = this.state;
+    ticketGenerate(generateCount).then(console.debug)
+  };
+
+  /**
+   * 领券中心弹窗返回
+   * @constructor
+   */
+  handleLayoutClose = (res) => {
+    console.debug("res", res);
+    this.setState({layoutGenerateShow: false})
+  };
 
   handleClick = () => {
     this.setState({status: "loading"});
@@ -121,7 +134,7 @@ export default class Index extends Taro.Component {
   };
 
   render() {
-    const {modalTicketPurchaseShow} = this.state;
+    const {layoutGenerateShow, generateCount} = this.state;
     const {tOpened, tText, tStatus} = this.state;
     const {defaultCount, activeCount} = this.state;
     const {ticketLogList} = this.state;
@@ -129,12 +142,18 @@ export default class Index extends Taro.Component {
     // noinspection JSXNamespaceValidation
     return (
       <View>
-        <View class="container">
+        <View class="bg bg-tab">
           <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask/>
-          <ModalTicketPurchase
-            isOpened={modalTicketPurchaseShow}
-            // onHide={this.modalTicketPurchaseReturn.bind(this)}
-          />
+          <AtFloatLayout isOpened={layoutGenerateShow} onClose={this.handleLayoutClose.bind(this)}>
+            <View className="float">
+              <AtInputNumber min={0} max={10000} step={1} value={generateCount}
+                             onChange={this.handleCountChange.bind(this)}/>
+            </View>
+            <AtButton type="secondary" circle disabled={!generateCount > 0}
+                      onClick={this.handleTacketGenerate.bind(this)}>
+              确定
+            </AtButton>
+          </AtFloatLayout>
           <View class="tickets-info">
             <AtProgress className="info-progress" percent={percent} isHidePercent status="progress" strokeWidth={20}/>
             <View className="at-row ">
@@ -153,12 +172,8 @@ export default class Index extends Taro.Component {
             </View>
           </View>
           <View class="ticket-apply">
-            <AtButton
-              type="secondary"
-              circle
-              // disabled={ticketLogList.length >= 3}
-              onClick={this.modalTicketPurchaseShow.bind(this)}
-            >
+            <AtButton type="secondary" circle
+                      onClick={this.handleLayoutGenerateShow.bind(this)}>
               增发票券
             </AtButton>
           </View>
@@ -174,11 +189,7 @@ export default class Index extends Taro.Component {
                       </View>
                     </View>
                   ))}
-                  <AtLoadMore
-                    className={"load-more"}
-                    onClick={this.handleClick.bind(this)}
-                    status={this.state.status}
-                  />
+                  <AtLoadMore className={"load-more"} status={this.state.status} onClick={this.handleClick.bind(this)}/>
                 </View>
                 :
                 <View class="item none">没有记录</View>
