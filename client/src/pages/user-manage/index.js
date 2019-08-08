@@ -17,22 +17,21 @@ export default class Index extends Taro.Component {
     navigationBarBackgroundColor: "#383c42",
     navigationBarTextStyle: "white",
     navigationBarTitleText: "用户列表",
-    enablePullDownRefresh: true,
+    enablePullDownRefresh: false,
   };
 
   constructor() {
     super(...arguments);
     this.state = {
-      user_list: [],
-      none_text: "正在加载用户信息……"
+      userList: Taro.getStorageSync('user-manage-userList') || [],
+      noneText: "正在加载用户信息……"
     }
   }
 
+  /**
+   * 页面显示事件，触发更新数据
+   */
   componentDidShow() {
-    Taro.startPullDownRefresh();
-  }
-
-  onPullDownRefresh() {
     this.updateUserList();
   }
 
@@ -40,16 +39,20 @@ export default class Index extends Taro.Component {
    * 更新用户列表显示
    */
   updateUserList = () => {
+    if (this.first === undefined) {
+      this.first = true;
+      Taro.showLoading({title: '加载中'}).then();
+    }
     memberList().then(res => {
-      const user_list = res.items;
-      Taro.stopPullDownRefresh();
-      Taro.showToast({title: "加载成功", icon: "none", duration: 500});
-      this.setState({user_list, none_text: "暂时没有员工数据"});
+      Taro.hideLoading();
+      const userList = res.items;
+      Taro.setStorage({key: 'user-manage-userList', data: userList}).then();
+      this.setState({userList: userList, noneText: "暂时没有员工数据"});
     }).catch(err => {
       console.error(err);
-      Taro.stopPullDownRefresh();
-      Taro.showToast({title: "加载失败", icon: "none", duration: 500});
-      this.setState({none_text: "员工数据加载失败"});
+      Taro.hideLoading();
+      this.setState({noneText: "员工数据加载失败"});
+      Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
     });
   };
 
@@ -57,7 +60,7 @@ export default class Index extends Taro.Component {
   handleAddUser = () => Taro.navigateTo({url: `/pages/user-add/index`});
 
   render() {
-    const {user_list, none_text} = this.state;
+    const {userList, noneText} = this.state;
 
     // noinspection JSXNamespaceValidation
     return (
@@ -74,8 +77,8 @@ export default class Index extends Taro.Component {
           </View>
           <View class="block">
             <View class="list list-card">
-              {user_list.length > 0 ?
-                user_list.map((user_item, index) => (
+              {userList.length > 0 ?
+                userList.map((user_item, index) => (
                   <View class="item item-card">
                     <AtCard
                       key={index}
@@ -91,7 +94,7 @@ export default class Index extends Taro.Component {
                     </AtCard>
                   </View>
                 )) :
-                <AtListItem className="item" title={none_text}/>
+                <AtListItem className="item" title={noneText}/>
               }
             </View>
           </View>

@@ -1,6 +1,6 @@
 import Taro from "@tarojs/taro"
 import {Text, View} from "@tarojs/components"
-import {AtButton, AtLoadMore, AtProgress, AtToast} from "taro-ui";
+import {AtGrid, AtLoadMore, AtProgress, AtToast} from "taro-ui";
 import "./index.scss"
 import GenerateModule from "../../component/module-generate"
 import ReportModule from "../../component/module-report"
@@ -16,7 +16,7 @@ export default class Index extends Taro.Component {
     navigationBarBackgroundColor: "#383c42",
     navigationBarTextStyle: "white",
     navigationBarTitleText: "票券管理",
-    enablePullDownRefresh: true,
+    enablePullDownRefresh: false,
   };
 
   constructor() {
@@ -29,28 +29,31 @@ export default class Index extends Taro.Component {
       moduleReportShow: false,
       moduleSystemShow: false,
       generateCount: 0,
-      lastCount: 0,
-      usedCount: 0,
+      lastCount: Taro.getStorageSync('ticket-manage-lastCount') || 0,
+      usedCount: Taro.getStorageSync('ticket-manage-usedCount') || 0,
       ticketLogList: [],
       status: "more"
     }
   }
 
+  /**
+   * 页面显示事件，触发更新数据
+   */
   componentDidShow() {
-    Taro.startPullDownRefresh().then();
-  }
-
-  onPullDownRefresh() {
     this.updateTicketUsage();
     this.updateTicketLogList();
-    this.setState({status: "more"});
   }
 
   /**
    * 更新票券列表显示
    */
   updateTicketUsage = () => {
+    if (this.first === undefined) {
+      this.first = true;
+      Taro.showLoading({title: '加载中'}).then();
+    }
     ticketUsage().then(res => {
+      Taro.hideLoading();
       if (res.code === 0) {
         let ticketCounts = res.data;
         let lastCount = 0;
@@ -62,14 +65,14 @@ export default class Index extends Taro.Component {
             usedCount += ticketCounts[count]
           }
         }
+        Taro.setStorage({key: 'ticket-manage-lastCount', data: lastCount}).then();
+        Taro.setStorage({key: 'ticket-manage-usedCount', data: usedCount}).then();
         this.setState({lastCount, usedCount})
       }
-      Taro.stopPullDownRefresh();
-      Taro.showToast({title: "加载成功", icon: "none", duration: 500}).then();
     }).catch(err => {
       console.error(err);
-      Taro.stopPullDownRefresh();
-      Taro.showToast({title: "加载失败", icon: "none", duration: 500}).then();
+      Taro.hideLoading();
+      Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
     });
   };
 
@@ -82,45 +85,36 @@ export default class Index extends Taro.Component {
     if (append) {
       skip = ticketLogList.length;
     }
+    if (this.first === undefined) {
+      this.first = true;
+      Taro.showLoading({title: '加载中'}).then();
+    }
     return new Promise((resolve, reject) => {
       ticketLog(skip, limit).then(res => {
+        Taro.hideLoading();
         if (append) {
           ticketLogList = ticketLogList.concat(res.items);
         } else {
           ticketLogList = res.items;
         }
-        Taro.stopPullDownRefresh();
-        Taro.showToast({title: "加载成功", icon: "none", duration: 500}).then();
-        this.setState({ticketLogList, openIndex: -1, tOpened: false});
-        resolve(res.items.length === limit)
+        this.setState({ticketLogList, openIndex: -1, tOpened: false, status: "more"});
+        resolve(res.items.length === limit);
       }).catch(err => {
         console.error(err);
-        Taro.stopPullDownRefresh();
-        Taro.showToast({title: "加载失败", icon: "none", duration: 500}).then();
+        Taro.hideLoading();
+        Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
         reject()
       });
     });
   };
 
   /**
-   * 增发票券按钮点击
-   */
-  handleModuleGenerateShow = () => {
-    this.setState({moduleGenerateShow: true});
-  };
-
-  /**
-   * 增发票券按钮点击
-   */
-  handleModuleReportShow = () => {
-    this.setState({moduleReportShow: true});
-  };
-
-  /**
    * 系统设置按钮点击
    */
-  handleModuleSystemShow = () => {
-    this.setState({moduleSystemShow: true});
+  handleModuleShow = (item, index) => {
+    let newState = {};
+    newState[item.data0] = true;
+    this.setState(newState);
   };
 
   /**
@@ -187,15 +181,27 @@ export default class Index extends Taro.Component {
             </View>
           </View>
           <View class="block">
-            <AtButton type="secondary" circle onClick={this.handleModuleGenerateShow.bind(this)}>
-              增发票券
-            </AtButton>
-            <AtButton type="secondary" circle onClick={this.handleModuleReportShow.bind(this)}>
-              报表导出
-            </AtButton>
-            <AtButton type="secondary" circle onClick={this.handleModuleSystemShow.bind(this)}>
-              系统设置
-            </AtButton>
+            <View class="body">
+              <AtGrid hasBorder={false} data={
+                [
+                  {
+                    image: 'https://i.loli.net/2019/08/08/IO8CtKg1mQRyFAH.png',
+                    value: '增发票券',
+                    data0: 'moduleGenerateShow'
+                  },
+                  {
+                    image: 'https://i.loli.net/2019/08/08/gIboDypXRYV9hjd.png',
+                    value: '报表导出',
+                    data0: 'moduleReportShow'
+                  },
+                  {
+                    image: 'https://i.loli.net/2019/08/08/cE8Bz54TtFkjxWd.png',
+                    value: '系统设置',
+                    data0: 'moduleSystemShow'
+                  }
+                ]
+              } onClick={this.handleModuleShow.bind(this)}/>
+            </View>
           </View>
           <View class="block">
             <View class="list">

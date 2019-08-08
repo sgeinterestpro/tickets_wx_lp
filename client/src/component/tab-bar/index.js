@@ -61,7 +61,7 @@ export default class Index extends Taro.Component {
         <View class={'placeholder'}/>
         <AtTabBar
           backgroundColor="#ececec"
-          color="#ea6bb8"
+          // color="#ea6bb8"
           tabList={roleTabUrls[role]}
           onClick={this.handleClick.bind(this)}
           current={current}

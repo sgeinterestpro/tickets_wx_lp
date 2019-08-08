@@ -9,7 +9,7 @@ import Taro from "@tarojs/taro"
 import {View} from "@tarojs/components"
 import {AtButton, AtList, AtListItem, AtSwipeAction, AtToast} from "taro-ui";
 import "./index.scss"
-import {ticketClass, ticketState} from "../../config";
+import {ticketClass, ticketIcon, ticketState} from "../../config";
 import TicketTabBar from "../../component/tab-bar"
 import ModalTicketPurchase from "../../component/modal-ticket-purchase"
 import {refundTicket, ticketPackage} from "../../apis";
@@ -19,7 +19,7 @@ export default class Index extends Taro.Component {
     navigationBarBackgroundColor: "#383c42",
     navigationBarTextStyle: "white",
     navigationBarTitleText: "票券列表",
-    enablePullDownRefresh: true,
+    // enablePullDownRefresh: true,
   };
 
   constructor() {
@@ -30,21 +30,14 @@ export default class Index extends Taro.Component {
       tStatus: "loading",
       modalTicketPurchaseState: false,
       openIndex: -1,
-      ticketList: []
+      ticketList: Taro.getStorageSync('ticket-package-ticketList') || []
     }
   }
 
   /**
-   * 页面加载完毕事件，触发下拉刷新
+   * 页面显示事件，触发更新数据
    */
   componentDidShow() {
-    Taro.startPullDownRefresh();
-  }
-
-  /**
-   * 页面下拉刷新事件，更新票券列表
-   */
-  onPullDownRefresh() {
     this.updateTicketList();
   }
 
@@ -53,18 +46,22 @@ export default class Index extends Taro.Component {
    * 出发下拉刷新加载动画
    */
   updateTicketList = () => {
+    if (this.first === undefined) {
+      this.first = true;
+      Taro.showLoading({title: '加载中'}).then();
+    }
     ticketPackage().then(res => {
+      Taro.hideLoading();
       let ticketListNew = [];
       res.items.map((item) => {
         ticketListNew.push(item)
       });
-      Taro.stopPullDownRefresh();
-      Taro.showToast({title: "加载成功", icon: "none", duration: 500});
+      Taro.setStorage({key: 'ticket-package-ticketList', data: ticketListNew}).then();
       this.setState({ticketList: ticketListNew, openIndex: -1, tOpened: false});
     }).catch(err => {
       console.error(err);
-      Taro.stopPullDownRefresh();
-      Taro.showToast({title: "加载失败", icon: "none", duration: 500});
+      Taro.hideLoading();
+      Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
     });
   };
 
@@ -183,7 +180,7 @@ export default class Index extends Taro.Component {
                         disabled={item.state !== "valid"}
                         extraText={ticketState[item[`state`]]}
                         arrow="right"
-                        thumb="https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png"
+                        thumb={ticketIcon[item["class"]]}
                         onClick={this.onTicketClick.bind(this, item)}
                       />
                     </AtSwipeAction>
