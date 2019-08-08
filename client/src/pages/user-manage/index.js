@@ -50,8 +50,8 @@ export default class Index extends Taro.Component {
       this.setState({userList: userList, noneText: "暂时没有员工数据"});
     }).catch(err => {
       console.error(err);
-      Taro.hideLoading();
       this.setState({noneText: "员工数据加载失败"});
+      Taro.hideLoading();
       Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
     });
   };
