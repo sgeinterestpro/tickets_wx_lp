@@ -14,7 +14,6 @@ class App extends Component {
   config = {
     pages: [
       "pages/index/index",
-      "pages/report-manage/index",
       "pages/scan-history/index",
       "pages/ticket-package/index",
       "pages/ticket-manage/index",
@@ -33,12 +32,19 @@ class App extends Component {
       navigationBarBackgroundColor: "#1A5784",
       navigationBarTitleText: "票券助手",
       navigationBarTextStyle: "white",
+    },
+    networkTimeout: {
+      request: 20000
     }
   };
 
   constructor() {
     super(...arguments);
-    Taro.cloud.init();
+    if (!wx.cloud) {
+      console.error('请使用 2.2.3 或以上的基础库以使用云能力');
+    } else {
+      Taro.cloud.init({env: "tickets-zgopx"});
+    }
   }
 
   componentDidShow() {

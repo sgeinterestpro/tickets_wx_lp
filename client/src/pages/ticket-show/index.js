@@ -79,18 +79,18 @@ export default class Index extends Component {
     const {qrShow} = this.state;
     // noinspection JSXNamespaceValidation
     return (
-      <View class="container">
+      <View class="bg">
         <View class="qrCodeMax" hidden={!qrShow} onClick={this.onQrCodeClick.bind(this)}>
           <Canvas className="code" canvasId="qrCodeMax"/>
         </View>
-        <View class="main" hidden={qrShow}>
+        <View class="list" hidden={qrShow}>
           <View class="qrCode item" onClick={this.onQrCodeClick.bind(this)}>
             <Canvas className="code" canvasId="qrCode"/>
           </View>
           <View class="round left"/>
           <View class="round right"/>
           <View class="intro">
-            <View class="title">说明：</View>
+            <View class="item">说明：</View>
             <View>1. 有效期为领取票券时所选日期。</View> {/*TODO 根据数据显示实际日期*/}
             <View>2. 仅供本人使用不可转借他人。</View>
             <View>3. 最终解释权归发券方所有。</View>

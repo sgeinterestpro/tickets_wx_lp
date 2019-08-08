@@ -100,7 +100,7 @@ export default class Index extends Taro.Component {
     const {floatLayoutShow, startDate, endDate, ticketScanList} = this.state;
     // noinspection JSXNamespaceValidation
     return (
-      <View class="container">
+      <View class="bg">
         <AtFloatLayout isOpened={floatLayoutShow} title="请选择查询日期" onClose={this.handleFloatLayoutClose.bind(this)}>
           <AtCalendar isMultiSelect onSelectDate={this.handleCalendarChange.bind(this)}/>
         </AtFloatLayout>
@@ -115,7 +115,7 @@ export default class Index extends Taro.Component {
             </View>
           </View>
         </View>
-        <View class="ticket-log">
+        <View class="block">
           <View class="list">
             {ticketScanList.length > 0 ?
               <View>
@@ -126,9 +126,9 @@ export default class Index extends Taro.Component {
                 </View>
                 {ticketScanList.map((item, index) => (
                   <View key={index} class="item">
-                    <View class="text">{`编号：${item["_id"].substr(0, 20)}`}</View>
-                    <View class="text">{`用户：${item["user_init"]["real_name"] || "已注销"}`}</View>
-                    <View class="text">{`项目：${ticketClass[item["class"]]}`}</View>
+                    <View>{`编号：${item["_id"].substr(0, 20)}`}</View>
+                    <View>{`用户：${item["user_init"]["real_name"] || "已注销"}`}</View>
+                    <View>{`项目：${ticketClass[item["class"]]}`}</View>
                     <View class="time">{`时间：${item["check_time"]}`}</View>
                   </View>
                 ))}

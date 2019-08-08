@@ -21,8 +21,19 @@ export default class Index extends Taro.Component {
   constructor() {
     super(...arguments);
     this.state = {
-      info: ""
+      info: "",
+      needReLaunch: false,
     }
+  }
+
+  componentDidShow() {
+    if (this.state.needReLaunch) {
+      Taro.reLaunch({url: "/pages/index/index"}).then()
+    }
+  }
+
+  componentDidHide() {
+    this.setState({needReLaunch: true});
   }
 
   componentWillMount() {
@@ -46,10 +57,10 @@ export default class Index extends Taro.Component {
             role = roles[0] || "other";
             Taro.setStorageSync("Role", role)
           }
-          Taro.redirectTo({url: defaultRoleUrl[role]})
+          Taro.redirectTo({url: defaultRoleUrl[role]}).then()
         } else {
           // 需要绑定用户身份
-          Taro.redirectTo({url: defaultBindUrl})
+          Taro.redirectTo({url: defaultBindUrl}).then()
         }
       }).catch(err => {
         console.error(err);
@@ -58,13 +69,13 @@ export default class Index extends Taro.Component {
         if (retry === 0) {
           Taro.setStorageSync("UesrInfoRetry", retry + 1);
           setTimeout(() => {
-            Taro.reLaunch({url: "/pages/index/index"})
+            Taro.reLaunch({url: "/pages/index/index"}).then()
           }, 1000)
         } else if (retry < 5) {
           this.setState({info: "用户认证失败，两秒后重试..."});
           Taro.setStorageSync("UesrInfoRetry", retry + 1);
           setTimeout(() => {
-            Taro.reLaunch({url: "/pages/index/index"})
+            Taro.reLaunch({url: "/pages/index/index"}).then()
           }, 2000)
         } else {
           this.setState({info: "用户认证失败，服务器暂时被结界封印了..."});
@@ -74,7 +85,7 @@ export default class Index extends Taro.Component {
     }).catch(err => {
       // 需要用户授权——跳转到用户授权页面
       console.warn(err);
-      Taro.redirectTo({url: defaultAuthUrl})
+      Taro.redirectTo({url: defaultAuthUrl}).then()
     })
   }
 
@@ -82,7 +93,7 @@ export default class Index extends Taro.Component {
     const info = this.state;
     // noinspection JSXNamespaceValidation
     return (
-      <View> {info} </View>
+      <View class="bg bg-center"> {info} </View>
     )
   }
 }

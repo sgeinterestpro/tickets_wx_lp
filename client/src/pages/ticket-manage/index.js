@@ -1,11 +1,14 @@
 import Taro from "@tarojs/taro"
 import {Text, View} from "@tarojs/components"
-import {AtButton, AtLoadMore, AtProgress, AtToast} from "taro-ui";
+import {AtGrid, AtLoadMore, AtProgress, AtToast} from "taro-ui";
 import "./index.scss"
+import GenerateModule from "../../component/module-generate"
+import ReportModule from "../../component/module-report"
+import SystemModule from "../../component/module-system"
 import TicketTabBar from "../../component/tab-bar"
-import ModalTicketPurchase from "../../component/modal-ticket-purchase"
-import {ticketGenerate, ticketLog, ticketUsage} from "../../apis";
+import {ticketLog, ticketUsage} from "../../apis";
 import {ticketOption} from "../../config";
+
 // import {ticketClass, ticketState} from "../../config";
 
 export default class Index extends Taro.Component {
@@ -13,7 +16,7 @@ export default class Index extends Taro.Component {
     navigationBarBackgroundColor: "#383c42",
     navigationBarTextStyle: "white",
     navigationBarTitleText: "票券管理",
-    enablePullDownRefresh: true,
+    enablePullDownRefresh: false,
   };
 
   constructor() {
@@ -22,44 +25,57 @@ export default class Index extends Taro.Component {
       tOpened: false,
       tText: "加载中...",
       tStatus: "loading",
-      modalTicketPurchaseShow: false,
-      openIndex: -1,
-      defaultCount: 0,
-      activeCount: 0,
-      ticketLogList: [],
+      moduleGenerateShow: false,
+      moduleReportShow: false,
+      moduleSystemShow: false,
+      generateCount: 0,
+      lastCount: Taro.getStorageSync('ticket-manage-lastCount') || 0,
+      usedCount: Taro.getStorageSync('ticket-manage-usedCount') || 0,
+      ticketLogList: Taro.getStorageSync('ticket-manage-logList') || [],
       status: "more"
     }
   }
 
+  /**
+   * 页面显示事件，触发更新数据
+   */
   componentDidShow() {
-    Taro.startPullDownRefresh();
-  }
-
-  onPullDownRefresh() {
     this.updateTicketUsage();
     this.updateTicketLogList();
-    this.setState({status: "more"});
   }
 
   /**
    * 更新票券列表显示
    */
   updateTicketUsage = () => {
+    if (this.first === undefined) {
+      this.first = true;
+      Taro.showLoading({title: '加载中'}).then();
+    }
     ticketUsage().then(res => {
+      Taro.hideLoading();
       if (res.code === 0) {
-        this.setState({
-          defaultCount: res.data.default,
-          activeCount: res.data.active
-        });
+        let ticketCounts = res.data;
+        let lastCount = 0;
+        let usedCount = 0;
+        for (let count of Object.keys(ticketCounts)) {
+          if (count === 'default') {
+            lastCount += ticketCounts[count]
+          } else {
+            usedCount += ticketCounts[count]
+          }
+        }
+        Taro.setStorage({key: 'ticket-manage-lastCount', data: lastCount}).then();
+        Taro.setStorage({key: 'ticket-manage-usedCount', data: usedCount}).then();
+        this.setState({lastCount, usedCount})
       }
-      Taro.stopPullDownRefresh();
-      Taro.showToast({title: "加载成功", icon: "none", duration: 500});
     }).catch(err => {
       console.error(err);
-      Taro.stopPullDownRefresh();
-      Taro.showToast({title: "加载失败", icon: "none", duration: 500});
+      Taro.hideLoading();
+      Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
     });
   };
+
   /**
    * 更新票券列表记录
    */
@@ -69,43 +85,54 @@ export default class Index extends Taro.Component {
     if (append) {
       skip = ticketLogList.length;
     }
+    if (this.first === undefined) {
+      this.first = true;
+      Taro.showLoading({title: '加载中'}).then();
+    }
     return new Promise((resolve, reject) => {
       ticketLog(skip, limit).then(res => {
+        Taro.hideLoading();
         if (append) {
           ticketLogList = ticketLogList.concat(res.items);
         } else {
           ticketLogList = res.items;
         }
-        Taro.stopPullDownRefresh();
-        Taro.showToast({title: "加载成功", icon: "none", duration: 500});
-        this.setState({ticketLogList, openIndex: -1, tOpened: false});
-        resolve(res.items.length === limit)
+        Taro.setStorage({key: 'ticket-manage-logList', data: ticketLogList}).then();
+        this.setState({ticketLogList, openIndex: -1, tOpened: false, status: "more"});
+        resolve(res.items.length === limit);
       }).catch(err => {
         console.error(err);
-        Taro.stopPullDownRefresh();
-        Taro.showToast({title: "加载失败", icon: "none", duration: 500});
+        Taro.hideLoading();
+        Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
         reject()
       });
     });
   };
 
   /**
-   * 领取新票券按钮点击
+   * 系统设置按钮点击
    */
-  modalTicketPurchaseShow = () => {
-    ticketGenerate(10).then(console.debug)
-    // this.setState({openIndex: -1, modalTicketPurchaseShow: true});
+  handleModuleShow = (item, index) => {
+    let newState = {};
+    newState[item.data0] = true;
+    this.setState(newState);
   };
 
-  // /**
-  //  * 领券中心弹窗返回
-  //  * @constructor
-  //  */
-  // modalTicketPurchaseReturn = (res) => {
-  //   console.debug("res", res);
-  //   // if (res) this.updateTicketUsage();
-  //   this.setState({modalTicketPurchaseShow: false})
-  // };
+  /**
+   * 领券中心弹窗返回
+   * @constructor
+   */
+  handleModuleClose = (res) => {
+    console.debug("res", res);
+    this.setState({
+      moduleGenerateShow: false,
+      moduleReportShow: false,
+      moduleSystemShow: false,
+    });
+    if (res === "generate") {
+      this.updateTicketUsage();
+    }
+  };
 
   handleClick = () => {
     this.setState({status: "loading"});
@@ -121,48 +148,63 @@ export default class Index extends Taro.Component {
   };
 
   render() {
-    const {modalTicketPurchaseShow} = this.state;
+    const {moduleGenerateShow, moduleReportShow, moduleSystemShow} = this.state;
     const {tOpened, tText, tStatus} = this.state;
-    const {defaultCount, activeCount} = this.state;
+    const {lastCount, usedCount} = this.state;
     const {ticketLogList} = this.state;
-    const percent = 100 * (defaultCount / ((activeCount + defaultCount) || 1));
+    // const percent = 100 * (lastCount / ((usedCount + usedCount) || 1));
+    const percent = 100 * (lastCount / 500);
     // noinspection JSXNamespaceValidation
     return (
       <View>
-        <View class="container">
+        <View class="bg">
           <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask/>
-          <ModalTicketPurchase
-            isOpened={modalTicketPurchaseShow}
-            // onHide={this.modalTicketPurchaseReturn.bind(this)}
-          />
-          <View class="tickets-info">
-            <AtProgress className="info-progress" percent={percent} isHidePercent status="progress" strokeWidth={20}/>
-            <View className="at-row ">
-              <View className="at-col info-item">
-                <View className="item-title">当月剩余数量</View>
-                <View className="item-body">
-                  <Text className="item-text">{defaultCount}</Text><Text className="item-unit">张</Text>
+          <GenerateModule isOpened={moduleGenerateShow} onClose={this.handleModuleClose.bind(this)}/>
+          <ReportModule isOpened={moduleReportShow} onClose={this.handleModuleClose.bind(this)}/>
+          <SystemModule isOpened={moduleSystemShow} onClose={this.handleModuleClose.bind(this)}/>
+          <View class="block">
+            <View class="body">
+              <AtProgress className="info-progress" percent={percent} isHidePercent status="progress" strokeWidth={20}/>
+              <View className="at-row">
+                <View className="at-col info-item">
+                  <View className="item-title">库存剩余数量</View>
+                  <View className="item-body">
+                    <Text className="item-text">{lastCount}</Text><Text className="item-unit">张</Text>
+                  </View>
                 </View>
-              </View>
-              <View className="at-col info-item">
-                <View className="item-title">当月领取数量</View>
-                <View className="item-body">
-                  <Text className="item-text">{activeCount}</Text><Text className="item-unit">张</Text>
+                <View className="at-col info-item">
+                  <View className="item-title">当月消耗数量</View>
+                  <View className="item-body">
+                    <Text className="item-text">{usedCount}</Text><Text className="item-unit">张</Text>
+                  </View>
                 </View>
               </View>
             </View>
           </View>
-          <View class="ticket-apply">
-            <AtButton
-              type="secondary"
-              circle
-              // disabled={ticketLogList.length >= 3}
-              onClick={this.modalTicketPurchaseShow.bind(this)}
-            >
-              增发票券
-            </AtButton>
+          <View class="block">
+            <View class="body">
+              <AtGrid hasBorder={false} data={
+                [
+                  {
+                    image: 'https://i.loli.net/2019/08/08/IO8CtKg1mQRyFAH.png',
+                    value: '增发票券',
+                    data0: 'moduleGenerateShow'
+                  },
+                  {
+                    image: 'https://i.loli.net/2019/08/08/gIboDypXRYV9hjd.png',
+                    value: '报表导出',
+                    data0: 'moduleReportShow'
+                  },
+                  {
+                    image: 'https://i.loli.net/2019/08/08/cE8Bz54TtFkjxWd.png',
+                    value: '系统设置',
+                    data0: 'moduleSystemShow'
+                  }
+                ]
+              } onClick={this.handleModuleShow.bind(this)}/>
+            </View>
           </View>
-          <View class="ticket-log">
+          <View class="block">
             <View class="list">
               {ticketLogList.length > 0 ?
                 <View>
@@ -170,14 +212,14 @@ export default class Index extends Taro.Component {
                     <View key={index} class="item">
                       <View class="time">{item.time}</View>
                       <View class="text">
-                        {`${item["real_name"]} ${ticketOption[item["option"]]} ${item["ticket_id"].substr(0, 20)}`}
+                        {`${ticketOption[item["option"]]} ${item["ticket_id"].substr(0, 20)} ${item["real_name"]}`}
                       </View>
                     </View>
                   ))}
                   <AtLoadMore
-                    className={"load-more"}
-                    onClick={this.handleClick.bind(this)}
+                    className={"item item-more"}
                     status={this.state.status}
+                    onClick={this.handleClick.bind(this)}
                   />
                 </View>
                 :

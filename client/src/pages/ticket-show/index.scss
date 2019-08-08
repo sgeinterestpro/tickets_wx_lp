@@ -6,29 +6,22 @@ page {
   height: 100%;
 }
 
-.container {
-  height: 100%;
+
+.list {
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+  box-shadow: 0 0 2px 0 rgba(25, 29, 33, 0.15);
+  position: relative;
+  width: 670px;
+  margin: 40px auto 0;
+  padding: 0 40px;
+  background: #fff;
+  border-radius: 12px;
 
-  .main {
-    box-sizing: border-box;
-    box-shadow: 0 0 2px 0 rgba(25, 29, 33, 0.15);
-    position: relative;
-    width: 670px;
-    margin: 40px auto 0;
-    padding: 0 40px;
-    background: #fff;
-    border-radius: 12px;
-
-    .item {
-      border-bottom: 2px solid #f4f5f7;
-    }
+  .item {
+    border-bottom: 2px solid #f4f5f7;
   }
 }
+
 
 .qrCode {
   width: 590px;
@@ -95,7 +88,7 @@ page {
     word-wrap: break-word;
   }
 
-  .title {
+  .item {
     font-size: 32px;
     color: #191d21;
     line-height: 50px;

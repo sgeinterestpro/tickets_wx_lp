@@ -6,7 +6,7 @@
 import Taro, {Component} from "@tarojs/taro"
 import {Button, Picker, Text, View} from "@tarojs/components"
 import {AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from "taro-ui"
-import "./index.scss"
+import "../module-index.scss"
 import {ticketClass} from "../../config";
 import {getNowDay, getWeekDay} from "../../common/getWeek";
 import {purchaseTicket} from "../../apis";
@@ -68,11 +68,14 @@ export default class Index extends Component {
     purchaseTicket(data).then(res => {
       this.setState({tOpened: false});
       if (res.code !== 0) {
-        Taro.showModal({content: res.message, showCancel: false});
+        Taro.showModal({title: "错误", content: res.message, showCancel: false}).then();
       } else {
-        Taro.showModal({content: "领取成功", showCancel: false});
+        Taro.showModal({title: "提示", content: "领取成功", showCancel: false}).then();
         this.onReturn(true);
       }
+    }).catch(err => {
+      console.error(err);
+      Taro.showModal({title: "警告", content: "网络可能收到了神秘信号的干扰。", showCancel: false}).then();
     });
   };
 
@@ -86,33 +89,35 @@ export default class Index extends Component {
     // noinspection JSXNamespaceValidation
     return (
       isOpened &&
-      <View class="container">
+      <View>
         <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask/>
         <AtModal isOpened={isOpened}>
           <AtModalHeader>领券中心</AtModalHeader>
           <AtModalContent>
-            <View className="page-section">
-              <View className="page-section-title">
-                <Text>项目选择</Text>
+            <View class="section-container">
+              <View className="section">
+                <View className="section-title">
+                  <Text>项目选择</Text>
+                </View>
+                <View className="section-text">
+                  <Picker mode="selector" range={eventShow} value={eventSelect}
+                          onChange={this.onClassChange.bind(this)}>
+                    <View className="section-picker">
+                      当前选择：{eventShow[eventSelect]}
+                    </View>
+                  </Picker>
+                </View>
               </View>
-              <View>
-                <Picker mode="selector" range={eventShow} value={eventSelect}
-                        onChange={this.onClassChange.bind(this)}>
-                  <View className="picker">
-                    当前选择：{eventShow[eventSelect]}
-                  </View>
-                </Picker>
-              </View>
-            </View>
-            <View className="page-section">
-              <View className="page-section-title">
-                <Text>日期选择</Text>
-              </View>
-              <View>
-                <Picker mode="date" start={dateStart} end={dateEnd} value={dateSel}
-                        onChange={this.onDateChange.bind(this)}>
-                  <View className="picker">当前选择：{dateSel}</View>
-                </Picker>
+              <View className="section">
+                <View className="section-title">
+                  <Text>日期选择</Text>
+                </View>
+                <View>
+                  <Picker mode="date" start={dateStart} end={dateEnd} value={dateSel}
+                          onChange={this.onDateChange.bind(this)}>
+                    <View className="section-picker">当前选择：{dateSel}</View>
+                  </Picker>
+                </View>
               </View>
             </View>
           </AtModalContent>

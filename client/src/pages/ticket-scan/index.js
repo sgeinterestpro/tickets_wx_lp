@@ -19,7 +19,7 @@ export default class Index extends Taro.Component {
     navigationBarBackgroundColor: "#383c42",
     navigationBarTextStyle: "white",
     navigationBarTitleText: "票券使用",
-    enablePullDownRefresh: true,
+    enablePullDownRefresh: false,
   };
 
   constructor() {
@@ -27,15 +27,11 @@ export default class Index extends Taro.Component {
     this.state = {
       ticketId: "",
       modalTicketDisplayShow: false,
-      ticketCheckLogList: []
+      ticketCheckLogList: Taro.getStorageSync('ticket-scan-LogList') || []
     }
   }
 
   componentDidMount() {
-    Taro.startPullDownRefresh();
-  }
-
-  onPullDownRefresh() {
     this.updateTicketCheckLogList();
   }
 
@@ -46,14 +42,14 @@ export default class Index extends Taro.Component {
     let {ticketCheckLogList} = this.state;
     // const nowDate = getNowDay();
     ticketCheckLog().then(res => {
+      Taro.hideLoading();
       ticketCheckLogList = res.items;
-      Taro.stopPullDownRefresh();
-      Taro.showToast({title: "加载成功", icon: "none", duration: 500});
+      Taro.setStorage({key: 'ticket-scan-LogList', data: ticketCheckLogList}).then();
       this.setState({ticketCheckLogList, openIndex: -1, tOpened: false});
     }).catch(err => {
       console.error(err);
-      Taro.stopPullDownRefresh();
-      Taro.showToast({title: "加载失败", icon: "none", duration: 500});
+      Taro.hideLoading();
+      Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
     });
   };
 
@@ -92,7 +88,7 @@ export default class Index extends Taro.Component {
     const {ticketId, modalTicketDisplayShow, ticketCheckLogList} = this.state;
     // noinspection JSXNamespaceValidation
     return (
-      <View class="container">
+      <View class="bg">
         <ModalTicketDisplay
           isOpened={modalTicketDisplayShow}
           onReturn={this.modalTicketDisplayReturn.bind(this)}
@@ -110,7 +106,7 @@ export default class Index extends Taro.Component {
           <View class="btn-submit">
           </View>
         </View>
-        <View class="ticket-log">
+        <View class="block">
           <View class="list">
             {ticketCheckLogList.length > 0 ?
               <View>

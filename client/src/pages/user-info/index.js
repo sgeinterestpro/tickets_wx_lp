@@ -67,8 +67,8 @@ export default class Index extends Taro.Component {
 
     // noinspection JSXNamespaceValidation
     return (
-      <View class="container">
-        <View class="main">
+      <View class="bg">
+        <View class="user-card">
           <View class="avatar">
             {/*<AtAvatar openData={{type: "userAvatarUrl"}}/>*/}
             <AtAvatar image={userInfo["avatarUrl"] || 'https://jdc.jd.com/img/200'}/>
@@ -79,7 +79,7 @@ export default class Index extends Taro.Component {
 
           </View>
         </View>
-        {userInfo["avatarUrl"] ? "" : <View class="ticket-apply">
+        {userInfo["avatarUrl"] ? "" : <View class="button-full">
           <AtButton
             type="secondary"
             circle
@@ -88,28 +88,27 @@ export default class Index extends Taro.Component {
             同步用户信息
           </AtButton>
         </View>}
-        <View class="item-list">
-          <View class="item">
-            <AtList>
-              <AtListItem title="姓名" extraText={userInfo["real_name"]}/>
-              <AtListItem title="电话" extraText={userInfo["phone"]}/>
-              <AtListItem title="工号" extraText={userInfo["work_no"]}/>
-              <AtListItem title="邮箱" extraText={userInfo["email"]}/>
-              <AtListItem
-                title="项目"
-                extraText={(userInfo["sports"] || []).map((sport_item) => ticketClass[sport_item] || '未知')}/>
-            </AtList>
-          </View>
-          {roleValueList.length > 1 &&
-          <View class="item">
-            <Picker mode="selector" range={roleValueList} value={roleSelectIndex}
-                    onChange={this.onRoleChange.bind(this)}>
-              <View class="picker">
-                <View class="title">角色</View>
-                <View class="text">{roleValueList[roleSelectIndex]}</View>
-              </View>
-            </Picker>
-          </View>}
+        <View class="block">
+          <AtList hasBorder={false}>
+            <AtListItem class="item" title="姓名" extraText={userInfo["real_name"]}/>
+            <AtListItem class="item" title="电话" extraText={userInfo["phone"]}/>
+            <AtListItem class="item" title="工号" extraText={userInfo["work_no"]}/>
+            <AtListItem class="item" title="邮箱" extraText={userInfo["email"]}/>
+            <AtListItem
+              class="item"
+              title="项目"
+              extraText={(userInfo["sports"] || []).map((sport_item) => ticketClass[sport_item] || '未知')}/>
+            {roleValueList.length > 1 &&
+            <View class="item">
+              <Picker mode="selector" range={roleValueList} value={roleSelectIndex}
+                      onChange={this.onRoleChange.bind(this)}>
+                <View class="picker">
+                  <View class="item">角色</View>
+                  <View class="text">{roleValueList[roleSelectIndex]}</View>
+                </View>
+              </Picker>
+            </View>}
+          </AtList>
         </View>
         <TicketTabBar/>
       </View>
