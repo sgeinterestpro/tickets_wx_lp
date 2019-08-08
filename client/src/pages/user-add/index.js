@@ -87,8 +87,8 @@ export default class Index extends Taro.Component {
     // noinspection JSXNamespaceValidation
     return (
       <View class="bg">
-        <View class="main">
-          <View class="title">
+        <View class="list">
+          <View class="item">
             新增用户
           </View>
           <AtForm

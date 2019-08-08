@@ -62,7 +62,7 @@ export default class Index extends Taro.Component {
     // noinspection JSXNamespaceValidation
     return (
       <View>
-        <View class="bg bg-tab">
+        <View class="bg">
           <View class="add">
             <AtButton
               type="secondary"
@@ -72,25 +72,28 @@ export default class Index extends Taro.Component {
               新增用户
             </AtButton>
           </View>
-          <View class="list">
-            {user_list.length > 0 ?
-              user_list.map((user_item, index) => (
-                <AtCard
-                  key={index}
-                  className={"item"}
-                  isFull={true}
-                  note={user_item["email"]}
-                  extra={`工号：${user_item["work_no"]}`}
-                  title={`姓名：${user_item["real_name"]}`}
-                  onClick={this.handleUserClick.bind(this, user_item["init_id"])}
-                  thumb={user_item["avatarUrl"] || 'https://jdc.jd.com/img/13'}
-                >
-                  {user_item["user_id"] ? "" : <View>提示：用户未绑定微信</View>}
-                  <View>项目：{user_item["sports"].map((sport_item) => ticketClass[sport_item] || '未知')}</View>
-                </AtCard>
-              )) :
-              <AtListItem className="item" title={none_text}/>
-            }
+          <View class="block">
+            <View class="list list-card">
+              {user_list.length > 0 ?
+                user_list.map((user_item, index) => (
+                  <View class="item item-card">
+                    <AtCard
+                      key={index}
+                      isFull={true}
+                      note={user_item["email"]}
+                      extra={`工号：${user_item["work_no"]}`}
+                      title={`姓名：${user_item["real_name"]}`}
+                      onClick={this.handleUserClick.bind(this, user_item["init_id"])}
+                      thumb={user_item["avatarUrl"] || 'https://jdc.jd.com/img/13'}
+                    >
+                      {user_item["user_id"] ? "" : <View>提示：用户未绑定微信</View>}
+                      <View>项目：{user_item["sports"].map((sport_item) => ticketClass[sport_item] || '未知')}</View>
+                    </AtCard>
+                  </View>
+                )) :
+                <AtListItem className="item" title={none_text}/>
+              }
+            </View>
           </View>
         </View>
         <TicketTabBar/>

@@ -1,10 +1,14 @@
 import Taro from "@tarojs/taro"
 import {Text, View} from "@tarojs/components"
-import {AtButton, AtFloatLayout, AtInputNumber, AtLoadMore, AtProgress, AtToast} from "taro-ui";
+import {AtButton, AtLoadMore, AtProgress, AtToast} from "taro-ui";
 import "./index.scss"
+import GenerateModule from "../../component/module-generate"
+import ReportModule from "../../component/module-report"
+import SystemModule from "../../component/module-system"
 import TicketTabBar from "../../component/tab-bar"
-import {ticketGenerate, ticketLog, ticketUsage} from "../../apis";
+import {ticketLog, ticketUsage} from "../../apis";
 import {ticketOption} from "../../config";
+
 // import {ticketClass, ticketState} from "../../config";
 
 export default class Index extends Taro.Component {
@@ -21,18 +25,19 @@ export default class Index extends Taro.Component {
       tOpened: false,
       tText: "加载中...",
       tStatus: "loading",
-      layoutGenerateShow: false,
+      moduleGenerateShow: false,
+      moduleReportShow: false,
+      moduleSystemShow: false,
       generateCount: 0,
-      defaultCount: 0,
-      activeCount: 0,
+      lastCount: 0,
+      usedCount: 0,
       ticketLogList: [],
       status: "more"
     }
   }
 
   componentDidShow() {
-    Taro.startPullDownRefresh();
-    Taro.showTabBar()
+    Taro.startPullDownRefresh().then();
   }
 
   onPullDownRefresh() {
@@ -47,19 +52,27 @@ export default class Index extends Taro.Component {
   updateTicketUsage = () => {
     ticketUsage().then(res => {
       if (res.code === 0) {
-        this.setState({
-          defaultCount: res.data.default,
-          activeCount: res.data.active
-        });
+        let ticketCounts = res.data;
+        let lastCount = 0;
+        let usedCount = 0;
+        for (let count of Object.keys(ticketCounts)) {
+          if (count === 'default') {
+            lastCount += ticketCounts[count]
+          } else {
+            usedCount += ticketCounts[count]
+          }
+        }
+        this.setState({lastCount, usedCount})
       }
       Taro.stopPullDownRefresh();
-      Taro.showToast({title: "加载成功", icon: "none", duration: 500});
+      Taro.showToast({title: "加载成功", icon: "none", duration: 500}).then();
     }).catch(err => {
       console.error(err);
       Taro.stopPullDownRefresh();
-      Taro.showToast({title: "加载失败", icon: "none", duration: 500});
+      Taro.showToast({title: "加载失败", icon: "none", duration: 500}).then();
     });
   };
+
   /**
    * 更新票券列表记录
    */
@@ -77,13 +90,13 @@ export default class Index extends Taro.Component {
           ticketLogList = res.items;
         }
         Taro.stopPullDownRefresh();
-        Taro.showToast({title: "加载成功", icon: "none", duration: 500});
+        Taro.showToast({title: "加载成功", icon: "none", duration: 500}).then();
         this.setState({ticketLogList, openIndex: -1, tOpened: false});
         resolve(res.items.length === limit)
       }).catch(err => {
         console.error(err);
         Taro.stopPullDownRefresh();
-        Taro.showToast({title: "加载失败", icon: "none", duration: 500});
+        Taro.showToast({title: "加载失败", icon: "none", duration: 500}).then();
         reject()
       });
     });
@@ -92,32 +105,38 @@ export default class Index extends Taro.Component {
   /**
    * 增发票券按钮点击
    */
-  handleLayoutGenerateShow = () => {
-    this.setState({generateCount: 0, layoutGenerateShow: true});
+  handleModuleGenerateShow = () => {
+    this.setState({moduleGenerateShow: true});
   };
 
   /**
-   * 增发数量修改
+   * 增发票券按钮点击
    */
-  handleCountChange = (generateCount) => {
-    this.setState({generateCount: parseInt(generateCount)})
+  handleModuleReportShow = () => {
+    this.setState({moduleReportShow: true});
   };
 
   /**
-   * 确定增发
+   * 系统设置按钮点击
    */
-  handleTacketGenerate = () => {
-    const {generateCount} = this.state;
-    ticketGenerate(generateCount).then(console.debug)
+  handleModuleSystemShow = () => {
+    this.setState({moduleSystemShow: true});
   };
 
   /**
    * 领券中心弹窗返回
    * @constructor
    */
-  handleLayoutClose = (res) => {
+  handleModuleClose = (res) => {
     console.debug("res", res);
-    this.setState({layoutGenerateShow: false})
+    this.setState({
+      moduleGenerateShow: false,
+      moduleReportShow: false,
+      moduleSystemShow: false,
+    });
+    if (res === "generate") {
+      this.updateTicketUsage();
+    }
   };
 
   handleClick = () => {
@@ -134,50 +153,51 @@ export default class Index extends Taro.Component {
   };
 
   render() {
-    const {layoutGenerateShow, generateCount} = this.state;
+    const {moduleGenerateShow, moduleReportShow, moduleSystemShow} = this.state;
     const {tOpened, tText, tStatus} = this.state;
-    const {defaultCount, activeCount} = this.state;
+    const {lastCount, usedCount} = this.state;
     const {ticketLogList} = this.state;
-    const percent = 100 * (defaultCount / ((activeCount + defaultCount) || 1));
+    // const percent = 100 * (lastCount / ((usedCount + usedCount) || 1));
+    const percent = 100 * (lastCount / 500);
     // noinspection JSXNamespaceValidation
     return (
       <View>
-        <View class="bg bg-tab">
+        <View class="bg">
           <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask/>
-          <AtFloatLayout isOpened={layoutGenerateShow} onClose={this.handleLayoutClose.bind(this)}>
-            <View className="float">
-              <AtInputNumber min={0} max={10000} step={1} value={generateCount}
-                             onChange={this.handleCountChange.bind(this)}/>
-            </View>
-            <AtButton type="secondary" circle disabled={!generateCount > 0}
-                      onClick={this.handleTacketGenerate.bind(this)}>
-              确定
-            </AtButton>
-          </AtFloatLayout>
-          <View class="tickets-info">
-            <AtProgress className="info-progress" percent={percent} isHidePercent status="progress" strokeWidth={20}/>
-            <View className="at-row ">
-              <View className="at-col info-item">
-                <View className="item-title">当月剩余数量</View>
-                <View className="item-body">
-                  <Text className="item-text">{defaultCount}</Text><Text className="item-unit">张</Text>
+          <GenerateModule isOpened={moduleGenerateShow} onClose={this.handleModuleClose.bind(this)}/>
+          <ReportModule isOpened={moduleReportShow} onClose={this.handleModuleClose.bind(this)}/>
+          <SystemModule isOpened={moduleSystemShow} onClose={this.handleModuleClose.bind(this)}/>
+          <View class="block">
+            <View class="body">
+              <AtProgress className="info-progress" percent={percent} isHidePercent status="progress" strokeWidth={20}/>
+              <View className="at-row">
+                <View className="at-col info-item">
+                  <View className="item-title">库存剩余数量</View>
+                  <View className="item-body">
+                    <Text className="item-text">{lastCount}</Text><Text className="item-unit">张</Text>
+                  </View>
                 </View>
-              </View>
-              <View className="at-col info-item">
-                <View className="item-title">当月领取数量</View>
-                <View className="item-body">
-                  <Text className="item-text">{activeCount}</Text><Text className="item-unit">张</Text>
+                <View className="at-col info-item">
+                  <View className="item-title">当月消耗数量</View>
+                  <View className="item-body">
+                    <Text className="item-text">{usedCount}</Text><Text className="item-unit">张</Text>
+                  </View>
                 </View>
               </View>
             </View>
           </View>
-          <View class="ticket-apply">
-            <AtButton type="secondary" circle
-                      onClick={this.handleLayoutGenerateShow.bind(this)}>
+          <View class="block">
+            <AtButton type="secondary" circle onClick={this.handleModuleGenerateShow.bind(this)}>
               增发票券
             </AtButton>
+            <AtButton type="secondary" circle onClick={this.handleModuleReportShow.bind(this)}>
+              报表导出
+            </AtButton>
+            <AtButton type="secondary" circle onClick={this.handleModuleSystemShow.bind(this)}>
+              系统设置
+            </AtButton>
           </View>
-          <View class="ticket-log">
+          <View class="block">
             <View class="list">
               {ticketLogList.length > 0 ?
                 <View>
@@ -185,11 +205,15 @@ export default class Index extends Taro.Component {
                     <View key={index} class="item">
                       <View class="time">{item.time}</View>
                       <View class="text">
-                        {`${item["real_name"]} ${ticketOption[item["option"]]} ${item["ticket_id"].substr(0, 20)}`}
+                        {`${ticketOption[item["option"]]} ${item["ticket_id"].substr(0, 20)} ${item["real_name"]}`}
                       </View>
                     </View>
                   ))}
-                  <AtLoadMore className={"load-more"} status={this.state.status} onClick={this.handleClick.bind(this)}/>
+                  <AtLoadMore
+                    className={"item item-more"}
+                    status={this.state.status}
+                    onClick={this.handleClick.bind(this)}
+                  />
                 </View>
                 :
                 <View class="item none">没有记录</View>

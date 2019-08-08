@@ -58,6 +58,7 @@ export default class Index extends Taro.Component {
     // noinspection JSXNamespaceValidation
     return (
       <View>
+        <View class={'placeholder'}/>
         <AtTabBar
           backgroundColor="#ececec"
           color="#ea6bb8"

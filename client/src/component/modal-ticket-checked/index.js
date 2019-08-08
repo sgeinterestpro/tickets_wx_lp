@@ -7,7 +7,7 @@ import Taro, {Component} from "@tarojs/taro"
 import {Button, Text, View} from "@tarojs/components"
 import {AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from "taro-ui"
 import {checkedTicket, inspectTicket} from "../../apis";
-import "./index.scss"
+import "../module-index.scss"
 import {ticketClass} from "../../config";
 
 export default class Index extends Component {

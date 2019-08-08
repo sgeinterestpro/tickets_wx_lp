@@ -7,7 +7,7 @@ page {
 }
 
 
-.main {
+.list {
   box-sizing: border-box;
   box-shadow: 0 0 2px 0 rgba(25, 29, 33, 0.15);
   position: relative;
@@ -88,7 +88,7 @@ page {
     word-wrap: break-word;
   }
 
-  .title {
+  .item {
     font-size: 32px;
     color: #191d21;
     line-height: 50px;

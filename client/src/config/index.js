@@ -26,7 +26,7 @@ export const ticketState = {
 
 export const ticketOption = {
   "purchase": "领取",
-  "refund": "退还",
+  "refund": "删除",
   "checked": "使用"
 };
 /**
@@ -41,19 +41,19 @@ export const roleAllList = {
 export const reportList = [{
   "api": "ReportUsedDtl",
   "title": "领用登记明细表",
-  "type": "timespan",
+  "type": "day",
 }, {
   "api": "ReportUsedDay",
   "title": "领用登记日报表",
-  "type": "timespan",
+  "type": "day span",
 }, {
   "api": "ReportUsedMonth",
   "title": "领用登记月报表",
-  "type": "timespan",
+  "type": "month span",
 }, {
   "api": "ReportUsedSportMonth",
   "title": "活动券分项领用月报表",
-  "type": "time",
+  "type": "month",
 }
 ];
 /**
@@ -70,7 +70,6 @@ export const roleTabUrls = {
   ],
   "admin": [
     {"id": "TicketManage", "url": "/pages/ticket-manage/index", "title": "票券管理", "iconType": "money"},
-    {"id": "ReportManage", "url": "/pages/report-manage/index", "title": "报表管理", "iconType": "calendar"},
     {"id": "UserManage", "url": "/pages/user-manage/index", "title": "用户管理", "iconType": "folder"},
     {"id": "UserInfo", "url": "/pages/user-info/index", "title": "用户中心", "iconType": "user"}
   ],

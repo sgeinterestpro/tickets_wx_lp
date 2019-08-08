@@ -157,42 +157,43 @@ export default class Index extends Taro.Component {
     // noinspection JSXNamespaceValidation
     return (
       <View>
-        <View class="bg bg-tab">
+        <View class="bg">
           <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask/>
           <ModalTicketPurchase
             isOpened={modalTicketPurchaseState}
             onReturn={this.modalTicketPurchaseReturn.bind(this)}
           />
-          <View class="ticket-list">
-            <AtList>
-              {ticketList.length > 0 ?
-                ticketList.map((item, index) => (
-                  <AtSwipeAction
-                    key={index}
-                    onClick={this.onSwipeActionClick.bind(this, index)}
-                    onOpened={this.onSwipeActionOpened.bind(this, index)}
-                    isOpened={index === openIndex}
-                    disabled={item.state !== "valid"}
-                    autoClose
-                    options={[{text: "删除", style: {backgroundColor: "#FF4949"}}]}
-                  >
-                    <AtListItem
-                      className="item"
-                      title={ticketClass[item["class"]]}
-                      note={item["expiry_date"]}
+          <View class="block">
+            <View class="list">
+              <AtList hasBorder={false}>
+                {ticketList.length > 0 ?
+                  ticketList.map((item, index) => (
+                    <AtSwipeAction
+                      key={index}
+                      onClick={this.onSwipeActionClick.bind(this, index)}
+                      onOpened={this.onSwipeActionOpened.bind(this, index)}
+                      isOpened={index === openIndex}
                       disabled={item.state !== "valid"}
-                      extraText={ticketState[item[`state`]]}
-                      arrow="right"
-                      thumb="https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png"
-                      onClick={this.onTicketClick.bind(this, item)}
-                    />
-                  </AtSwipeAction>
-                )) :
-                <AtListItem className="item" title="本周还未领取优惠券"/>
-              }
-            </AtList>
+                      autoClose
+                      options={[{text: "删除", style: {backgroundColor: "#FF4949"}}]}
+                    >
+                      <AtListItem
+                        title={ticketClass[item["class"]]}
+                        note={item["expiry_date"]}
+                        disabled={item.state !== "valid"}
+                        extraText={ticketState[item[`state`]]}
+                        arrow="right"
+                        thumb="https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png"
+                        onClick={this.onTicketClick.bind(this, item)}
+                      />
+                    </AtSwipeAction>
+                  )) :
+                  <AtListItem className="item" title="本周未领取票券"/>
+                }
+              </AtList>
+            </View>
           </View>
-          <View class="ticket-apply">
+          <View class="button-full">
             <AtButton
               type="secondary"
               circle

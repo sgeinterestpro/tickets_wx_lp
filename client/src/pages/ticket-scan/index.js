@@ -92,7 +92,7 @@ export default class Index extends Taro.Component {
     const {ticketId, modalTicketDisplayShow, ticketCheckLogList} = this.state;
     // noinspection JSXNamespaceValidation
     return (
-      <View class="bg bg-tab">
+      <View class="bg">
         <ModalTicketDisplay
           isOpened={modalTicketDisplayShow}
           onReturn={this.modalTicketDisplayReturn.bind(this)}
@@ -110,7 +110,7 @@ export default class Index extends Taro.Component {
           <View class="btn-submit">
           </View>
         </View>
-        <View class="ticket-log">
+        <View class="block">
           <View class="list">
             {ticketCheckLogList.length > 0 ?
               <View>

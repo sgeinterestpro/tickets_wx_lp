@@ -2,83 +2,38 @@ page {
   background-color: #383c42;
 }
 
-  .tickets-scan {
-    box-sizing: border-box;
-    box-shadow: 0 0 2px 0 rgba(25, 29, 33, 0.15);
-    position: relative;
-    width: 670px;
-    margin: 40px auto 0;
-    padding: 0 40px;
-    background: #fff;
-    border-radius: 12px;
+.tickets-scan {
+  box-sizing: border-box;
+  box-shadow: 0 0 2px 0 rgba(25, 29, 33, 0.15);
+  position: relative;
+  width: 670px;
+  margin: 40px auto 0;
+  padding: 0 40px;
+  background: #fff;
+  border-radius: 12px;
 
-    .input-container {
-      padding: 10px 0 0 0;
-      width: 590px;
-      margin: 0 auto;
+  .input-container {
+    padding: 10px 0 0 0;
+    width: 590px;
+    margin: 0 auto;
 
-      .text-view {
-        position: relative;
-        padding: 24px 0;
-        color: #333;
-        background-color: #FFF;
-        margin-left: 32px;
-        margin-bottom: 1px;
-        display: flex;
+    .text-view {
+      position: relative;
+      padding: 24px 0;
+      color: #333;
+      background-color: #FFF;
+      margin-left: 32px;
+      margin-bottom: 1px;
+      display: flex;
 
-        .text-value {
-          font-size: 32px;
-          width: 536px;
-          margin: auto;
-        }
+      .text-value {
+        font-size: 32px;
+        width: 536px;
+        margin: auto;
       }
-    }
-
-  }
-
-  .ticket-log {
-    background: #fff;
-    border-radius: 12px;
-    box-sizing: border-box;
-    box-shadow: 0 0 0 0 rgba(25, 29, 33, 0.15);
-    font-size: 32px;
-    margin: 50px auto 0;
-    padding: 20px;
-    width: 670px;
-
-    .list {
-      padding: 10px 20px;
-
-      .item {
-        border-bottom: 1px solid #C5D9E8;;
-        padding: 5px;
-
-        .time {
-          font-size: 32px;
-          color: #AAA;
-        }
-
-        .text {
-          font-size: 32px;
-        }
-      }
-
-    }
-
-    .pagination {
-      margin: 30px 0;
-    }
-
-    .none {
-      border-bottom: none;
-    }
-
-    .load-more {
-      height: 80px;
-      border: none;
-      //border-top: 1px solid #C5D9E8;;
     }
   }
 
+}
 
 

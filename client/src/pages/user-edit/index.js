@@ -88,7 +88,7 @@ export default class Index extends Taro.Component {
     // noinspection JSXNamespaceValidation
     return (
       <View class="bg">
-        <View class="main">
+        <View class="user-card">
           <View class="avatar">
             <AtAvatar image={userInfo["avatarUrl"] || 'https://jdc.jd.com/img/200'}/>
             {/*<AtAvatar openData={{type: "userAvatarUrl"}}/>*/}
@@ -98,22 +98,22 @@ export default class Index extends Taro.Component {
             {/*<OpenData type="userNickName"/>*/}
           </View>
         </View>
-
-        <View class="list">
-          <View class="item">姓名：{userInfo["real_name"]}</View>
-          <View class="item">电话：{userInfo["phone"]}</View>
-          <View class="item">工号：{userInfo["work_no"]}</View>
-          <View class="item">邮箱：{userInfo["email"]}</View>
-          <View class="item">
-            角色：{(userInfo["role"] || []).map((role) => roleAllList[role] || '未知').join(',')}
-          </View>
-          <View class="item">
-            项目：{(userInfo["sports"] || []).map((sport) => ticketClass[sport] || '未知').join(',')}
+        <View class="block">
+          <View class="list">
+            <View class="item">姓名：{userInfo["real_name"]}</View>
+            <View class="item">电话：{userInfo["phone"]}</View>
+            <View class="item">工号：{userInfo["work_no"]}</View>
+            <View class="item">邮箱：{userInfo["email"]}</View>
+            <View class="item">
+              角色：{(userInfo["role"] || []).map((role) => roleAllList[role] || '未知').join(',')}
+            </View>
+            <View class="item">
+              项目：{(userInfo["sports"] || []).map((sport) => ticketClass[sport] || '未知').join(',')}
+            </View>
           </View>
         </View>
-        <View class="delete">
+        <View class="button-full button-danger">
           <AtButton
-            className={'delete-button'}
             type="secondary"
             circle
             onClick={this.handleDeleteUser.bind(this, userInfo['init_id'])}
