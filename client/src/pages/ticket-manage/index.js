@@ -31,7 +31,7 @@ export default class Index extends Taro.Component {
       generateCount: 0,
       lastCount: Taro.getStorageSync('ticket-manage-lastCount') || 0,
       usedCount: Taro.getStorageSync('ticket-manage-usedCount') || 0,
-      ticketLogList: [],
+      ticketLogList: Taro.getStorageSync('ticket-manage-logList') || [],
       status: "more"
     }
   }
@@ -97,6 +97,7 @@ export default class Index extends Taro.Component {
         } else {
           ticketLogList = res.items;
         }
+        Taro.setStorage({key: 'ticket-manage-logList', data: ticketLogList}).then();
         this.setState({ticketLogList, openIndex: -1, tOpened: false, status: "more"});
         resolve(res.items.length === limit);
       }).catch(err => {
