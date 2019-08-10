@@ -50,10 +50,8 @@ export default class Index extends Taro.Component {
   updateTicketUsage = () => {
     if (this.first === undefined) {
       this.first = true;
-      Taro.showLoading({title: '加载中'}).then();
     }
     ticketUsage().then(res => {
-      Taro.hideLoading();
       if (res.code === 0) {
         let ticketCounts = res.data;
         let lastCount = 0;
@@ -71,7 +69,6 @@ export default class Index extends Taro.Component {
       }
     }).catch(err => {
       console.error(err);
-      Taro.hideLoading();
       Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
     });
   };
@@ -87,11 +84,9 @@ export default class Index extends Taro.Component {
     }
     if (this.first === undefined) {
       this.first = true;
-      Taro.showLoading({title: '加载中'}).then();
     }
     return new Promise((resolve, reject) => {
       ticketLog(skip, limit).then(res => {
-        Taro.hideLoading();
         if (append) {
           ticketLogList = ticketLogList.concat(res.items);
         } else {
@@ -102,7 +97,6 @@ export default class Index extends Taro.Component {
         resolve(res.items.length === limit);
       }).catch(err => {
         console.error(err);
-        Taro.hideLoading();
         Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
         reject()
       });

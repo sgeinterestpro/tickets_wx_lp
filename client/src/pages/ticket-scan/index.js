@@ -42,13 +42,11 @@ export default class Index extends Taro.Component {
     let {ticketCheckLogList} = this.state;
     // const nowDate = getNowDay();
     ticketCheckLog().then(res => {
-      Taro.hideLoading();
       ticketCheckLogList = res.items;
       Taro.setStorage({key: 'ticket-scan-LogList', data: ticketCheckLogList}).then();
       this.setState({ticketCheckLogList, openIndex: -1, tOpened: false});
     }).catch(err => {
       console.error(err);
-      Taro.hideLoading();
       Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
     });
   };

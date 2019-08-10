@@ -46,12 +46,7 @@ export default class Index extends Taro.Component {
    * 出发下拉刷新加载动画
    */
   updateTicketList = () => {
-    if (this.first === undefined) {
-      this.first = true;
-      Taro.showLoading({title: '加载中'}).then();
-    }
     ticketPackage().then(res => {
-      Taro.hideLoading();
       let ticketListNew = [];
       res.items.map((item) => {
         ticketListNew.push(item)
@@ -60,7 +55,7 @@ export default class Index extends Taro.Component {
       this.setState({ticketList: ticketListNew, openIndex: -1, tOpened: false});
     }).catch(err => {
       console.error(err);
-      Taro.hideLoading();
+      Taro.hideNavigationBarLoading();
       Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
     });
   };

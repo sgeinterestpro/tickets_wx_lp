@@ -5,6 +5,7 @@ import {cloudRequest} from "../common/cloudRequest";
 const urlBase = "http://ticket.sge-tech.com:10000";
 
 const request = (method, url, data) => {
+  Taro.showNavigationBarLoading();
   let _request = cloudRequest;
   if (url.indexOf("localhost") !== -1) _request = Taro.request;
   return new Promise((resolve, reject) => {
@@ -18,6 +19,7 @@ const request = (method, url, data) => {
       method: method,
       dataType: "json"
     }).then(res => {
+      Taro.hideNavigationBarLoading();
       if (res.statusCode >= 400) {
         console.error(res);
         reject(res.data);
@@ -26,6 +28,7 @@ const request = (method, url, data) => {
         resolve(res.data);
       }
     }).catch(err => {
+      Taro.hideNavigationBarLoading();
       console.error(err);
       reject(err)
     });

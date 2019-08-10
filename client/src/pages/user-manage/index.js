@@ -41,17 +41,14 @@ export default class Index extends Taro.Component {
   updateUserList = () => {
     if (this.first === undefined) {
       this.first = true;
-      Taro.showLoading({title: '加载中'}).then();
     }
     memberList().then(res => {
-      Taro.hideLoading();
       const userList = res.items;
       Taro.setStorage({key: 'user-manage-userList', data: userList}).then();
       this.setState({userList: userList, noneText: "暂时没有员工数据"});
     }).catch(err => {
       console.error(err);
       this.setState({noneText: "员工数据加载失败"});
-      Taro.hideLoading();
       Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
     });
   };
