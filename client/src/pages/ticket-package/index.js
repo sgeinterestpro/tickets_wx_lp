@@ -72,8 +72,8 @@ export default class Index extends Taro.Component {
   onTicketClick = (item) => {
     this.setState({openIndex: -1});
     Taro.navigateTo({
-      url: `/pages/ticket-show/index?id=${item._id}`
-    })
+      url: `/pages/ticket-show/index?id=${item._id}&type=${item.class}&date=${item.expiry_date}`
+    }).then()
   };
 
   /**

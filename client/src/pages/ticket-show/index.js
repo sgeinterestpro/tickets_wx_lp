@@ -6,16 +6,27 @@
  * 3、点击二维码放大
  * 4、TODO 显示准确的票券信息
  */
-import Taro, {Component} from "@tarojs/taro"
+import Taro from "@tarojs/taro"
 import {Canvas, View} from "@tarojs/components"
 import drawQrcode from "weapp-qrcode";
 import "./index.scss"
+import {ticketIcon} from "../../config";
 
 const deviceWidth = 750;
 const qrCodeSize = 400;
-const qrCodeMaxSize = 666;
+const qrImageSize = 40;
+const qrCodeFullSize = 666;
+const qrImageFullSize = 66;
 
-export default class Index extends Component {
+// const ticketIcon = {
+//   "badminton": "../../img/ticket/badminton.png",
+//   "basketball": "../../img/ticket/basketball.png",
+//   "football": "../../img/ticket/football.png",
+//   "swim": "../../img/ticket/swim.png",
+//   "yoga": "../../img/ticket/yoga.png",
+// };
+
+export default class Index extends Taro.Component {
 
   config = {
     navigationBarBackgroundColor: "#383c42",
@@ -50,19 +61,37 @@ export default class Index extends Component {
    * @param scale 屏幕缩放系数，默认为1（不推荐）
    */
   showQrCode = (value, scale = 1) => {
+    const {id, type, date} = this.$router.params;
+    const qrScaleSize = (qrCodeSize / 2) * scale;
+    const qrScaleFullSize = (qrCodeFullSize / 2) * scale;
+    console.log(type);
     drawQrcode({
       _this: this.$scope,
       canvasId: "qrCode",
-      width: (qrCodeSize / 2) * scale,
-      height: (qrCodeSize / 2) * scale,
-      text: value
+      width: qrScaleSize,
+      height: qrScaleSize,
+      text: value,
+      image: {
+        imageResource: ticketIcon[type],
+        dx: (qrScaleSize - qrImageSize) / 2,
+        dy: (qrScaleSize - qrImageSize) / 2,
+        dWidth: qrImageSize,
+        dHeight: qrImageSize,
+      }
     });
     drawQrcode({
       _this: this.$scope,
-      canvasId: "qrCodeMax",
-      width: (qrCodeMaxSize / 2) * scale,
-      height: (qrCodeMaxSize / 2) * scale,
-      text: value
+      canvasId: "qrCodeFull",
+      width: qrScaleFullSize,
+      height: qrScaleFullSize,
+      text: value,
+      image: {
+        imageResource: ticketIcon[type],
+        dx: (qrScaleFullSize - qrImageFullSize) / 2,
+        dy: (qrScaleFullSize - qrImageFullSize) / 2,
+        dWidth: qrImageFullSize,
+        dHeight: qrImageFullSize,
+      }
     });
   };
 
@@ -72,16 +101,28 @@ export default class Index extends Component {
   onQrCodeClick = () => {
     const {qrShow} = this.state;
     console.debug(`QR FullScreen ${!qrShow}`);
+    if (!qrShow) {//全屏
+      Taro.setNavigationBarColor({
+        frontColor: "#000000",
+        backgroundColor: "#ffffff"
+      }).then()
+    } else {
+      Taro.setNavigationBarColor({
+        frontColor: "#ffffff",
+        backgroundColor: "#383c42"
+      }).then()
+    }
     this.setState({qrShow: !qrShow})
   };
 
   render() {
+    const {id, type, date} = this.$router.params;
     const {qrShow} = this.state;
     // noinspection JSXNamespaceValidation
     return (
       <View class="bg">
-        <View class="qrCodeMax" hidden={!qrShow} onClick={this.onQrCodeClick.bind(this)}>
-          <Canvas className="code" canvasId="qrCodeMax"/>
+        <View class="qrCodeFull" hidden={!qrShow} onClick={this.onQrCodeClick.bind(this)}>
+          <Canvas className="code" canvasId="qrCodeFull"/>
         </View>
         <View class="list" hidden={qrShow}>
           <View class="qrCode item" onClick={this.onQrCodeClick.bind(this)}>
@@ -91,7 +132,7 @@ export default class Index extends Component {
           <View class="round right"/>
           <View class="intro">
             <View class="item">说明：</View>
-            <View>1. 有效期为领取票券时所选日期。</View> {/*TODO 根据数据显示实际日期*/}
+            <View>1. 可使用日期为{date}。</View> {/*TODO 根据数据显示实际日期*/}
             <View>2. 仅供本人使用不可转借他人。</View>
             <View>3. 最终解释权归发券方所有。</View>
           </View>

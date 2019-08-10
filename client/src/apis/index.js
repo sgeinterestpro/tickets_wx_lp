@@ -1,8 +1,8 @@
 import Taro from "@tarojs/taro";
 import {cloudRequest} from "../common/cloudRequest";
 
-const urlBase = "http://localhost:10000"; //本地调试
-// const urlBase = "http://ticket.sge-tech.com:10000";
+// const urlBase = "http://localhost:10000"; //本地调试
+const urlBase = "http://ticket.sge-tech.com:10000";
 
 const request = (method, url, data) => {
   let _request = cloudRequest;

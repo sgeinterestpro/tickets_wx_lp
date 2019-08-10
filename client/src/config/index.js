@@ -2,6 +2,24 @@
  * muumlover@2019-05-27
  * 配置文件
  */
+import scanHistory from "../img/tabbar/scan-history.png"
+import scanHistoryActive from "../img/tabbar/scan-history-active.png"
+import ticketPackage from "../img/tabbar/ticket-package.png"
+import ticketPackageActive from "../img/tabbar/ticket-package-active.png"
+import ticketManage from "../img/tabbar/ticket-manage.png"
+import ticketManageActive from "../img/tabbar/ticket-manage-active.png"
+import ticketScan from "../img/tabbar/ticket-scan.png"
+import ticketScanActive from "../img/tabbar/ticket-scan-active.png"
+import userManage from "../img/tabbar/user-manage.png"
+import userManageActive from "../img/tabbar/user-manage-active.png"
+import userInfo from "../img/tabbar/user-info.png"
+import userInfoActive from "../img/tabbar/user-info-active.png"
+
+import badminton from "../img/ticket/badminton.png"
+import basketball from "../img/ticket/basketball.png"
+import football from "../img/ticket/football.png"
+import swim from "../img/ticket/swim.png"
+import yoga from "../img/ticket/yoga.png"
 
 /**
  * 运动项目类型代码显示
@@ -15,16 +33,11 @@ export const ticketClass = {
   "yoga": "瑜伽",
 };
 export const ticketIcon = {
-  "badminton":
-    "https://i.loli.net/2019/08/08/NjoBlAgLTumqM1D.png",
-  "basketball":
-    "https://i.loli.net/2019/08/08/2PawFm9ysYNVD8T.png",
-  "football":
-    "https://i.loli.net/2019/08/08/gmDIlz83qvsQFSW.png",
-  "swim":
-    "https://i.loli.net/2019/08/08/LAxzrWZ2ghEsm1w.png",
-  "yoga":
-    "https://i.loli.net/2019/08/08/ukd7i1Nft6IDUgE.png",
+  "badminton": badminton,
+  "basketball": basketball,
+  "football": football,
+  "swim": swim,
+  "yoga": yoga,
 };
 /**
  * 票券状态代码显示
@@ -73,43 +86,43 @@ const allRoleTabUrls = {
     "id": "ScanHistory",
     "url": "/pages/scan-history/index",
     "title": "扫描历史",
-    "image": "https://i.loli.net/2019/08/08/hKdLTinVX1GwcOW.png",
-    "selectedImage": "https://i.loli.net/2019/08/08/rb2zVtJikRosm1x.png",
+    "image": scanHistory,
+    "selectedImage": scanHistoryActive,
   },
-  TicketList: {
-    "id": "TicketList",
+  TicketPackage: {
+    "id": "TicketPackage",
     "url": "/pages/ticket-package/index",
     "title": "票券夹",
-    "image": "https://i.loli.net/2019/08/08/aC2e9tODxJQN7UE.png",
-    "selectedImage": "https://i.loli.net/2019/08/08/B6EidyT4f7NSXlL.png",
+    "image": ticketPackage,
+    "selectedImage": ticketPackageActive,
   },
   TicketManage: {
     "id": "TicketManage",
     "url": "/pages/ticket-manage/index",
     "title": "票券管理",
-    "image": "https://i.loli.net/2019/08/08/UrFGWdbCX3BlmD2.png",
-    "selectedImage": "https://i.loli.net/2019/08/08/vcuFAHbZMaEXKhz.png",
+    "image": ticketManage,
+    "selectedImage": ticketManageActive,
   },
   TicketScan: {
     "id": "TicketScan",
     "url": "/pages/ticket-scan/index",
     "title": "票券扫描",
-    "image": "https://i.loli.net/2019/08/08/uRKQDE7pMlgtOvF.png",
-    "selectedImage": "https://i.loli.net/2019/08/08/vV4s3mL7uxFGwIb.png",
+    "image": ticketScan,
+    "selectedImage": ticketScanActive,
   },
   UserManage: {
     "id": "UserManage",
     "url": "/pages/user-manage/index",
     "title": "用户管理",
-    "image": "https://i.loli.net/2019/08/08/N3hn5xOVP4R9kzY.png",
-    "selectedImage": "https://i.loli.net/2019/08/08/ZHmKcYgn6pASoyz.png",
+    "image": userManage,
+    "selectedImage": userManageActive,
   },
   UserInfo: {
     "id": "UserInfo",
     "url": "/pages/user-info/index",
     "title": "用户中心",
-    "image": "https://i.loli.net/2019/08/08/w9Ph5CsHEW3aGJp.png",
-    "selectedImage": "https://i.loli.net/2019/08/08/fM453Q9aWw8cDZq.png",
+    "image": userInfo,
+    "selectedImage": userInfoActive,
   },
 };
 /**
@@ -121,7 +134,7 @@ export const roleTabUrls = {
     allRoleTabUrls.UserInfo
   ],
   "user": [
-    allRoleTabUrls.TicketList,
+    allRoleTabUrls.TicketPackage,
     allRoleTabUrls.UserInfo,
   ],
   "admin": [

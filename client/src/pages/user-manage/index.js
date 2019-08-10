@@ -79,17 +79,16 @@ export default class Index extends Taro.Component {
             <View class="list list-card">
               {userList.length > 0 ?
                 userList.map((user_item, index) => (
-                  <View class="item item-card">
+                  <View class="item item-card" key={index}>
                     <AtCard
-                      key={index}
                       isFull={true}
                       note={user_item["email"]}
-                      extra={`工号：${user_item["work_no"]}`}
+                      extra={user_item["user_id"] ? "" : "未绑定微信"}
+                      // extra={`工号：${user_item["work_no"]}`}
                       title={`姓名：${user_item["real_name"]}`}
                       onClick={this.handleUserClick.bind(this, user_item["init_id"])}
                       thumb={user_item["avatarUrl"] || 'https://jdc.jd.com/img/13'}
                     >
-                      {user_item["user_id"] ? "" : <View>提示：用户未绑定微信</View>}
                       <View>项目：{user_item["sports"].map((sport_item) => ticketClass[sport_item] || '未知')}</View>
                     </AtCard>
                   </View>

@@ -64,7 +64,6 @@ export default class Index extends Taro.Component {
   render() {
     const {roleSelectIndex, roleList, userInfo} = this.state;
     const roleValueList = Object.values(roleList);
-
     // noinspection JSXNamespaceValidation
     return (
       <View class="bg">
@@ -97,7 +96,7 @@ export default class Index extends Taro.Component {
             <AtListItem
               class="item"
               title="项目"
-              extraText={(userInfo["sports"] || []).map((sport_item) => ticketClass[sport_item] || '未知')}/>
+              extraText={(userInfo["sports"] || []).map((sport_item) => ticketClass[sport_item] || '未知').join()}/>
             {roleValueList.length > 1 &&
             <View class="item">
               <Picker mode="selector" range={roleValueList} value={roleSelectIndex}
