@@ -79,6 +79,9 @@ export default class Index extends Taro.Component {
     });
   };
 
+  onToastClose = () => {
+    this.setState({tOpened: false});
+  };
 
   render() {
     const {isOpened} = this.props;
@@ -90,7 +93,8 @@ export default class Index extends Taro.Component {
     return (
       isOpened &&
       <View>
-        <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask/>
+        <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask
+                 onClose={this.onToastClose.bind(this)}/>
         <AtModal isOpened={isOpened}>
           <AtModalHeader>领券中心</AtModalHeader>
           <AtModalContent>

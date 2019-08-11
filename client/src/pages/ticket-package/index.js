@@ -11,7 +11,7 @@ import {AtButton, AtList, AtListItem, AtSwipeAction, AtToast} from "taro-ui";
 import "./index.scss"
 import {ticketClass, ticketIcon, ticketState} from "../../config";
 import TicketTabBar from "../../component/tab-bar"
-import ModalTicketPurchase from "../../component/modal-ticket-purchase"
+import ModalTicketPurchase from "../../component/module-ticket-purchase"
 import {refundTicket, ticketPackage} from "../../apis";
 
 export default class Index extends Taro.Component {
@@ -142,15 +142,20 @@ export default class Index extends Taro.Component {
     this.setState({modalTicketPurchaseState: false})
   };
 
+  onToastClose = () => {
+    this.setState({tOpened: false});
+  };
+
   render() {
     const {ticketList, modalTicketPurchaseState, openIndex} = this.state;
-    const {tOpened, tText, tStatus} = this.state;
+    const {tOpened, tText, tStatus,tDuration} = this.state;
 
     // noinspection JSXNamespaceValidation
     return (
       <View>
         <View class="bg">
-          <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask/>
+          <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={tDuration} hasMask={tDuration === 0}
+                   onClose={this.onToastClose.bind(this)}/>
           <ModalTicketPurchase
             isOpened={modalTicketPurchaseState}
             onReturn={this.modalTicketPurchaseReturn.bind(this)}

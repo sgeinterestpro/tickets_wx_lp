@@ -9,6 +9,10 @@ import TicketTabBar from "../../component/tab-bar"
 import {ticketLog, ticketUsage} from "../../apis";
 import {ticketOption} from "../../config";
 
+import imgGenerate from "../../img/action/generate.png"
+import imgReport from "../../img/action/report.png"
+import imgSystem from "../../img/action/system.png"
+
 // import {ticketClass, ticketState} from "../../config";
 
 export default class Index extends Taro.Component {
@@ -141,9 +145,13 @@ export default class Index extends Taro.Component {
     });
   };
 
+  onToastClose = () => {
+    this.setState({tOpened: false});
+  };
+
   render() {
     const {moduleGenerateShow, moduleReportShow, moduleSystemShow} = this.state;
-    const {tOpened, tText, tStatus} = this.state;
+    const {tOpened, tText, tStatus, tDuration} = this.state;
     const {lastCount, usedCount} = this.state;
     const {ticketLogList} = this.state;
     // const percent = 100 * (lastCount / ((usedCount + usedCount) || 1));
@@ -152,7 +160,8 @@ export default class Index extends Taro.Component {
     return (
       <View>
         <View class="bg">
-          <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask/>
+          <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={tDuration} hasMask={tDuration === 0}
+                   onClose={this.onToastClose.bind(this)}/>
           <GenerateModule isOpened={moduleGenerateShow} onClose={this.handleModuleClose.bind(this)}/>
           <ReportModule isOpened={moduleReportShow} onClose={this.handleModuleClose.bind(this)}/>
           <SystemModule isOpened={moduleSystemShow} onClose={this.handleModuleClose.bind(this)}/>
@@ -180,17 +189,17 @@ export default class Index extends Taro.Component {
               <AtGrid hasBorder={false} data={
                 [
                   {
-                    image: 'https://i.loli.net/2019/08/08/IO8CtKg1mQRyFAH.png',
+                    image: imgGenerate,
                     value: '增发票券',
                     data0: 'moduleGenerateShow'
                   },
                   {
-                    image: 'https://i.loli.net/2019/08/08/gIboDypXRYV9hjd.png',
+                    image: imgReport,
                     value: '报表导出',
                     data0: 'moduleReportShow'
                   },
                   {
-                    image: 'https://i.loli.net/2019/08/08/cE8Bz54TtFkjxWd.png',
+                    image: imgSystem,
                     value: '系统设置',
                     data0: 'moduleSystemShow'
                   }

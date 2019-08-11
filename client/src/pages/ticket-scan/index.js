@@ -10,7 +10,7 @@ import {View} from "@tarojs/components"
 import {AtButton, AtInput} from "taro-ui"
 import "./index.scss"
 import TicketTabBar from "../../component/tab-bar"
-import ModalTicketDisplay from "../../component/modal-ticket-checked";
+import ModalTicketDisplay from "../../component/module-ticket-checked";
 import {ticketClass} from "../../config";
 import {ticketCheckLog} from "../../apis";
 

@@ -70,11 +70,11 @@ export const reportList = [{
 }, {
   "api": "ReportUsedDay",
   "title": "领用登记日报表",
-  "type": "day span",
+  "type": "day-span",
 }, {
   "api": "ReportUsedMonth",
   "title": "领用登记月报表",
-  "type": "month span",
+  "type": "month-span",
 }, {
   "api": "ReportUsedSportMonth",
   "title": "活动券分项领用月报表",
