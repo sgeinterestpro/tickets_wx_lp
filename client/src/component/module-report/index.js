@@ -1,6 +1,6 @@
 import Taro from "@tarojs/taro"
-import {Picker, Text, View} from "@tarojs/components"
-import {AtButton, AtFloatLayout} from "taro-ui";
+import {Button, Picker, Text, View} from "@tarojs/components"
+import {AtButton, AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from "taro-ui";
 import "../module-index.scss"
 import {reportList} from "../../config";
 import {reportExport} from "../../apis";
@@ -22,7 +22,11 @@ export default class Index extends Taro.Component {
       reportTypeSelect: -1,
       reportClassShow,
       reportClassValue,
-      reportClassType
+      reportClassType,
+      tOpened: false,
+      tText: "加载中...",
+      tStatus: "loading",
+      tDuration: 3000,
     }
   }
 
@@ -34,6 +38,7 @@ export default class Index extends Taro.Component {
    * 选择报表类型
    */
   onReportChange = e => {
+    console.log(e);
     this.setState({
       reportTypeSelect: e.detail.value
     })
@@ -66,14 +71,46 @@ export default class Index extends Taro.Component {
     });
   };
 
+  onToastClose = () => {
+    this.setState({tOpened: false});
+  };
+
   render() {
     const {isOpened} = this.props;
     const {reportTypeSelect, reportClassShow, reportClassValue, reportClassType} = this.state;
     const {dateStart, dateEnd} = this.state;
+    const {tOpened, tText, tStatus, tDuration} = this.state;
     let afterConfig = null;
     if (isOpened) {
       switch (reportClassType[reportTypeSelect]) {
-        case "timespan": {
+        case "month": {
+          afterConfig = <View>
+
+          </View>;
+          break
+        }
+        case "month-span": {
+          afterConfig = <View>
+
+          </View>;
+          break
+        }
+        case "day": {
+          afterConfig = <View>
+            <View className="section">
+              <View className="section-title">
+                <Text>选择导出日期</Text>
+              </View>
+              <View className="section-text">
+                <Picker mode="date" value={dateStart} onChange={this.onDateChange.bind(this, "dateStart")}>
+                  <View className="section-picker">当前选择：{dateStart}</View>
+                </Picker>
+              </View>
+            </View>
+          </View>;
+          break
+        }
+        case "day-span": {
           // noinspection JSXNamespaceValidation
           afterConfig = (<View>
             <View className="section">
@@ -99,27 +136,6 @@ export default class Index extends Taro.Component {
           </View>);
           break
         }
-        case "time": {
-          afterConfig = <View>
-            <View className="section">
-              <View className="section-title">
-                <Text>选择导出日期</Text>
-              </View>
-              <View className="section-text">
-                <Picker mode="date" value={dateStart} onChange={this.onDateChange.bind(this, "dateStart")}>
-                  <View className="section-picker">当前选择：{dateStart}</View>
-                </Picker>
-              </View>
-            </View>
-          </View>;
-          break
-        }
-        case "month": {
-          afterConfig = <View>
-
-          </View>;
-          break
-        }
         default: {
           break
         }
@@ -128,38 +144,42 @@ export default class Index extends Taro.Component {
     // noinspection JSXNamespaceValidation
     return (
       isOpened &&
-      <AtFloatLayout isOpened={isOpened} title="报表导出" onClose={this.onClose}>
-        <View class="section-container">
-          <View className="section">
-            <View className="section-title">
-              <Text>报表类型选择</Text>
+      <AtModal closeOnClickOverlay={false} isOpened={isOpened} onClose={this.onClose}>
+        <AtModalHeader>报表导出</AtModalHeader>
+        <AtModalContent>
+          <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={tDuration} hasMask={tDuration === 0}
+                   onClose={this.onToastClose.bind(this)}/>
+          <View class="section-container">
+            <View className="section">
+              <View className="section-title">
+                <Text>报表类型选择</Text>
+              </View>
+              <View className="section-text">
+                <Picker
+                  mode="selector"
+                  range={reportClassShow}
+                  value={reportTypeSelect}
+                  onChange={this.onReportChange.bind(this)}
+                >
+                  <View className="section-picker">
+                    当前选择：{reportClassShow[reportTypeSelect]}
+                  </View>
+                </Picker>
+              </View>
             </View>
-            <View className="section-text">
-              <Picker
-                mode="selector"
-                range={reportClassShow}
-                value={reportTypeSelect}
-                onChange={this.onReportChange.bind(this)}
-              >
-                <View className="section-picker">
-                  当前选择：{reportClassShow[reportTypeSelect]}
-                </View>
-              </Picker>
-            </View>
+            {afterConfig}
           </View>
-          {afterConfig}
-          <View className="section">
-            <AtButton
-              type="secondary"
-              circle
-              disabled={!reportClassShow[reportTypeSelect]}
-              onClick={this.handleSubmitClick.bind(this, reportClassValue[reportTypeSelect])}
-            >
-              确定
-            </AtButton>
-          </View>
-        </View>
-      </AtFloatLayout>
+        </AtModalContent>
+        <AtModalAction>
+          <Button onClick={this.onClose.bind(this, "")}>取消</Button>
+          <Button
+            disabled={!reportClassShow[reportTypeSelect]}
+            onClick={this.handleSubmitClick.bind(this, reportClassValue[reportTypeSelect])}
+          >
+            确定
+          </Button>
+        </AtModalAction>
+      </AtModal>
     )
   }
 }

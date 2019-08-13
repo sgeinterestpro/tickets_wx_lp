@@ -3,7 +3,7 @@
  * 票券领取对话框
  * 1、显示日期和可领取项目
  */
-import Taro, {Component} from "@tarojs/taro"
+import Taro from "@tarojs/taro"
 import {Button, Picker, Text, View} from "@tarojs/components"
 import {AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from "taro-ui"
 import "../module-index.scss"
@@ -11,7 +11,7 @@ import {ticketClass} from "../../config";
 import {getNowDay, getWeekDay} from "../../common/getWeek";
 import {purchaseTicket} from "../../apis";
 
-export default class Index extends Component {
+export default class Index extends Taro.Component {
 
   constructor() {
     super(...arguments);
@@ -79,6 +79,9 @@ export default class Index extends Component {
     });
   };
 
+  onToastClose = () => {
+    this.setState({tOpened: false});
+  };
 
   render() {
     const {isOpened} = this.props;
@@ -90,7 +93,8 @@ export default class Index extends Component {
     return (
       isOpened &&
       <View>
-        <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask/>
+        <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={0} hasMask
+                 onClose={this.onToastClose.bind(this)}/>
         <AtModal isOpened={isOpened}>
           <AtModalHeader>领券中心</AtModalHeader>
           <AtModalContent>

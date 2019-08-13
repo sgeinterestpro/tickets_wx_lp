@@ -1,4 +1,4 @@
-import Taro, {Component} from "@tarojs/taro"
+import Taro from "@tarojs/taro"
 import Index from "./pages/index"
 
 import "./app.scss"
@@ -10,7 +10,7 @@ import {login} from "./common/getUserInfo";
 //   require("nerv-devtools")
 // }
 
-class App extends Component {
+class App extends Taro.Component {
   config = {
     pages: [
       "pages/index/index",

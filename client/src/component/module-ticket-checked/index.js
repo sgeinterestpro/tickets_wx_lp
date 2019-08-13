@@ -5,7 +5,7 @@
  */
 import Taro, {Component} from "@tarojs/taro"
 import {Button, Text, View} from "@tarojs/components"
-import {AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from "taro-ui"
+import {AtFloatLayout, AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from "taro-ui"
 import {checkedTicket, inspectTicket} from "../../apis";
 import "../module-index.scss"
 import {ticketClass} from "../../config";
@@ -71,6 +71,10 @@ export default class Index extends Component {
     })
   };
 
+  onToastClose = () => {
+    this.setState({tOpened: false});
+  };
+
   render() {
     const {isOpened, ticketId} = this.props;
     const {ticketShow, ticket, member, tOpened, tText} = this.state;
@@ -78,7 +82,8 @@ export default class Index extends Component {
     return (
       isOpened &&
       <View class="container">
-        <AtToast isOpened={tOpened} text={tText} status="loading" duration={0} hasMask/>
+        <AtToast isOpened={tOpened} text={tText} status="loading" duration={0} hasMask={tDuration === 0}
+                 onClose={this.onToastClose.bind(this)}/>
         <AtModal isOpened={ticketShow} onClose={this.onReturn.bind(this)}>
           <AtModalHeader>票券详情</AtModalHeader>
           <AtModalContent>

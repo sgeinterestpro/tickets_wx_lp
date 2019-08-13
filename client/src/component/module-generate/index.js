@@ -1,6 +1,6 @@
 import Taro from "@tarojs/taro"
-import {View} from "@tarojs/components"
-import {AtButton, AtFloatLayout, AtInputNumber} from "taro-ui";
+import {Button, View} from "@tarojs/components"
+import {AtInputNumber, AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from "taro-ui";
 import "../module-index.scss"
 import {ticketGenerate} from "../../apis";
 import {impOptNotice} from "../../common/getString";
@@ -9,12 +9,20 @@ export default class Index extends Taro.Component {
   constructor() {
     super(...arguments);
     this.state = {
-      generateCount: 0
+      generateCount: 0,
+      tOpened: false,
+      tText: "加载中...",
+      tStatus: "loading",
+      tDuration: 3000,
     }
   }
 
   onClose = (res) => {
     this.props.onClose(res);
+  };
+
+  onToastClose = () => {
+    this.setState({tOpened: false});
   };
 
   /**
@@ -34,7 +42,9 @@ export default class Index extends Taro.Component {
       content: impOptNotice("增发" + generateCount + "张票券")
     }).then(res => {
       if (res.confirm) {
+        this.setState({tOpened: true, tText: "正在执行操作", tStatus: "loading", tDuration: 0});
         ticketGenerate(generateCount).then(res => {
+          this.onToastClose();
           if (res.code !== 0) {
             Taro.showModal({title: "提示", content: res.message, showCancel: false}).then();
           } else {
@@ -43,6 +53,7 @@ export default class Index extends Taro.Component {
           }
         }).catch(err => {
           console.error(err);
+          this.onToastClose();
           Taro.showModal({title: "错误", content: "票券增发失败", showCancel: false, confirmColor: "#FF0000"}).then();
         });
       }
@@ -52,19 +63,38 @@ export default class Index extends Taro.Component {
   render() {
     const {isOpened} = this.props;
     const {generateCount} = this.state;
+    const {tOpened, tText, tStatus, tDuration} = this.state;
     // noinspection JSXNamespaceValidation
     return (
       isOpened &&
-      <AtFloatLayout isOpened={isOpened} title="增发票券" onClose={this.onClose}>
-        <View className="generate body-center">
-          <AtInputNumber min={0} max={10000} size step={1} value={generateCount} width={180}
-                         onChange={this.handleCountChange.bind(this)}/>
-        </View>
-        <AtButton type="secondary" circle disabled={!generateCount > 0}
-                  onClick={this.handleTicketGenerate.bind(this)}>
-          确定
-        </AtButton>
-      </AtFloatLayout>
+      <AtModal closeOnClickOverlay={false} isOpened={isOpened} onClose={this.onClose}>
+        <AtModalHeader>增发票券</AtModalHeader>
+        <AtModalContent>
+          <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={tDuration} hasMask={tDuration === 0}
+                   onClose={this.onToastClose.bind(this)}/>
+          <View className="generate body-center">
+            <AtInputNumber
+              type="number"
+              value={generateCount}
+              min={0}
+              max={10000}
+              step={1}
+              size="80"
+              width={180}
+              onChange={this.handleCountChange.bind(this)}
+            />
+          </View>
+        </AtModalContent>
+        <AtModalAction>
+          <Button onClick={this.onClose.bind(this, "")}>取消</Button>
+          <Button
+            disabled={!generateCount > 0}
+            onClick={this.handleTicketGenerate.bind(this)}
+          >
+            确定
+          </Button>
+        </AtModalAction>
+      </AtModal>
     )
   }
 }

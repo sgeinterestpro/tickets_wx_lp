@@ -92,10 +92,6 @@ export default class Index extends Taro.Component {
     });
   };
 
-  onToastClose = () => {
-    this.setState({tOpened: false});
-  };
-
   onTimeUp = () => {
     Taro.reLaunch({url: "/pages/index/index"});
   };
@@ -115,6 +111,10 @@ export default class Index extends Taro.Component {
     this.checkLoop = setTimeout(() => {
       this.checkUserState()
     }, 5 * 1000)
+  };
+
+  onToastClose = () => {
+    this.setState({tOpened: false});
   };
 
   render() {
