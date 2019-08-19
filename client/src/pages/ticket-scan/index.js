@@ -95,7 +95,7 @@ export default class Index extends Taro.Component {
         <View class="tickets-scan">
           <View class="input-container">
             <AtInput border={false} value={ticketId} onChange={this.handleInputChange.bind(this)}
-                     placeholder="扫描或输入票券编号"
+                     placeholder="扫描或输入票券编号" maxLength={1000}
             >
               <AtButton type="primary" onClick={this.modalTicketDisplayShow.bind(this, ticketId)}>确定</AtButton>
             </AtInput>
