@@ -54,7 +54,7 @@ export default class Index extends Taro.Component {
 
   handleChange = (email_value) => {
     this.setState({email_value});
-    const regExp = /^([a-zA-Z0-9]+[_|.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+    const regExp = /^([a-zA-Z0-9]+[_\-|.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_\-|.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
     if (!regExp.test(email_value)) {
       this.setState({email_valid: false});
     } else {
@@ -125,7 +125,7 @@ export default class Index extends Taro.Component {
       <View class="bg bg-center">
         <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={tDuration} hasMask={tDuration === 0}
                  onClose={this.onToastClose.bind(this)}/>
-        <View class="bind" hidden={email_waiting}>
+        <View hidden={email_waiting}>
           <View class="input">
             <AtInput
               clear
