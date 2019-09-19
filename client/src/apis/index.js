@@ -1,13 +1,15 @@
 import Taro from "@tarojs/taro";
 import {cloudRequest} from "../common/cloudRequest";
 
-// const urlBase = "http://localhost:10000"; //本地调试
-const urlBase = "http://ticket.sge-tech.com:10000";
+const urlBase = "http://localhost:10000"; //本地调试
+// const urlBase = "http://ticket.sge-tech.com:10000";
+// const urlBase = "https://ticket.sge.ronpy.com";
 
-const request = (method, url, data) => {
+const request = (method, url, data, dataType = "json") => {
   Taro.showNavigationBarLoading();
-  let _request = cloudRequest;
-  if (url.indexOf("localhost") !== -1) _request = Taro.request;
+  // let _request = cloudRequest;
+  // if (url.indexOf("localhost") !== -1) _request = Taro.request;
+  let _request = Taro.request;
   return new Promise((resolve, reject) => {
     _request({
       url: url,
@@ -17,7 +19,7 @@ const request = (method, url, data) => {
         "open-id": Taro.getStorageSync("OpenId") || ""
       },
       method: method,
-      dataType: "json"
+      dataType: dataType
     }).then(res => {
       Taro.hideNavigationBarLoading();
       if (res.statusCode >= 400) {
@@ -35,8 +37,8 @@ const request = (method, url, data) => {
   });
 };
 
-const GET = (url) => request("GET", url);
-const POST = (url, data) => request("POST", url, data);
+const GET = (url, dataType) => request("GET", url, undefined, dataType);
+const POST = (url, data, dataType) => request("POST", url, data, dataType);
 // const DELETE = (url) => request("DELETE", url);
 // const PUT = (url, data) => request("PUT", url, data);
 
@@ -59,6 +61,10 @@ const inspectTicket = (ticket_id) => {
 const checkedTicket = (ticket_id) => {
   console.log(`API: checkedTicket(${ticket_id})`);
   return POST(`${urlBase}/ticket_checked`, {ticket_id});
+};
+const ticketSignIn = (data) => {
+  console.log(`API: ticketSignIn(${JSON.stringify(data)})`);
+  return POST(`${urlBase}/ticket_sign_in`, data)
 };
 const ticketGenerate = (count) => {
   console.log(`API: ticketGenerate(${count})`);
@@ -108,6 +114,10 @@ const reportExport = (type, start, end) => {
   console.log(`API: reportExport(${type},${start}, ${end})`);
   return POST(`${urlBase}/report_export`, {type, start, end});
 };
+const rsaPubKey = () => {
+  console.log(`API: rsa_pub_key()`);
+  return GET(`${urlBase}/web/rsa_pub_key`, 'data');
+};
 // const getHistoryTickets = () => GET(`${urlBase}/ticket_history`);
 
 export {
@@ -115,6 +125,7 @@ export {
   inspectTicket,
   purchaseTicket,
   refundTicket,
+  ticketSignIn,
   ticketPackage,
   ticketCheckLog,
   ticketGenerate,
@@ -128,5 +139,6 @@ export {
   memberFind,
   memberList,
   reportExport,
+  rsaPubKey,
   // getHistoryTickets
 }

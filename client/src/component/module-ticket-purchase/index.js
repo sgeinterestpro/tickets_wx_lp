@@ -22,13 +22,15 @@ export default class Index extends Taro.Component {
     month = (month.length === 1) ? "0" + month : month;
     day = (day.length === 1) ? "0" + day : day;
     let sportList = [];
-    const {sports} = Taro.getStorageSync("UesrInfo");
-    if (sports) {
+    const {sports} = Taro.getStorageSync("UserInfo");
+    if (sports && sports.length > 0) {
       for (let sport of sports) {
         if (ticketClass[sport]) {
           sportList[sport] = ticketClass[sport]
         }
       }
+    } else {
+      sportList = ticketClass
     }
     this.state = {
       tOpened: false,

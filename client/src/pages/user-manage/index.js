@@ -6,7 +6,7 @@
  */
 import Taro from "@tarojs/taro"
 import {View} from "@tarojs/components"
-import {AtButton, AtCard, AtListItem} from "taro-ui";
+import {AtButton, AtCard, AtListItem, AtSearchBar} from "taro-ui";
 import "./index.scss"
 import {ticketClass} from "../../config";
 import TicketTabBar from "../../component/tab-bar"
@@ -24,7 +24,8 @@ export default class Index extends Taro.Component {
     super(...arguments);
     this.state = {
       userList: Taro.getStorageSync('user-manage-userList') || [],
-      noneText: "正在加载用户信息……"
+      noneText: "正在加载用户信息……",
+      searchText: '',
     }
   }
 
@@ -53,40 +54,53 @@ export default class Index extends Taro.Component {
     });
   };
 
+  onSearchChange = (value) => {
+    this.setState({searchText: value})
+  };
+
   handleUserClick = (init_id) => Taro.navigateTo({url: `/pages/user-edit/index?id=${init_id}`});
   handleAddUser = () => Taro.navigateTo({url: `/pages/user-add/index`});
 
   render() {
-    const {userList, noneText} = this.state;
-
+    const {userList, noneText, searchText} = this.state;
+    const userListResult = (() => {
+      const searchRegex = new RegExp(searchText, 'g');
+      if (userList) {
+        return userList.filter((user) => {
+          return (
+            searchRegex.test(user["real_name"]) ||
+            searchRegex.test(user["email"])
+            // 返回real_name或者email字段满足筛选条件的数据
+          );
+        });
+      }
+    })();
     // noinspection JSXNamespaceValidation
     return (
       <View>
         <View class="bg">
-          <View class="add">
-            <AtButton
-              type="secondary"
-              circle
-              onClick={this.handleAddUser.bind(this)}
-            >
+          <View class="block block-search">
+            <AtSearchBar value={searchText} onChange={this.onSearchChange.bind(this)}/>
+          </View>
+          <View class="button-full">
+            <AtButton type="secondary" circle onClick={this.handleAddUser.bind(this)}>
               新增用户
             </AtButton>
           </View>
           <View class="block">
             <View class="list list-card">
-              {userList.length > 0 ?
-                userList.map((user_item, index) => (
+              {userListResult.length > 0 ?
+                userListResult.map((userItem, index) => (
                   <View class="item item-card" key={index}>
                     <AtCard
                       isFull={true}
-                      note={user_item["email"]}
-                      extra={user_item["user_id"] ? "" : "未绑定微信"}
-                      // extra={`工号：${user_item["work_no"]}`}
-                      title={`姓名：${user_item["real_name"]}`}
-                      onClick={this.handleUserClick.bind(this, user_item["init_id"])}
-                      thumb={user_item["avatarUrl"] || 'https://jdc.jd.com/img/13'}
+                      note={userItem["email"]}
+                      extra={userItem["user_id"] ? "" : "未绑定微信"}
+                      title={`姓名：${userItem["real_name"]}`}
+                      onClick={this.handleUserClick.bind(this, userItem["init_id"])}
+                      thumb={userItem["avatarUrl"] || 'https://jdc.jd.com/img/13'}
                     >
-                      <View>项目：{user_item["sports"].map((sport_item) => ticketClass[sport_item] || '未知')}</View>
+                      <View>项目：{userItem["sports"].map((sportItem) => ticketClass[sportItem] || '未知').join()}</View>
                     </AtCard>
                   </View>
                 )) :

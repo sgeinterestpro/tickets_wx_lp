@@ -17,6 +17,7 @@ export default class Index extends Component {
     this.state = {
       tOpened: true,
       tText: "票券信息加载中...",
+      tDuration: 3000,
       ticketShow: false,
       ticket: {},
       user: {},
@@ -45,9 +46,12 @@ export default class Index extends Component {
             ticket: res['ticket'],
             user: res['user'],
             member: res['init'],
-
           });
         }
+      }).catch(()=>{
+        Taro.showModal({content: '系统错误', showCancel: false}).then(() => {
+          this.onReturn(false);
+        });
       });
     }
   }
@@ -77,7 +81,8 @@ export default class Index extends Component {
 
   render() {
     const {isOpened, ticketId} = this.props;
-    const {ticketShow, ticket, member, tOpened, tText} = this.state;
+    const {ticketShow, ticket, member} = this.state;
+    const {tOpened, tText, tDuration} = this.state;
     // noinspection JSXNamespaceValidation
     return (
       isOpened &&
@@ -92,7 +97,7 @@ export default class Index extends Component {
                 <Text>运动项目：{ticketClass[ticket["class"]]}</Text>
               </View>
               <View className="page-section-title">
-                <Text>电子券码：{ticketId.substr(0, 20)}</Text>
+                <Text>电子券码：{(ticket["_id"] || '').substr(0, 20)}</Text>
               </View>
               <View className="page-section-title">
                 <Text>有效日期：{ticket["expiry_date"]}</Text>

@@ -47,6 +47,14 @@ page {
   background: #fff;
   border-radius: 12px;
 
+  &-search {
+    padding: 0;
+
+    .at-search-bar {
+      border-radius: 12px;
+    }
+  }
+
   .body {
     margin: 0 24px;
     border-bottom: none;
@@ -56,16 +64,14 @@ page {
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    box-shadow: 0 0 2px 0 rgba(25, 29, 33, 0.15);
     position: relative;
-    //width: 670px;
     margin: 0 24px;
     padding: 20px 0 0;
     background: #fff;
-    border-radius: 12px;
 
     &-card {
-      margin: 0;
+      margin-left: 0;
+      margin-right: 0;
       padding: 0;
     }
 
@@ -114,7 +120,6 @@ page {
       }
 
     }
-
 
     .form {
       padding: 10px;
