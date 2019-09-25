@@ -94,25 +94,22 @@ export default class Index extends Taro.Component {
         </View>}
         <View class="block">
           <AtList hasBorder={false}>
-            <AtListItem class="item" title="姓名" extraText={userInfo["real_name"]}/>
-            <AtListItem class="item" title="电话" extraText={userInfo["phone"]}/>
-            <AtListItem class="item" title="部门" extraText={userInfo["department"]}/>
+            <AtListItem title="姓名" extraText={userInfo["real_name"]}/>
+            <AtListItem title="电话" extraText={userInfo["phone"]}/>
+            <AtListItem title="部门" extraText={userInfo["department"]}/>
             {/*<AtListItem class="item" title="工号" extraText={userInfo["work_no"]}/>*/}
-            <AtListItem class="item" title="邮箱" extraText={userInfo["email"]}/>
+            <AtListItem title="邮箱" extraText={userInfo["email"]}/>
             <AtListItem
-              class="item"
               title="项目"
               extraText={(sportList).map((sport_item) => ticketClass[sport_item] || '未知').join()}/>
             {roleValueList.length > 1 &&
-            <View class="item">
-              <Picker mode="selector" range={roleValueList} value={roleSelectIndex}
-                      onChange={this.onRoleChange.bind(this)}>
-                <View class="picker">
-                  <View class="item">角色</View>
-                  <View class="text">{roleValueList[roleSelectIndex]}</View>
-                </View>
-              </Picker>
-            </View>}
+            <Picker mode="selector" range={roleValueList} value={roleSelectIndex}
+                    onChange={this.onRoleChange.bind(this)}>
+              <View class="cell">
+                <View class="cell-title">角色</View>
+                <View class="cell-extra">{roleValueList[roleSelectIndex]}</View>
+              </View>
+            </Picker>}
           </AtList>
         </View>
         <TicketTabBar/>

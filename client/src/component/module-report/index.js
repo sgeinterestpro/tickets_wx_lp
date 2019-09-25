@@ -1,28 +1,23 @@
 import Taro from "@tarojs/taro"
 import {Button, Picker, Text, View} from "@tarojs/components"
-import {AtButton, AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from "taro-ui";
+import {AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from "taro-ui";
 import "../module-index.scss"
 import {reportList} from "../../config";
 import {reportExport} from "../../apis";
+import {getNowDate} from "../../common/getWeek";
 
-// import {ticketClass, ticketState} from "../../config";
 
 export default class Index extends Taro.Component {
   constructor() {
     super(...arguments);
-    let reportClassShow = [];
-    let reportClassValue = [];
-    let reportClassType = [];
+    let reportTitleList = [];
     reportList.map((report) => {
-      reportClassShow.push(report['title']);
-      reportClassValue.push(report['api']);
-      reportClassType.push(report['type']);
+      reportTitleList.push(report['title']);
     });
     this.state = {
-      reportTypeSelect: -1,
-      reportClassShow,
-      reportClassValue,
-      reportClassType,
+      reportTitleList,
+      reportSelectIndex: -1,
+      reportSelect: {},
       tOpened: false,
       tText: "加载中...",
       tStatus: "loading",
@@ -39,8 +34,10 @@ export default class Index extends Taro.Component {
    */
   onReportChange = e => {
     console.log(e);
+    const reportSelectIndex = e.detail.value;
     this.setState({
-      reportTypeSelect: e.detail.value
+      reportSelectIndex,
+      reportSelect: reportList[reportSelectIndex],
     })
   };
 
@@ -77,68 +74,67 @@ export default class Index extends Taro.Component {
 
   render() {
     const {isOpened} = this.props;
-    const {reportTypeSelect, reportClassShow, reportClassValue, reportClassType} = this.state;
-    const {dateStart, dateEnd} = this.state;
+    const {reportTitleList, reportSelectIndex, reportSelect} = this.state;
     const {tOpened, tText, tStatus, tDuration} = this.state;
+    const {dateStart, dateEnd} = this.state;
+    const dateNow = getNowDate();
     let afterConfig = null;
     if (isOpened) {
-      switch (reportClassType[reportTypeSelect]) {
-        case "month": {
-          afterConfig = <View>
-
-          </View>;
-          break
-        }
-        case "month-span": {
-          afterConfig = <View>
-
-          </View>;
-          break
-        }
-        case "day": {
-          afterConfig = <View>
-            <View className="section">
-              <View className="section-title">
-                <Text>选择导出日期</Text>
-              </View>
-              <View className="section-text">
-                <Picker mode="date" value={dateStart} onChange={this.onDateChange.bind(this, "dateStart")}>
-                  <View className="section-picker">当前选择：{dateStart}</View>
-                </Picker>
-              </View>
+      if (reportSelect['span']) {
+        // noinspection JSXNamespaceValidation
+        afterConfig = (<View>
+          <View className="section">
+            <View className="section-title">
+              <Text>导出开始时间</Text>
             </View>
-          </View>;
-          break
-        }
-        case "day-span": {
-          // noinspection JSXNamespaceValidation
-          afterConfig = (<View>
-            <View className="section">
-              <View className="section-title">
-                <Text>选择开始日期</Text>
-              </View>
-              <View className="section-text">
-                <Picker mode="date" value={dateStart} onChange={this.onDateChange.bind(this, "dateStart")}>
-                  <View className="section-picker">当前选择：{dateStart}</View>
-                </Picker>
-              </View>
+            <View className="section-text">
+              <Picker
+                mode="date"
+                end={dateNow}
+                value={dateStart}
+                fields={reportSelect['type']}
+                onChange={this.onDateChange.bind(this, "dateStart")}
+              >
+                <View className="section-picker">当前选择：{dateStart}</View>
+              </Picker>
             </View>
-            <View className="section">
-              <View className="section-title">
-                <Text>选择结束日期</Text>
-              </View>
-              <View className="section-text">
-                <Picker mode="date" value={dateEnd} onChange={this.onDateChange.bind(this, "dateEnd")}>
-                  <View className="section-picker">当前选择：{dateEnd}</View>
-                </Picker>
-              </View>
+          </View>
+          <View className="section">
+            <View className="section-title">
+              <Text>导出结束时间</Text>
             </View>
-          </View>);
-          break
-        }
-        default: {
-          break
-        }
+            <View className="section-text">
+              <Picker
+                mode="date"
+                end={dateNow}
+                value={dateEnd}
+                fields={reportSelect['type']}
+                onChange={this.onDateChange.bind(this, "dateEnd")}
+              >
+                <View className="section-picker">当前选择：{dateEnd}</View>
+              </Picker>
+            </View>
+          </View>
+        </View>);
+      } else {
+        afterConfig = <View>
+          <View className="section">
+            <View className="section-title">
+              <Text>导出时间</Text>
+            </View>
+            <View className="section-text">
+              <Picker
+                mode="date"
+                value={dateStart}
+                end={dateNow}
+                fields={reportSelect['type']}
+                onChange={this.onDateChange.bind(this, "dateStart")}
+              >
+                <View className="section-picker">当前选择：{dateStart}</View>
+              </Picker>
+            </View>
+          </View>
+        </View>;
       }
     }
     // noinspection JSXNamespaceValidation
@@ -152,17 +148,17 @@ export default class Index extends Taro.Component {
           <View class="section-container">
             <View className="section">
               <View className="section-title">
-                <Text>报表类型选择</Text>
+                <Text>报表类型</Text>
               </View>
               <View className="section-text">
                 <Picker
                   mode="selector"
-                  range={reportClassShow}
-                  value={reportTypeSelect}
+                  range={reportTitleList}
+                  value={reportSelectIndex}
                   onChange={this.onReportChange.bind(this)}
                 >
                   <View className="section-picker">
-                    当前选择：{reportClassShow[reportTypeSelect]}
+                    当前选择：{reportSelect['title']}
                   </View>
                 </Picker>
               </View>
@@ -173,8 +169,8 @@ export default class Index extends Taro.Component {
         <AtModalAction>
           <Button onClick={this.onClose.bind(this, "")}>取消</Button>
           <Button
-            disabled={!reportClassShow[reportTypeSelect]}
-            onClick={this.handleSubmitClick.bind(this, reportClassValue[reportTypeSelect])}
+            disabled={!reportSelect}
+            onClick={this.handleSubmitClick.bind(this, reportSelect['api'])}
           >
             确定
           </Button>

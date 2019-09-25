@@ -1,9 +1,9 @@
 import Taro from "@tarojs/taro";
-import {cloudRequest} from "../common/cloudRequest";
 
-const urlBase = "http://localhost:10000"; //本地调试
+// const urlBase = "http://localhost:10000"; //本地调试
 // const urlBase = "http://ticket.sge-tech.com:10000";
 // const urlBase = "https://ticket.sge.ronpy.com";
+const urlBase = "https://ticket-test.sge.ronpy.com";
 
 const request = (method, url, data, dataType = "json") => {
   Taro.showNavigationBarLoading();
@@ -61,6 +61,18 @@ const inspectTicket = (ticket_id) => {
 const checkedTicket = (ticket_id) => {
   console.log(`API: checkedTicket(${ticket_id})`);
   return POST(`${urlBase}/ticket_checked`, {ticket_id});
+};
+const messageList = () => {
+  console.log(`API: messageList()`);
+  return POST(`${urlBase}/message_list`)
+};
+const messageCount = () => {
+  console.log(`API: messageCount()`);
+  return POST(`${urlBase}/message_count`)
+};
+const messageAction = (message_id) => {
+  console.log(`API: messageAction(${message_id})`);
+  return POST(`${urlBase}/message_action`, {message_id})
 };
 const ticketSignIn = (data) => {
   console.log(`API: ticketSignIn(${JSON.stringify(data)})`);
@@ -123,8 +135,17 @@ const rsaPubKey = () => {
 export {
   checkedTicket,
   inspectTicket,
+  memberAdd,
+  memberDelete,
+  memberFind,
+  memberList,
+  messageList,
+  messageCount,
+  messageAction,
   purchaseTicket,
   refundTicket,
+  reportExport,
+  rsaPubKey,
   ticketSignIn,
   ticketPackage,
   ticketCheckLog,
@@ -134,11 +155,5 @@ export {
   userBind,
   userInfo,
   userUpdate,
-  memberAdd,
-  memberDelete,
-  memberFind,
-  memberList,
-  reportExport,
-  rsaPubKey,
   // getHistoryTickets
 }

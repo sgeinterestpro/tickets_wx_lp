@@ -13,9 +13,9 @@ const getWeekDay = (i) => {
   firstDay.setDate(firstDay.getDate() + i);
   return dateToString(firstDay)
 };
-const getNowDay = () => {
+const getNowDate = () => {
   let now = new Date();
   return dateToString(now)
 };
 
-export {getWeekDay, getNowDay};
+export {getWeekDay, getNowDate};

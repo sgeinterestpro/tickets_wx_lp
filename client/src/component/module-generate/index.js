@@ -45,11 +45,11 @@ export default class Index extends Taro.Component {
         this.setState({tOpened: true, tText: "正在执行操作", tStatus: "loading", tDuration: 0});
         ticketGenerate(generateCount).then(res => {
           this.onToastClose();
-          if (res.code !== 0) {
-            Taro.showModal({title: "提示", content: res.message, showCancel: false}).then();
-          } else {
-            Taro.showModal({title: "提示", content: "票券增发成功", showCancel: false}).then();
+          if (res.code === 0) {
+            Taro.showModal({title: "成功", content: res.message, showCancel: false}).then();
             this.onClose("generate");
+          } else {
+            Taro.showModal({title: "失败", content: res.message, showCancel: false}).then();
           }
         }).catch(err => {
           console.error(err);

@@ -72,18 +72,27 @@ export const reportList = [{
   "api": "ReportUsedDtl",
   "title": "领用登记明细表",
   "type": "day",
+  "span": false,
 }, {
   "api": "ReportUsedDay",
-  "title": "领用登记日报表",
-  "type": "day-span",
+  "title": "领用统计日报表",
+  "type": "day",
+  "span": true,
 }, {
   "api": "ReportUsedMonth",
-  "title": "领用登记月报表",
-  "type": "month-span",
-}, {
-  "api": "ReportUsedSportMonth",
-  "title": "活动券分项领用月报表",
+  "title": "领用统计月报表",
   "type": "month",
+  "span": true,
+}, {
+  "api": "ReportDayCheck",
+  "title": "勾稽关系统计表",
+  "type": "day",
+  "span": true,
+// }, {
+//   "api": "ReportUsedSportMonth",
+//   "title": "活动券分项领用月报表",
+//   "type": "month",
+//   "span": false,
 }
 ];
 const allRoleTabUrls = {
@@ -161,7 +170,7 @@ export const roleTabUrls = {
   ],
   "user": [
     allRoleTabUrls.TicketSignIn,
-    allRoleTabUrls.TicketHistory,
+    // allRoleTabUrls.TicketHistory,
     allRoleTabUrls.UserInfo,
   ],
   "admin": [

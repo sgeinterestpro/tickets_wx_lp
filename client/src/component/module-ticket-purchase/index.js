@@ -8,7 +8,7 @@ import {Button, Picker, Text, View} from "@tarojs/components"
 import {AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from "taro-ui"
 import "../module-index.scss"
 import {ticketClass} from "../../config";
-import {getNowDay, getWeekDay} from "../../common/getWeek";
+import {getNowDate, getWeekDay} from "../../common/getWeek";
 import {purchaseTicket} from "../../apis";
 
 export default class Index extends Taro.Component {
@@ -89,7 +89,7 @@ export default class Index extends Taro.Component {
     const {isOpened} = this.props;
     const {eventShow, eventSelect, dateSel} = this.state;
     const {tOpened, tText, tStatus} = this.state;
-    const dateStart = getNowDay();
+    const dateStart = getNowDate();
     const dateEnd = getWeekDay(6);
     // noinspection JSXNamespaceValidation
     return (

@@ -88,10 +88,10 @@ export default class Index extends Taro.Component {
             </AtButton>
           </View>
           <View class="block">
-            <View class="list list-card">
+            <View class="list">
               {userListResult.length > 0 ?
                 userListResult.map((userItem, index) => (
-                  <View class="item item-card" key={index}>
+                  <View class="list-item card-fix" key={index}>
                     <AtCard
                       isFull={true}
                       note={userItem["email"]}
@@ -104,7 +104,7 @@ export default class Index extends Taro.Component {
                     </AtCard>
                   </View>
                 )) :
-                <AtListItem className="item" title={noneText}/>
+                <AtListItem className="list-item" title={noneText}/>
               }
             </View>
           </View>

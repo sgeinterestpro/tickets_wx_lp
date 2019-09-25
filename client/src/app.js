@@ -15,6 +15,7 @@ class App extends Taro.Component {
   config = {
     pages: [
       "pages/index/index",
+      "pages/message-list/index",
       "pages/scan-history/index",
       "pages/ticket-gather/index",
       "pages/ticket-history/index",

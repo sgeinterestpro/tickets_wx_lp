@@ -23,8 +23,9 @@ export default class Index extends Taro.Component {
   constructor() {
     super(...arguments);
     this.state = {
-      roleList: {},
-      userInfo: {}
+      userInfo: {},
+      roleList: [],
+      sportList: []
     }
   }
 
@@ -41,7 +42,11 @@ export default class Index extends Taro.Component {
             roleList[roleKey] = roleAllList[roleKey]
           }
         }
-        this.setState({roleList, userInfo})
+        let sportList = [];
+        if (!(userInfo["sports"] && userInfo["sports"].length > 0)) {
+          sportList = Object.keys(ticketClass)
+        }
+        this.setState({userInfo, roleList, sportList})
       }
     })
   }
@@ -63,14 +68,14 @@ export default class Index extends Taro.Component {
               tText: "删除失败",
               tStatus: "error",
             });
-            Taro.showModal({content: res.message, showCancel: false});
+            Taro.showModal({content: res.message, showCancel: false}).then();
           } else {
             this.setState({
               tOpened: true,
               tText: "删除成功",
               tStatus: "success",
             });
-            Taro.navigateBack();
+            Taro.navigateBack().then();
           }
         });
         this.setState({
@@ -84,7 +89,7 @@ export default class Index extends Taro.Component {
   };
 
   render() {
-    const {userInfo} = this.state;
+    const {userInfo, sportList} = this.state;
     // noinspection JSXNamespaceValidation
     return (
       <View class="bg">
@@ -100,15 +105,15 @@ export default class Index extends Taro.Component {
         </View>
         <View class="block">
           <View class="list">
-            <View class="item">姓名：{userInfo["real_name"]}</View>
-            <View class="item">电话：{userInfo["phone"]}</View>
-            <View class="item">工号：{userInfo["work_no"]}</View>
-            <View class="item">邮箱：{userInfo["email"]}</View>
-            <View class="item">
+            <View class="list-item">姓名：{userInfo["real_name"]}</View>
+            <View class="list-item">电话：{userInfo["phone"]}</View>
+            <View class="list-item">工号：{userInfo["work_no"]}</View>
+            <View class="list-item">邮箱：{userInfo["email"]}</View>
+            <View class="list-item">
               角色：{(userInfo["role"] || []).map((role) => roleAllList[role] || '未知').join(',')}
             </View>
-            <View class="item">
-              项目：{(userInfo["sports"] || []).map((sport) => ticketClass[sport] || '未知').join(',')}
+            <View class="list-item">
+              项目：{sportList.map((sport) => ticketClass[sport] || '未知').join(',')}
             </View>
           </View>
         </View>

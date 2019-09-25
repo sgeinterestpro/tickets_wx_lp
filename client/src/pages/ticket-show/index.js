@@ -130,7 +130,7 @@ export default class Index extends Taro.Component {
           <Canvas className="code" canvasId="qrCodeFull"/>
         </View>
         <View class="list" hidden={qrShow}>
-          <View class="qrCode item" onClick={this.onQrCodeClick.bind(this)}>
+          <View class="item qrCode" onClick={this.onQrCodeClick.bind(this)}>
             <Canvas className="code" canvasId="qrCode"/>
           </View>
           <View class="round left"/>

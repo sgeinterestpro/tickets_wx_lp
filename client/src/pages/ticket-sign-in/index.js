@@ -63,7 +63,6 @@ export default class Index extends Taro.Component {
       this.setState({ticketList: ticketListNew, openIndex: -1, tOpened: false});
     }).catch(err => {
       console.error(err);
-      Taro.hideNavigationBarLoading();
       Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
     });
   };
@@ -165,7 +164,7 @@ export default class Index extends Taro.Component {
                     onClick={this.onBtnScanClick.bind(this, sport)}
                   />
                 )) :
-                <AtListItem className="item" title="今日无可用项目"/>
+                <AtListItem className="list-item" title="今日无可用项目"/>
               }
             </AtList>
           </View>
