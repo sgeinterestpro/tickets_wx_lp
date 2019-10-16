@@ -1,0 +1,50 @@
+$qrCodeSize: 500px;
+$qrMarginTop: 178-$qrCodeSize*3/10;
+
+.tickets-scan {
+  box-sizing: border-box;
+  box-shadow: 0 0 2px 0 rgba(25, 29, 33, 0.15);
+  position: relative;
+  width: 670px;
+  margin: 40px auto 0;
+  padding: 0 40px;
+  background: #fff;
+  border-radius: 12px;
+
+  .item {
+    border-bottom: 2px solid #F4F5F7;
+  }
+}
+
+.input-container {
+  padding: 10px 0 0 0;
+  width: 590px;
+  margin: 0 auto;
+}
+
+.btn-submit {
+  padding: 10px 0;
+  width: 590px;
+  margin: 0 auto 25px;
+}
+
+.qrCode {
+  width: 590px;
+  margin: 0 auto;
+  padding: 50px 0 59px;
+  border-top: 2px solid #f4f5f7;
+  text-align: center;
+
+  .code {
+    width: $qrCodeSize;
+    height: $qrCodeSize;
+    margin: $qrMarginTop auto 0;
+  }
+
+  .tips {
+    margin-top: 40px;
+    font-size: 24px;
+    color: #999ba1;
+    line-height: 28px;
+  }
+}

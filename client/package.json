@@ -28,10 +28,12 @@
     "@tarojs/taro-swan": "1.3.12",
     "@tarojs/taro-tt": "1.3.12",
     "@tarojs/taro-weapp": "1.3.12",
+    "BigInt": "^5.5.3",
     "nerv-devtools": "^1.3.9",
     "nervjs": "^1.3.9",
     "taro-ui": "^2.0.2",
-    "weapp-qrcode": "^1.0.0"
+    "weapp-qrcode": "^1.0.0",
+    "wx-jsencrypt": "^3.0.0-rc.1.4"
   },
   "devDependencies": {
     "@tarojs/cli": "1.3.12",

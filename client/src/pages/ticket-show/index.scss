@@ -1,5 +1,6 @@
-$qrCodeSize: 400px;
+$qrCodeSize: 500px;
 $qrCodeFullSize: 666px;
+$qrMarginTop: 178-$qrCodeSize*3/10;
 
 page {
   height: 100%;
@@ -32,7 +33,7 @@ page {
   .code {
     width: $qrCodeSize;
     height: $qrCodeSize;
-    margin: 58px auto 0;
+    margin: $qrMarginTop auto 0;
   }
 
   .tips {

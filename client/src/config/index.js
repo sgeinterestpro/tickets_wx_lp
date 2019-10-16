@@ -22,6 +22,11 @@ import swim from "../img/ticket/swim.png"
 import yoga from "../img/ticket/yoga.png"
 
 /**
+ * 用户绑定页面
+ * @type {string}
+ */
+export const qrCodeBase = "http://ticket.sge-tech.com/qr";
+/**
  * 运动项目类型代码显示
  * @type {{basketball: string, yoga: string, badminton: string, football: string, swim: string}}
  */
@@ -67,18 +72,27 @@ export const reportList = [{
   "api": "ReportUsedDtl",
   "title": "领用登记明细表",
   "type": "day",
+  "span": false,
 }, {
   "api": "ReportUsedDay",
-  "title": "领用登记日报表",
-  "type": "day-span",
+  "title": "领用统计日报表",
+  "type": "day",
+  "span": true,
 }, {
   "api": "ReportUsedMonth",
-  "title": "领用登记月报表",
-  "type": "month-span",
-}, {
-  "api": "ReportUsedSportMonth",
-  "title": "活动券分项领用月报表",
+  "title": "领用统计月报表",
   "type": "month",
+  "span": true,
+}, {
+  "api": "ReportDayCheck",
+  "title": "勾稽关系统计表",
+  "type": "day",
+  "span": true,
+// }, {
+//   "api": "ReportUsedSportMonth",
+//   "title": "活动券分项领用月报表",
+//   "type": "month",
+//   "span": false,
 }
 ];
 const allRoleTabUrls = {
@@ -96,6 +110,13 @@ const allRoleTabUrls = {
     "image": ticketPackage,
     "selectedImage": ticketPackageActive,
   },
+  TicketGather: {
+    "id": "TicketGather",
+    "url": "/pages/ticket-gather/index",
+    "title": "票券扫描",
+    "image": ticketScan,
+    "selectedImage": ticketScanActive,
+  },
   TicketManage: {
     "id": "TicketManage",
     "url": "/pages/ticket-manage/index",
@@ -109,6 +130,20 @@ const allRoleTabUrls = {
     "title": "票券扫描",
     "image": ticketScan,
     "selectedImage": ticketScanActive,
+  },
+  TicketSignIn: {
+    "id": "TicketSignIn",
+    "url": "/pages/ticket-sign-in/index",
+    "title": "运动打卡",
+    "image": ticketScan,
+    "selectedImage": ticketScanActive,
+  },
+  TicketHistory: {
+    "id": "TicketHistory",
+    "url": "/pages/ticket-history/index",
+    "title": "打卡记录",
+    "image": ticketPackage,
+    "selectedImage": ticketPackageActive,
   },
   UserManage: {
     "id": "UserManage",
@@ -134,7 +169,8 @@ export const roleTabUrls = {
     allRoleTabUrls.UserInfo
   ],
   "user": [
-    allRoleTabUrls.TicketPackage,
+    allRoleTabUrls.TicketSignIn,
+    // allRoleTabUrls.TicketHistory,
     allRoleTabUrls.UserInfo,
   ],
   "admin": [
@@ -143,7 +179,7 @@ export const roleTabUrls = {
     allRoleTabUrls.UserInfo,
   ],
   "checker": [
-    allRoleTabUrls.TicketScan,
+    allRoleTabUrls.TicketGather,
     allRoleTabUrls.ScanHistory,
     allRoleTabUrls.UserInfo,
   ]
@@ -163,9 +199,9 @@ export const defaultAuthUrl = "/pages/user-auth/index";
  * @type {{other: string, admin: string, checker: string, user: string}}
  */
 export const defaultRoleUrl = {
-  "other": "/pages/user-info/index",
-  "user": "/pages/ticket-package/index",
-  "admin": "/pages/ticket-manage/index",
-  "checker": "/pages/ticket-scan/index"
+  "other": roleTabUrls["other"][0].url,
+  "user": roleTabUrls["user"][0].url,
+  "admin": roleTabUrls["admin"][0].url,
+  "checker": roleTabUrls["checker"][0].url,
 };
 

@@ -6,13 +6,16 @@
  * 3、TODO 显示扫描历史
  */
 import Taro from "@tarojs/taro"
-import {View} from "@tarojs/components"
-import {AtButton, AtInput} from "taro-ui"
+import {Canvas, View} from "@tarojs/components"
 import "./index.scss"
 import TicketTabBar from "../../component/tab-bar"
 import ModalTicketDisplay from "../../component/module-ticket-checked";
-import {ticketClass} from "../../config";
+import {qrCodeBase, ticketClass} from "../../config";
 import {ticketCheckLog} from "../../apis";
+import drawQrcode from "weapp-qrcode";
+
+const deviceWidth = 750;
+const qrCodeSize = 500;
 
 export default class Index extends Taro.Component {
   config = {
@@ -32,8 +35,42 @@ export default class Index extends Taro.Component {
   }
 
   componentDidMount() {
+    const {_id: user_id} = Taro.getStorageSync('UserInfo');
+    console.log(user_id);
+    Taro.getSystemInfo({
+      success: res => {
+        // 设置屏幕比例
+        const {screenWidth} = res;
+        const scale = screenWidth / (deviceWidth / 2);
+        console.log(user_id);
+        this.showQrCode(`${qrCodeBase}?${user_id}`, scale);
+      }
+    }).then(res => console.debug(res));
     this.updateTicketCheckLogList();
   }
+
+  /**
+   * 生成二维码，一个默认显示的二维码，一个放大后的二维码
+   * @param value 二维码的内容
+   * @param scale 屏幕缩放系数，默认为1（不推荐）
+   */
+  showQrCode = (value, scale = 1) => {
+    const qrScaleSize = (qrCodeSize / 2) * scale;
+    const img_p = 5;
+    drawQrcode({
+      _this: this.$scope,
+      canvasId: "qrCode",
+      width: qrScaleSize,
+      height: qrScaleSize,
+      text: value,
+      image: {
+        dx: qrScaleSize * (img_p - 1) / (img_p * 2),
+        dy: qrScaleSize * (img_p - 1) / (img_p * 2),
+        dWidth: qrScaleSize / img_p,
+        dHeight: qrScaleSize / img_p,
+      }
+    });
+  };
 
   /**
    * 更新票券列表记录
@@ -49,29 +86,6 @@ export default class Index extends Taro.Component {
       console.error(err);
       Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
     });
-  };
-
-  /**
-   * 保存输入框数据更改
-   * @param value
-   */
-  handleInputChange = (value) => {
-    this.setState({ticketId: value})
-  };
-
-  /**
-   * 开启微信扫描
-   */
-  onBtnScanClick = () => {
-    Taro.scanCode().then((res) => this.modalTicketDisplayShow(res.result))
-  };
-
-  /**
-   * 显示票券详情对话框
-   * @param ticketId 票券ID
-   */
-  modalTicketDisplayShow = (ticketId) => {
-    this.setState({ticketId, modalTicketDisplayShow: true,})
   };
 
   /**
@@ -93,15 +107,8 @@ export default class Index extends Taro.Component {
           ticketId={ticketId}
         />
         <View class="tickets-scan">
-          <View class="input-container">
-            <AtInput border={false} value={ticketId} onChange={this.handleInputChange.bind(this)}
-                     placeholder="扫描或输入票券编号" maxLength={1000}
-            >
-              <AtButton type="primary" onClick={this.modalTicketDisplayShow.bind(this, ticketId)}>确定</AtButton>
-            </AtInput>
-            <AtButton type="primary" onClick={this.onBtnScanClick.bind(this)}>扫描</AtButton>
-          </View>
-          <View class="btn-submit">
+          <View class="qrCode item">
+            <Canvas className="code" canvasId="qrCode"/>
           </View>
         </View>
         <View class="block">

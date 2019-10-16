@@ -47,29 +47,97 @@ page {
   background: #fff;
   border-radius: 12px;
 
+  &-search {
+    padding: 0;
+
+    .at-search-bar {
+      border-radius: 12px;
+    }
+  }
+
+
   .body {
     margin: 0 24px;
     border-bottom: none;
+  }
+
+  .title {
+    margin: 0 24px 24px;
+    border-bottom: none;
+    font-size: 32px;
+    text-align: center;
+  }
+
+  .text {
+    margin: 0 24px;
+    border-bottom: none;
+    font-size: 32px;
+  }
+
+  .time {
+    margin: 0 24px;
+    border-bottom: none;
+    font-size: 32px;
+    color: #AAA;
+  }
+
+  .card-fix {
+    margin: 0;
+    padding: 0;
+
+    .at-card {
+      border-top: none;
+      border-bottom: none;
+    }
+  }
+
+  .more-fix {
+    width: auto;
+    height: 80px;
+    margin-top: 20px;
+
+    .at-button {
+      border: none;
+    }
+  }
+
+  .cell {
+    display: flex;
+    padding: 24px;
+    font-size: 32px;
+
+    &-title {
+      display: inline-block;
+      width: 348px;
+      margin-right: 40px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &-extra {
+      display: inline-block;
+      color: #999;
+      padding-right: 30px;
+
+      -webkit-flex: 0 0 235px;
+      -ms-flex: 0 0 235px;
+      flex: 0 0 235px;
+      -webkit-box-flex: 0;
+      width: 235px;
+      text-align: right;
+    }
   }
 
   .list {
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    box-shadow: 0 0 2px 0 rgba(25, 29, 33, 0.15);
     position: relative;
-    //width: 670px;
     margin: 0 24px;
     padding: 20px 0 0;
     background: #fff;
-    border-radius: 12px;
 
-    &-card {
-      margin: 0;
-      padding: 0;
-    }
-
-    .item {
+    &-item {
       margin: 0 20px 6px;
       padding: 0 10px;
       font-size: 32px;
@@ -80,26 +148,6 @@ page {
         margin-bottom: 0;
       }
 
-      &-more {
-        width: auto;
-        height: 80px;
-        margin-top: 20px;
-
-        .at-button {
-          border: none;
-        }
-      }
-
-      &-card {
-        margin: 0;
-        padding: 0;
-
-        .at-card {
-          border-top: none;
-          border-bottom: none;
-        }
-      }
-
       view {
         font-size: 32px;
       }
@@ -107,41 +155,34 @@ page {
       view:last-child {
         margin-bottom: 10px;
       }
+    }
+  }
 
-      .time {
+  .form {
+    padding: 10px;
+
+    &-item {
+      .key {
+        padding: 24px 0;
+        color: #333;
+        background-color: #FFF;
+        margin-left: 32px;
         font-size: 32px;
-        color: #AAA;
       }
 
+      .value {
+        margin: 0 50px 0 190px;
+      }
     }
 
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 100px;
 
-    .form {
-      padding: 10px;
-
-      .form-item {
-        .key {
-          padding: 24px 0;
-          color: #333;
-          background-color: #FFF;
-          margin-left: 32px;
-          font-size: 32px;
-        }
-
-        .value {
-          margin: 0 50px 0 190px;
-        }
-      }
-
-      .buttons {
-        display: flex;
-        justify-content: space-between;
-        padding: 0 100px;
-
-        .button {
-          margin: 40px 0 20px;
-          width: 200px;
-        }
+      .button {
+        margin: 40px 0 20px;
+        width: 200px;
       }
     }
   }
@@ -171,31 +212,6 @@ page {
         margin-left: 10px;
         font-size: 32px;
       }
-    }
-  }
-
-  .picker {
-    display: flex;
-    padding: 24px;
-    font-size: 32px;
-
-    .item {
-      display: inline-block;
-      width: 348px;
-      margin-right: 40px;
-    }
-
-    .text {
-      display: inline-block;
-      color: #999;
-      padding-right: 30px;
-
-      -webkit-flex: 0 0 235px;
-      -ms-flex: 0 0 235px;
-      flex: 0 0 235px;
-      -webkit-box-flex: 0;
-      width: 235px;
-      text-align: right;
     }
   }
 

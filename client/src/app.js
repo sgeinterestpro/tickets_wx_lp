@@ -3,6 +3,7 @@ import Index from "./pages/index"
 
 import "./app.scss"
 import {login} from "./common/getUserInfo";
+import {rsaPubKey} from "./apis";
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -14,11 +15,15 @@ class App extends Taro.Component {
   config = {
     pages: [
       "pages/index/index",
+      "pages/message-list/index",
       "pages/scan-history/index",
-      "pages/ticket-package/index",
+      "pages/ticket-gather/index",
+      "pages/ticket-history/index",
       "pages/ticket-manage/index",
+      "pages/ticket-package/index",
       "pages/ticket-scan/index",
       "pages/ticket-show/index",
+      "pages/ticket-sign-in/index",
       "pages/user-add/index",
       "pages/user-auth/index",
       "pages/user-bind/index",
@@ -48,12 +53,21 @@ class App extends Taro.Component {
   }
 
   componentDidShow() {
-    if (Taro.getStorageSync("OpenId") === null)
-      this.getOpenId()
+    if (!Taro.getStorageSync("OpenId"))
+      this.getOpenId();
+    if (!Taro.getStorageSync("PubKey")) {
+      rsaPubKey().then(res => {
+        console.log(res);
+        Taro.setStorage({key: "PubKey", data: res}).then();
+      });
+    }
   }
 
   componentDidMount() {
-    this.getOpenId()
+    this.getOpenId();
+    rsaPubKey().then(res => {
+      Taro.setStorage({key: "PubKey", data: res}).then();
+    });
   }
 
   getOpenId = () => {

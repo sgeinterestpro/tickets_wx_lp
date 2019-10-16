@@ -33,7 +33,7 @@ export default class Index extends Taro.Component {
   componentDidMount() {
     const {roleList} = this.state;
     const roleSelect = Taro.getStorageSync("Role") || "other";
-    const userInfo = Taro.getStorageSync("UesrInfo") || {};
+    const userInfo = Taro.getStorageSync("UserInfo") || {};
     const roleKeyList = userInfo.role;
     for (let roleKey of roleKeyList) {
       if (roleAllList[roleKey]) {
@@ -64,6 +64,11 @@ export default class Index extends Taro.Component {
   render() {
     const {roleSelectIndex, roleList, userInfo} = this.state;
     const roleValueList = Object.values(roleList);
+    let sportList = [];
+    const {sports} = Taro.getStorageSync("UserInfo");
+    if (!(sports && sports.length > 0)) {
+      sportList = Object.keys(ticketClass)
+    }
     // noinspection JSXNamespaceValidation
     return (
       <View class="bg">
@@ -89,24 +94,22 @@ export default class Index extends Taro.Component {
         </View>}
         <View class="block">
           <AtList hasBorder={false}>
-            <AtListItem class="item" title="姓名" extraText={userInfo["real_name"]}/>
-            <AtListItem class="item" title="电话" extraText={userInfo["phone"]}/>
-            <AtListItem class="item" title="工号" extraText={userInfo["work_no"]}/>
-            <AtListItem class="item" title="邮箱" extraText={userInfo["email"]}/>
+            <AtListItem title="姓名" extraText={userInfo["real_name"]}/>
+            <AtListItem title="电话" extraText={userInfo["phone"]}/>
+            <AtListItem title="部门" extraText={userInfo["department"]}/>
+            {/*<AtListItem class="item" title="工号" extraText={userInfo["work_no"]}/>*/}
+            <AtListItem title="邮箱" extraText={userInfo["email"]}/>
             <AtListItem
-              class="item"
               title="项目"
-              extraText={(userInfo["sports"] || []).map((sport_item) => ticketClass[sport_item] || '未知').join()}/>
+              extraText={(sportList).map((sport_item) => ticketClass[sport_item] || '未知').join()}/>
             {roleValueList.length > 1 &&
-            <View class="item">
-              <Picker mode="selector" range={roleValueList} value={roleSelectIndex}
-                      onChange={this.onRoleChange.bind(this)}>
-                <View class="picker">
-                  <View class="item">角色</View>
-                  <View class="text">{roleValueList[roleSelectIndex]}</View>
-                </View>
-              </Picker>
-            </View>}
+            <Picker mode="selector" range={roleValueList} value={roleSelectIndex}
+                    onChange={this.onRoleChange.bind(this)}>
+              <View class="cell">
+                <View class="cell-title">角色</View>
+                <View class="cell-extra">{roleValueList[roleSelectIndex]}</View>
+              </View>
+            </Picker>}
           </AtList>
         </View>
         <TicketTabBar/>

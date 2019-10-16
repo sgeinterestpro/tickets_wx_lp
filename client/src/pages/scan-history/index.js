@@ -119,13 +119,13 @@ export default class Index extends Taro.Component {
           <View class="list">
             {ticketScanList.length > 0 ?
               <View>
-                <View class="item">
+                <View class="list-item">
                   <View class="text">
                     {`查询到 ${ticketScanList.length} 条记录`}
                   </View>
                 </View>
                 {ticketScanList.map((item, index) => (
-                  <View key={index} class="item">
+                  <View key={index} class="list-item">
                     <View>{`编号：${item["_id"].substr(0, 20)}`}</View>
                     <View>{`用户：${item["user_init"]["real_name"] || "已注销"}`}</View>
                     <View>{`项目：${ticketClass[item["class"]]}`}</View>
@@ -134,7 +134,7 @@ export default class Index extends Taro.Component {
                 ))}
               </View>
               :
-              <View class="item none">没有记录</View>
+              <View class="list-item none">没有记录</View>
             }
           </View>
           <View class="pagination">

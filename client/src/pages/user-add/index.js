@@ -87,8 +87,8 @@ export default class Index extends Taro.Component {
     // noinspection JSXNamespaceValidation
     return (
       <View class="bg">
-        <View class="list">
-          <View class="item">
+        <View class="block">
+          <View class="title">
             新增用户
           </View>
           <AtForm
@@ -96,13 +96,17 @@ export default class Index extends Taro.Component {
             onSubmit={this.onSubmit.bind(this)}
             onReset={this.onReset.bind(this)}
           >
-            <AtInput name="real_name" title="姓名" type="text" placeholder="请输入姓名" value={userInfo["real_name"]}
+            <AtInput class="form-item" name="real_name" title="姓名" type="text" placeholder="请输入姓名"
+                     value={userInfo["real_name"]}
                      onChange={this.handleChange.bind(this, "real_name")}/>
-            <AtInput name="work_no" title="工号" type="text" placeholder="请输入工号" value={userInfo["work_no"]}
+            <AtInput class="form-item" name="work_no" title="工号" type="text" placeholder="请输入工号"
+                     value={userInfo["work_no"]}
                      onChange={this.handleChange.bind(this, "work_no")}/>
-            <AtInput name="email" title="邮箱" type="text" placeholder="请输入邮箱" value={userInfo["email"]}
+            <AtInput class="form-item" name="email" title="邮箱" type="text" placeholder="请输入邮箱"
+                     value={userInfo["email"]}
                      onChange={this.handleChange.bind(this, "email")}/>
-            <AtInput name="phone" title="手机号码" type="text" placeholder="请输入手机号码" value={userInfo["phone"]}
+            <AtInput class="form-item" name="phone" title="手机号码" type="text" placeholder="请输入手机号码"
+                     value={userInfo["phone"]}
                      onChange={this.handleChange.bind(this, "phone")}/>
             <View class="form-item">
               <View class="key">

@@ -9,14 +9,13 @@
 import Taro from "@tarojs/taro"
 import {Canvas, View} from "@tarojs/components"
 import drawQrcode from "weapp-qrcode";
+import {JSEncrypt} from 'wx-jsencrypt'
 import "./index.scss"
 import {ticketIcon} from "../../config";
 
 const deviceWidth = 750;
-const qrCodeSize = 400;
-const qrImageSize = 40;
+const qrCodeSize = 500;
 const qrCodeFullSize = 666;
-const qrImageFullSize = 66;
 
 // const ticketIcon = {
 //   "badminton": "../../img/ticket/badminton.png",
@@ -49,7 +48,12 @@ export default class Index extends Taro.Component {
         // 设置屏幕比例
         const {screenWidth} = res;
         const scale = screenWidth / (deviceWidth / 2);
-        this.showQrCode(id, scale);
+        const PubKey = Taro.getStorageSync("PubKey");
+        const encrypt = new JSEncrypt();
+        encrypt.setKey(PubKey);
+        const encrypted = encrypt.encrypt(id);
+        console.log(id, encrypted);
+        this.showQrCode(encrypted, scale)
       }
     }).then(res => console.debug(res));
 
@@ -64,6 +68,7 @@ export default class Index extends Taro.Component {
     const {id, type, date} = this.$router.params;
     const qrScaleSize = (qrCodeSize / 2) * scale;
     const qrScaleFullSize = (qrCodeFullSize / 2) * scale;
+    const img_p = 5;
     console.log(type);
     drawQrcode({
       _this: this.$scope,
@@ -73,10 +78,10 @@ export default class Index extends Taro.Component {
       text: value,
       image: {
         imageResource: ticketIcon[type],
-        dx: (qrScaleSize - qrImageSize) / 2,
-        dy: (qrScaleSize - qrImageSize) / 2,
-        dWidth: qrImageSize,
-        dHeight: qrImageSize,
+        dx: qrScaleSize * (img_p - 1) / (img_p * 2),
+        dy: qrScaleSize * (img_p - 1) / (img_p * 2),
+        dWidth: qrScaleSize / img_p,
+        dHeight: qrScaleSize / img_p,
       }
     });
     drawQrcode({
@@ -87,10 +92,10 @@ export default class Index extends Taro.Component {
       text: value,
       image: {
         imageResource: ticketIcon[type],
-        dx: (qrScaleFullSize - qrImageFullSize) / 2,
-        dy: (qrScaleFullSize - qrImageFullSize) / 2,
-        dWidth: qrImageFullSize,
-        dHeight: qrImageFullSize,
+        dx: qrScaleFullSize * (img_p - 1) / (img_p * 2),
+        dy: qrScaleFullSize * (img_p - 1) / (img_p * 2),
+        dWidth: qrScaleFullSize / img_p,
+        dHeight: qrScaleFullSize / img_p,
       }
     });
   };
@@ -125,14 +130,14 @@ export default class Index extends Taro.Component {
           <Canvas className="code" canvasId="qrCodeFull"/>
         </View>
         <View class="list" hidden={qrShow}>
-          <View class="qrCode item" onClick={this.onQrCodeClick.bind(this)}>
+          <View class="item qrCode" onClick={this.onQrCodeClick.bind(this)}>
             <Canvas className="code" canvasId="qrCode"/>
           </View>
           <View class="round left"/>
           <View class="round right"/>
           <View class="intro">
             <View class="item">说明：</View>
-            <View>1. 可使用日期为{date}。</View> {/*TODO 根据数据显示实际日期*/}
+            <View>1. 可使用日期为{date}。</View>
             <View>2. 仅供本人使用不可转借他人。</View>
             <View>3. 最终解释权归发券方所有。</View>
           </View>

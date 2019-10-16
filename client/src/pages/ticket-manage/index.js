@@ -1,12 +1,12 @@
 import Taro from "@tarojs/taro"
 import {Text, View} from "@tarojs/components"
-import {AtGrid, AtLoadMore, AtProgress, AtToast} from "taro-ui";
+import {AtBadge, AtButton, AtGrid, AtLoadMore, AtProgress, AtToast} from "taro-ui";
 import "./index.scss"
 import GenerateModule from "../../component/module-generate"
 import ReportModule from "../../component/module-report"
 import SystemModule from "../../component/module-system"
 import TicketTabBar from "../../component/tab-bar"
-import {ticketLog, ticketUsage} from "../../apis";
+import {messageCount, ticketLog, ticketUsage} from "../../apis";
 import {ticketOption} from "../../config";
 
 import imgGenerate from "../../img/action/generate.png"
@@ -33,6 +33,7 @@ export default class Index extends Taro.Component {
       moduleReportShow: false,
       moduleSystemShow: false,
       generateCount: 0,
+      messageCount: Taro.getStorageSync('ticket-manage-messageCount') || 0,
       lastCount: Taro.getStorageSync('ticket-manage-lastCount') || 0,
       usedCount: Taro.getStorageSync('ticket-manage-usedCount') || 0,
       ticketLogList: Taro.getStorageSync('ticket-manage-logList') || [],
@@ -45,11 +46,12 @@ export default class Index extends Taro.Component {
    */
   componentDidShow() {
     this.updateTicketUsage();
+    this.updateMessageCount();
     this.updateTicketLogList();
   }
 
   /**
-   * 更新票券列表显示
+   * 更新票券使用量
    */
   updateTicketUsage = () => {
     if (this.first === undefined) {
@@ -70,15 +72,34 @@ export default class Index extends Taro.Component {
         Taro.setStorage({key: 'ticket-manage-lastCount', data: lastCount}).then();
         Taro.setStorage({key: 'ticket-manage-usedCount', data: usedCount}).then();
         this.setState({lastCount, usedCount})
+      } else {
+        throw `res.code = ${res.code}`;
       }
     }).catch(err => {
       console.error(err);
-      Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
+      Taro.showModal({title: "错误", content: "获取票券使用信息失败", showCancel: false}).then();
     });
   };
 
   /**
-   * 更新票券列表记录
+   * 更新消息数量
+   */
+  updateMessageCount() {
+    messageCount().then(res => {
+      if (res.code === 0) {
+        Taro.setStorage({key: 'ticket-manage-messageCount', data: res.count}).then();
+        this.setState({messageCount: res.count});
+      } else {
+        throw `res.code = ${res.code}`;
+      }
+    }).catch(err => {
+      console.error(err);
+      Taro.showModal({title: "错误", content: "获取消息数量失败", showCancel: false}).then();
+    });
+  };
+
+  /**
+   * 更新票券使用记录
    */
   updateTicketLogList = (append = false, limit = 5) => {
     let {ticketLogList} = this.state;
@@ -101,7 +122,7 @@ export default class Index extends Taro.Component {
         resolve(res.items.length === limit);
       }).catch(err => {
         console.error(err);
-        Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
+        Taro.showModal({title: "错误", content: "获取票券使用记录失败", showCancel: false}).then();
         reject()
       });
     });
@@ -129,6 +150,8 @@ export default class Index extends Taro.Component {
     });
     if (res === "generate") {
       this.updateTicketUsage();
+      this.updateMessageCount();
+      this.updateTicketLogList();
     }
   };
 
@@ -149,6 +172,10 @@ export default class Index extends Taro.Component {
     this.setState({tOpened: false});
   };
 
+  onMessageViewClick = () => {
+    Taro.navigateTo({url: '/pages/message-list/index'}).then()
+  };
+
   render() {
     const {moduleGenerateShow, moduleReportShow, moduleSystemShow} = this.state;
     const {tOpened, tText, tStatus, tDuration} = this.state;
@@ -156,6 +183,7 @@ export default class Index extends Taro.Component {
     const {ticketLogList} = this.state;
     // const percent = 100 * (lastCount / ((usedCount + usedCount) || 1));
     const percent = 100 * (lastCount / 500);
+    const {messageCount} = this.state;
     // noinspection JSXNamespaceValidation
     return (
       <View>
@@ -184,6 +212,16 @@ export default class Index extends Taro.Component {
               </View>
             </View>
           </View>
+          {messageCount > 0 && <View class="block">
+            <View class="cell">
+              <View class="cell-title">您有新的待处理任务</View>
+              <View class="cell-extra">
+                <AtBadge value={messageCount} maxValue={99}>
+                  <AtButton size='small' onClick={this.onMessageViewClick.bind(this)}>去处理</AtButton>
+                </AtBadge>
+              </View>
+            </View>
+          </View>}
           <View class="block">
             <View class="body">
               <AtGrid hasBorder={false} data={
@@ -212,7 +250,7 @@ export default class Index extends Taro.Component {
               {ticketLogList.length > 0 ?
                 <View>
                   {ticketLogList.map((item, index) => (
-                    <View key={index} class="item">
+                    <View key={index} class="list-item">
                       <View class="time">{item.time}</View>
                       <View class="text">
                         {`${ticketOption[item["option"]]} ${item["ticket_id"].substr(0, 20)} ${item["real_name"]}`}
@@ -220,13 +258,13 @@ export default class Index extends Taro.Component {
                     </View>
                   ))}
                   <AtLoadMore
-                    className={"item item-more"}
+                    className={"list-item more-fix"}
                     status={this.state.status}
                     onClick={this.handleClick.bind(this)}
                   />
                 </View>
                 :
-                <View class="item none">没有记录</View>
+                <View class="list-item none">没有记录</View>
               }
             </View>
           </View>
