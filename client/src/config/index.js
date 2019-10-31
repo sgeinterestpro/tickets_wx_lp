@@ -155,7 +155,7 @@ const allRoleTabUrls = {
   UserInfo: {
     "id": "UserInfo",
     "url": "/pages/user-info/index",
-    "title": "用户中心",
+    "title": "个人中心",
     "image": userInfo,
     "selectedImage": userInfoActive,
   },

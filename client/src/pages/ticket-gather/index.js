@@ -21,7 +21,7 @@ export default class Index extends Taro.Component {
   config = {
     navigationBarBackgroundColor: "#383c42",
     navigationBarTextStyle: "white",
-    navigationBarTitleText: "票券使用",
+    navigationBarTitleText: "票券扫描",
     enablePullDownRefresh: false,
   };
 
