@@ -22,23 +22,27 @@ export default class Index extends Taro.Component {
 
   constructor() {
     super(...arguments);
-    let sportList = [];
-    const {sports} = Taro.getStorageSync("UserInfo");
-    if (sports && sports.length > 0) {
-      for (let sport of sports) {
-        if (ticketClass[sport]) {
-          sportList[sport] = ticketClass[sport]
+    let {sports} = Taro.getStorageSync("UserInfo");
+    const {real_name} = Taro.getStorageSync("UserInfo");
+    console.log(sports);
+    let sportKeys = Object.keys(sports);
+    if (!sportKeys || Object.keys(sportKeys).length <= 0) {
+      sportKeys = Object.keys(ticketClass);
+      for (let sport of sportKeys) {
+        sports[sport] = {
+          name: ticketClass[sport],
+          enable: false,
+          message: '信息同步失败'
         }
       }
-    } else {
-      sportList = ticketClass
     }
     this.state = {
-      sportList: Object.keys(sportList),
+      sportKeys: sportKeys,
+      sportList: sports,
       ticketList: [],
       signInTime: "2019年09月17日 19:07:15",
-      signInType: "羽毛球",
-      signInUser: "王森"
+      signInType: "",
+      signInUser: real_name
     }
   }
 
@@ -86,7 +90,7 @@ export default class Index extends Taro.Component {
         if (res.code !== 0) {
           Taro.showModal({content: res.message, showCancel: false}).then();
         } else {
-          this.modalTicketDisplayShow(sportClass, res.result);
+          this.modalTicketDisplayShow(sportClass, res.data.time);
         }
       }).catch();
     }).catch(() => {
@@ -97,10 +101,10 @@ export default class Index extends Taro.Component {
   /**
    * 显示票券详情对话框
    */
-  modalTicketDisplayShow = (sport, url) => {
+  modalTicketDisplayShow = (sport, time) => {
     this.setState({
       signInType: sport,
-      signInTime: "2019年09月17日 18:25:23",
+      signInTime: time,
       modalTicketDisplayShow: true
     })
   };
@@ -108,14 +112,14 @@ export default class Index extends Taro.Component {
   /**
    * 关闭券详情对话框操作
    */
-  modalTicketDisplayReturn = (res) => {
+  modalTicketDisplayReturn = () => {
     this.setState({
       modalTicketDisplayShow: false
     });
   };
 
   render() {
-    const {sportList, ticketList, modalTicketDisplayShow, signInTime, signInType, signInUser} = this.state;
+    const {sportKeys, sportList, ticketList, modalTicketDisplayShow, signInTime, signInType, signInUser} = this.state;
 
     const all_count = 3;
     const use_count = ticketList.length;
@@ -152,13 +156,14 @@ export default class Index extends Taro.Component {
         <View class="block">
           <View class="list">
             <AtList hasBorder={false}>
-              {sportList.length > 0 ?
-                sportList.map((sport, index) => (
+              {sportKeys.length > 0 ?
+                sportKeys.map((sport, index) => (
                   <AtListItem
                     key={index}
                     title={ticketClass[sport]}
                     extraText={ticketState[sport]}
-                    disabled={use_count >= all_count}
+                    disabled={!sportList[sport].enable}
+                    note={sportList[sport].message}
                     arrow="right"
                     thumb={ticketIcon[sport]}
                     onClick={this.onBtnScanClick.bind(this, sport)}
