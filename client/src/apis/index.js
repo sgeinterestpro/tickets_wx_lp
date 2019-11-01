@@ -109,6 +109,10 @@ const memberAdd = (data) => {
   console.log(`API: userAdd(${data})`);
   return POST(`${urlBase}/member_add`, data);
 };
+const memberEdit = (data) => {
+  console.log(`API: memberEdit(${data})`);
+  return POST(`${urlBase}/member_edit`, data);
+};
 const memberDelete = (init_id) => {
   console.log(`API: userDelete(${init_id})`);
   return POST(`${urlBase}/member_delete`, {init_id});
@@ -135,6 +139,7 @@ export {
   checkedTicket,
   inspectTicket,
   memberAdd,
+  memberEdit,
   memberDelete,
   memberFind,
   memberList,
