@@ -63,7 +63,10 @@ export default class Index extends Taro.Component {
 
   render() {
     const {roleSelectIndex, roleList, userInfo} = this.state;
-    const roleValueList = Object.values(roleList);
+    // const roleValueList = Object.values(roleList);
+    const roleValueList = Object.keys(roleList).map((key) => {
+      return roleList[key];
+    });
     let sportList = [];
     const {sports} = Taro.getStorageSync("UserInfo");
     if (!(sports && sports.length > 0)) {
