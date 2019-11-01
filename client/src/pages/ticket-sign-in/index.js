@@ -25,8 +25,9 @@ export default class Index extends Taro.Component {
     let {sports} = Taro.getStorageSync("UserInfo");
     const {real_name} = Taro.getStorageSync("UserInfo");
     console.log(sports);
-    let sportKeys = Object.keys(sports);
-    if (!sportKeys || Object.keys(sportKeys).length <= 0) {
+    let sportKeys = [];
+    if (!sports || Object.keys(sports).length <= 0) {
+      sports = [];
       sportKeys = Object.keys(ticketClass);
       for (let sport of sportKeys) {
         sports[sport] = {
@@ -35,6 +36,8 @@ export default class Index extends Taro.Component {
           message: '信息同步失败'
         }
       }
+    } else {
+      sportKeys = Object.keys(sports);
     }
     this.state = {
       sportKeys: sportKeys,
