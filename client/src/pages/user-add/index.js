@@ -105,18 +105,18 @@ export default class Index extends Taro.Component {
             <AtInput class="form-item" name="phone" title="手机号码" type="text" placeholder="请输入手机号码"
                      value={userInfo["phone"]}
                      onChange={this.handleChange.bind(this, "phone")}/>
-            <View class="form-item">
-              <View class="key">
-                运动项目
-              </View>
-              <View class="value">
-                <AtCheckbox
-                  options={this.sportsOption}
-                  selectedList={userInfo["sports"]}
-                  onChange={this.handleChange.bind(this, "sports")}
-                />
-              </View>
-            </View>
+            {/*<View class="form-item">*/}
+            {/*  <View class="key">*/}
+            {/*    运动项目*/}
+            {/*  </View>*/}
+            {/*  <View class="value">*/}
+            {/*    <AtCheckbox*/}
+            {/*      options={this.sportsOption}*/}
+            {/*      selectedList={userInfo["sports"]}*/}
+            {/*      onChange={this.handleChange.bind(this, "sports")}*/}
+            {/*    />*/}
+            {/*  </View>*/}
+            {/*</View>*/}
             <View class="form-item">
               <View class="key">
                 用户角色
