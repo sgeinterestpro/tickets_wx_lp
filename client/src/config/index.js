@@ -66,7 +66,7 @@ export const ticketOption = {
 export const roleAllList = {
   "user": "组员",
   "admin": "管理员",
-  "checker": "一兆韦德"
+  "checker": "服务商"
 };
 export const reportList = [{
   "api": "ReportUsedDtl",

@@ -96,13 +96,10 @@ export default class Index extends Taro.Component {
             onSubmit={this.onSubmit.bind(this)}
             onReset={this.onReset.bind(this)}
           >
-            <AtInput class="form-item" name="real_name" title="姓名" type="text" placeholder="请输入姓名"
+            <AtInput class="form-item" name="real_name" title="用户姓名" type="text" placeholder="请输入用户姓名"
                      value={userInfo["real_name"]}
                      onChange={this.handleChange.bind(this, "real_name")}/>
-            <AtInput class="form-item" name="work_no" title="工号" type="text" placeholder="请输入工号"
-                     value={userInfo["work_no"]}
-                     onChange={this.handleChange.bind(this, "work_no")}/>
-            <AtInput class="form-item" name="email" title="邮箱" type="text" placeholder="请输入邮箱"
+            <AtInput class="form-item" name="email" title="电子邮件" type="text" placeholder="请输入电子邮件"
                      value={userInfo["email"]}
                      onChange={this.handleChange.bind(this, "email")}/>
             <AtInput class="form-item" name="phone" title="手机号码" type="text" placeholder="请输入手机号码"
