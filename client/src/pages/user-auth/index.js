@@ -33,13 +33,16 @@ export default class Index extends Taro.Component {
     // noinspection JSXNamespaceValidation
     return (
       <View class="bg bg-center">
+        <View class="block center">
+          该小程序仅限上海黄金交易所内部员工使用，登陆过程需要通过内部邮箱绑定验证后方可使用。
+        </View>
         <AtButton
           type="primary"
           openType="getUserInfo"
           size="normal"
           onGetUserInfo={this.onGetUserInfo.bind(this)}
         >
-          授权获取个人信息
+          去绑定邮箱
         </AtButton>
       </View>
     )

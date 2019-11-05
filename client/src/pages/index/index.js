@@ -7,7 +7,7 @@
 import Taro from "@tarojs/taro"
 import {View} from "@tarojs/components"
 import "./index.scss"
-import {defaultAuthUrl, defaultBindUrl, defaultRoleUrl} from "../../config";
+import {defaultBindUrl, defaultRoleUrl} from "../../config";
 import {userInfo} from "../../apis";
 
 export default class Index extends Taro.Component {
@@ -30,6 +30,9 @@ export default class Index extends Taro.Component {
     if (this.state.needReLaunch) {
       Taro.reLaunch({url: "/pages/index/index"}).then()
     }
+    Taro.eventCenter.on('OpenID', () => {
+      Taro.reLaunch({url: "/pages/index/index"}).then()
+    })
   }
 
   componentDidHide() {
@@ -42,51 +45,44 @@ export default class Index extends Taro.Component {
     // 未授权用户 授权才能拿到 openid，才能确定是谁的微信
     // 未绑定用户 绑定了才能对应到具体人员，拿到具体人员信息
     // 已绑定用户
-    Taro.getUserInfo().then(res => {
-      // 已经得到用户授权
-      console.debug(res);
-      userInfo().then(res => {
-        // 请求用户数据成功
-        Taro.setStorageSync("UserInfoRetry", 0);
-        // 根据 res.data.email 是否有值判断用户是否已经绑定
-        if (res.data && res.data.email) {
-          // 用户已经绑定身份
-          Taro.setStorageSync("UserInfo", res.data);
-          const roles = res.data.role;
-          if (!roles.includes(role)) {
-            role = roles[0] || "other";
-          }
-          Taro.setStorageSync("Role", role);
-          Taro.redirectTo({url: defaultRoleUrl[role]}).then()
-        } else {
-          // 需要绑定用户身份
-          Taro.redirectTo({url: defaultBindUrl}).then()
+    userInfo().then(res => {
+      // console.debug(res);
+      // 请求用户数据成功
+      Taro.setStorageSync("UserInfoRetry", 0);
+      // 根据 res.data.email 是否有值判断用户是否已经绑定
+      if (res.data && res.data.email) {
+        // 用户已经绑定身份
+        Taro.setStorageSync("UserInfo", res.data);
+        const roles = res.data.role;
+        if (!roles.includes(role)) {
+          role = roles[0] || "other";
         }
-      }).catch(err => {
-        console.error(err);
-        // 服务器连接失败——重试5次，每次间隔2秒
-        const retry = Taro.getStorageSync("UserInfoRetry");
-        if (retry === 0) {
-          Taro.setStorageSync("UserInfoRetry", retry + 1);
-          setTimeout(() => {
-            Taro.reLaunch({url: "/pages/index/index"}).then()
-          }, 1000)
-        } else if (retry < 5) {
-          this.setState({info: "用户认证失败，两秒后重试..."});
-          Taro.setStorageSync("UserInfoRetry", retry + 1);
-          setTimeout(() => {
-            Taro.reLaunch({url: "/pages/index/index"}).then()
-          }, 2000)
-        } else {
-          this.setState({info: "用户认证失败，服务器暂时被结界封印了..."});
-          Taro.setStorageSync("UserInfoRetry", 0);
-        }
-      });
+        Taro.setStorageSync("Role", role);
+        Taro.redirectTo({url: defaultRoleUrl[role]}).then()
+      } else {
+        // 需要绑定用户身份
+        Taro.redirectTo({url: defaultBindUrl}).then()
+      }
     }).catch(err => {
-      // 需要用户授权——跳转到用户授权页面
-      console.warn(err);
-      Taro.redirectTo({url: defaultAuthUrl}).then()
-    })
+      console.error(err);
+      // 服务器连接失败——重试5次，每次间隔2秒
+      const retry = Taro.getStorageSync("UserInfoRetry");
+      if (retry === 0) {
+        Taro.setStorageSync("UserInfoRetry", retry + 1);
+        setTimeout(() => {
+          Taro.reLaunch({url: "/pages/index/index"}).then()
+        }, 1000)
+      } else if (retry < 5) {
+        this.setState({info: "用户认证失败，两秒后重试..."});
+        Taro.setStorageSync("UserInfoRetry", retry + 1);
+        setTimeout(() => {
+          Taro.reLaunch({url: "/pages/index/index"}).then()
+        }, 2000)
+      } else {
+        this.setState({info: "用户认证失败，服务器暂时被结界封印了..."});
+        Taro.setStorageSync("UserInfoRetry", 0);
+      }
+    });
   }
 
   render() {

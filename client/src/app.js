@@ -43,15 +43,6 @@ class App extends Taro.Component {
     }
   };
 
-  constructor() {
-    super(...arguments);
-    if (!wx.cloud) {
-      console.error('请使用 2.2.3 或以上的基础库以使用云能力');
-    } else {
-      Taro.cloud.init({env: "tickets-zgopx"});
-    }
-  }
-
   componentDidShow() {
     if (!Taro.getStorageSync("OpenId"))
       this.getOpenId();
@@ -63,22 +54,13 @@ class App extends Taro.Component {
     }
   }
 
-  componentDidMount() {
-    this.getOpenId();
-    rsaPubKey().then(res => {
-      Taro.setStorage({key: "PubKey", data: res}).then();
-    });
-  }
-
   getOpenId = () => {
     console.log('getOpenId()');
-    login(`/${this.$router.params.path}`)
-      .then(() => {
-        Taro.eventCenter.trigger("OpenID")
-      })
-      .catch(err => {
-        console.error(err);
-      })
+    login().then(() => {
+      Taro.eventCenter.trigger("OpenID");
+    }).catch(err => {
+      console.error(err);
+    })
   };
 
   // 在 App 类中的 render() 函数没有实际作用

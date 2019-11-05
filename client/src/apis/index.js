@@ -41,6 +41,10 @@ const POST = (url, data, dataType) => request("POST", url, data, dataType);
 // const DELETE = (url) => request("DELETE", url);
 // const PUT = (url, data) => request("PUT", url, data);
 
+const wxLogin = (js_code) => {
+  console.log(`API: wxLogin(${js_code})`);
+  return POST(`${urlBase}/auth/weixin/login`, {js_code: js_code});
+};
 const ticketPackage = () => {
   console.log(`API: ticketPackage()`);
   return GET(`${urlBase}/ticket_package`);
@@ -136,6 +140,7 @@ const rsaPubKey = () => {
 // const getHistoryTickets = () => GET(`${urlBase}/ticket_history`);
 
 export {
+  wxLogin,
   checkedTicket,
   inspectTicket,
   memberAdd,

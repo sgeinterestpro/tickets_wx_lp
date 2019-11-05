@@ -24,7 +24,6 @@ export default class Index extends Taro.Component {
     super(...arguments);
     let {sports} = Taro.getStorageSync("UserInfo");
     const {real_name} = Taro.getStorageSync("UserInfo");
-    console.log(sports);
     let sportKeys = [];
     if (!sports || Object.keys(sports).length <= 0) {
       sports = [];
