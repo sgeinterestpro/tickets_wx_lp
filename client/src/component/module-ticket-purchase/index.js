@@ -36,7 +36,9 @@ export default class Index extends Taro.Component {
       tOpened: false,
       tText: "加载中...",
       tStatus: "loading",
-      eventShow: Object.values(sportList),
+      eventShow: Object.keys(sportList).map((key) => {
+        return sportList[key];
+      }),
       eventValue: Object.keys(sportList),
       eventSelect: 1,
       dateSel: [year, month, day].join("-")

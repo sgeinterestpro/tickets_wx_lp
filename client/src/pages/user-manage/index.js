@@ -100,7 +100,7 @@ export default class Index extends Taro.Component {
                       onClick={this.handleUserClick.bind(this, userItem["init_id"])}
                       thumb={userItem["avatarUrl"] || 'https://jdc.jd.com/img/13'}
                     >
-                      <View>项目：{userItem["sports"].map((sportItem) => ticketClass[sportItem] || '未知').join()}</View>
+                      <View>项目：{userItem["sports"].map((sportItem) => ticketClass[sportItem] || '未知').join() || '所有项目'}</View>
                     </AtCard>
                   </View>
                 )) :

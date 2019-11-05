@@ -109,7 +109,7 @@ export default class Index extends Taro.Component {
             <View class="text-view">
               <View class="text-value"
                     onClick={this.handleInputFocus.bind(this)}>
-                {endDate ? `${startDate} 至 ${endDate}` : "请选择查询日期"}
+                {endDate ? `${startDate} 至 ${endDate}` : "请选择查询日期范围"}
               </View>
               <AtButton type="primary" onClick={this.handleQueryClick.bind(this)}>查询</AtButton>
             </View>

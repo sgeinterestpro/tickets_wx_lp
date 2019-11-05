@@ -54,9 +54,9 @@ export default class Index extends Taro.Component {
           Taro.setStorageSync("UserInfo", res.data);
           const roles = res.data.role;
           if (!roles.includes(role)) {
-            role = roles[0] || "user";
-            Taro.setStorageSync("Role", role)
+            role = roles[0] || "other";
           }
+          Taro.setStorageSync("Role", role);
           Taro.redirectTo({url: defaultRoleUrl[role]}).then()
         } else {
           // 需要绑定用户身份

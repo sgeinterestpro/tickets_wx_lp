@@ -1,9 +1,8 @@
 import Taro from "@tarojs/taro";
 
 // const urlBase = "http://localhost:10000"; //本地调试
-// const urlBase = "http://ticket.sge-tech.com:10000";
-// const urlBase = "https://ticket.sge.ronpy.com";
-const urlBase = "https://ticket-test.sge.ronpy.com";
+const urlBase = "https://ticket.sge.ronpy.com"; //正式环境
+// const urlBase = "https://ticket-test.sge.ronpy.com"; //测试环境
 
 const request = (method, url, data, dataType = "json") => {
   Taro.showNavigationBarLoading();
@@ -110,6 +109,10 @@ const memberAdd = (data) => {
   console.log(`API: userAdd(${data})`);
   return POST(`${urlBase}/member_add`, data);
 };
+const memberEdit = (data) => {
+  console.log(`API: memberEdit(${data})`);
+  return POST(`${urlBase}/member_edit`, data);
+};
 const memberDelete = (init_id) => {
   console.log(`API: userDelete(${init_id})`);
   return POST(`${urlBase}/member_delete`, {init_id});
@@ -136,6 +139,7 @@ export {
   checkedTicket,
   inspectTicket,
   memberAdd,
+  memberEdit,
   memberDelete,
   memberFind,
   memberList,
