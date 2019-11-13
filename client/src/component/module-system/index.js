@@ -23,12 +23,10 @@ export default class Index extends Taro.Component {
   };
 
   render() {
-    const {isOpened} = this.props;
     const {tOpened, tText, tStatus, tDuration} = this.state;
     // noinspection JSXNamespaceValidation
     return (
-      isOpened &&
-      <AtModal closeOnClickOverlay={false} isOpened={isOpened} onClose={this.onClose}>
+      <AtModal closeOnClickOverlay={false} isOpened={true} onClose={this.onClose}>
         <AtModalHeader>系统设置</AtModalHeader>
         <AtModalContent>
           <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={tDuration} hasMask={tDuration === 0}

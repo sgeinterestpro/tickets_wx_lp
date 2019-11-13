@@ -6,7 +6,7 @@ import GenerateModule from "../../component/module-generate"
 import ReportModule from "../../component/module-report"
 import SystemModule from "../../component/module-system"
 import TicketTabBar from "../../component/tab-bar"
-import {messageCount, ticketLog, ticketUsage} from "../../apis";
+import {messageCount, reportList, ticketLog, ticketUsage} from "../../apis";
 import {ticketOption} from "../../config";
 
 import imgGenerate from "../../img/action/generate.png"
@@ -48,8 +48,17 @@ export default class Index extends Taro.Component {
     this.updateTicketUsage();
     this.updateMessageCount();
     this.updateTicketLogList();
+    this.getReportList();
   }
 
+  getReportList = () => {
+    reportList().then(res => {
+      console.debug(res);
+      if (res.code === 0) {
+        Taro.setStorage({key: 'ticket-manage-reportList', data: res.items}).then();
+      }
+    })
+  };
   /**
    * 更新票券使用量
    */
@@ -149,9 +158,9 @@ export default class Index extends Taro.Component {
       moduleSystemShow: false,
     });
     if (res === "generate") {
-      this.updateTicketUsage();
+      // this.updateTicketUsage();
       this.updateMessageCount();
-      this.updateTicketLogList();
+      // this.updateTicketLogList();
     }
   };
 
@@ -190,9 +199,9 @@ export default class Index extends Taro.Component {
         <View class="bg">
           <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={tDuration} hasMask={tDuration === 0}
                    onClose={this.onToastClose.bind(this)}/>
-          <GenerateModule isOpened={moduleGenerateShow} onClose={this.handleModuleClose.bind(this)}/>
-          <ReportModule isOpened={moduleReportShow} onClose={this.handleModuleClose.bind(this)}/>
-          <SystemModule isOpened={moduleSystemShow} onClose={this.handleModuleClose.bind(this)}/>
+          {moduleGenerateShow && <GenerateModule onClose={this.handleModuleClose.bind(this)}/>}
+          {moduleReportShow && <ReportModule onClose={this.handleModuleClose.bind(this)}/>}
+          {moduleSystemShow && <SystemModule onClose={this.handleModuleClose.bind(this)}/>}
           <View class="block">
             <View class="body">
               <AtProgress className="info-progress" percent={percent} isHidePercent status="progress" strokeWidth={20}/>

@@ -2,7 +2,6 @@ import Taro from "@tarojs/taro"
 import {Button, Picker, Text, View} from "@tarojs/components"
 import {AtModal, AtModalAction, AtModalContent, AtModalHeader, AtToast} from "taro-ui";
 import "../module-index.scss"
-import {reportList} from "../../config";
 import {reportExport} from "../../apis";
 import {getNowDate} from "../../common/getWeek";
 
@@ -10,9 +9,11 @@ import {getNowDate} from "../../common/getWeek";
 export default class Index extends Taro.Component {
   constructor() {
     super(...arguments);
+    this.reportList = Taro.getStorageSync("ticket-manage-reportList") || [];
+    console.debug("reportList", this.reportList);
     let reportTitleList = [];
-    reportList.map((report) => {
-      reportTitleList.push(report['title']);
+    this.reportList.map((report) => {
+      reportTitleList.push(report["title"]);
     });
     this.state = {
       reportTitleList,
@@ -22,6 +23,8 @@ export default class Index extends Taro.Component {
       tText: "加载中...",
       tStatus: "loading",
       tDuration: 3000,
+      dataIndex: {},
+      dataSubmit: {}
     }
   }
 
@@ -33,29 +36,37 @@ export default class Index extends Taro.Component {
    * 选择报表类型
    */
   onReportChange = e => {
-    console.log(e);
+    console.debug("e", e);
     const reportSelectIndex = e.detail.value;
     this.setState({
       reportSelectIndex,
-      reportSelect: reportList[reportSelectIndex],
+      reportSelect: this.reportList[reportSelectIndex],
     })
   };
 
-  onDateChange = (date, e) => {
-    let stateUpdate = {};
+  onDateChange = (reportType, fieldKey, valueRange, e) => {
+    console.debug("reportType", reportType, "fieldKey", fieldKey, "valueRange", valueRange, "e", e);
+    const {dataIndex, dataSubmit} = this.state;
+
     const val = e.detail.value;
-    stateUpdate[date] = Array.isArray(val) ? val.join("-") : val;
-    this.setState(stateUpdate)
+    dataIndex[reportType] = dataIndex[reportType] || {};
+    dataIndex[reportType][fieldKey] = Array.isArray(val) ? val.join("-") : val;
+
+    const valSubmit = valueRange ? valueRange[val] : val;
+    dataSubmit[reportType] = dataSubmit[reportType] || {};
+    dataSubmit[reportType][fieldKey] = Array.isArray(valSubmit) ? valSubmit.join("-") : valSubmit;
+
+    this.setState({dataIndex, dataSubmit})
   };
 
   /**
    * 查询扫描记录
    */
-  handleSubmitClick = (reportClass) => {
-    let {dateStart, dateEnd} = this.state;
+  handleSubmitClick = (reportType) => {
+    let {dataSubmit} = this.state;
     this.setState({tOpened: true, tText: "正在导出报表", tStatus: "loading", tDuration: 0});
-    if (dateEnd === undefined) dateEnd = dateStart;
-    reportExport(reportClass, dateStart, dateEnd).then(res => {
+    // if (dateEnd === undefined) dateEnd = dateStart;
+    reportExport(reportType, dataSubmit[reportType]).then(res => {
       if (res.code !== 0) {
         console.error(res);
         this.setState({tOpened: true, tText: res.message, tStatus: "error", tDuration: 3000});
@@ -73,74 +84,21 @@ export default class Index extends Taro.Component {
   };
 
   render() {
-    const {isOpened} = this.props;
     const {reportTitleList, reportSelectIndex, reportSelect} = this.state;
     const {tOpened, tText, tStatus, tDuration} = this.state;
-    const {dateStart, dateEnd} = this.state;
+    const {dataIndex} = this.state;
     const dateNow = getNowDate();
-    let afterConfig = null;
-    if (isOpened) {
-      if (reportSelect['span']) {
-        // noinspection JSXNamespaceValidation
-        afterConfig = (<View>
-          <View className="section">
-            <View className="section-title">
-              <Text>导出开始时间</Text>
-            </View>
-            <View className="section-text">
-              <Picker
-                mode="date"
-                end={dateNow}
-                value={dateStart}
-                fields={reportSelect['type']}
-                onChange={this.onDateChange.bind(this, "dateStart")}
-              >
-                <View className="section-picker">当前选择：{dateStart}</View>
-              </Picker>
-            </View>
-          </View>
-          <View className="section">
-            <View className="section-title">
-              <Text>导出结束时间</Text>
-            </View>
-            <View className="section-text">
-              <Picker
-                mode="date"
-                end={dateNow}
-                value={dateEnd}
-                fields={reportSelect['type']}
-                onChange={this.onDateChange.bind(this, "dateEnd")}
-              >
-                <View className="section-picker">当前选择：{dateEnd}</View>
-              </Picker>
-            </View>
-          </View>
-        </View>);
-      } else {
-        afterConfig = <View>
-          <View className="section">
-            <View className="section-title">
-              <Text>导出时间</Text>
-            </View>
-            <View className="section-text">
-              <Picker
-                mode="date"
-                value={dateStart}
-                end={dateNow}
-                fields={reportSelect['type']}
-                onChange={this.onDateChange.bind(this, "dateStart")}
-              >
-                <View className="section-picker">当前选择：{dateStart}</View>
-              </Picker>
-            </View>
-          </View>
-        </View>;
-      }
-    }
+    const reportFields = reportSelect["params"] || {};
+    console.debug("reportFields", reportFields);
+    const reportType = reportSelect["api"];
+    console.debug("reportType", reportType);
+    const fieldKeys = Object.keys(reportFields) || [];
+    console.debug("fieldKeys", fieldKeys);
+    const reportData = dataIndex[reportType] || {};
+    console.debug("reportData", reportData);
     // noinspection JSXNamespaceValidation
     return (
-      isOpened &&
-      <AtModal closeOnClickOverlay={false} isOpened={isOpened} onClose={this.onClose}>
+      <AtModal closeOnClickOverlay={false} isOpened={true} onClose={this.onClose}>
         <AtModalHeader>报表导出</AtModalHeader>
         <AtModalContent>
           <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={tDuration} hasMask={tDuration === 0}
@@ -151,27 +109,49 @@ export default class Index extends Taro.Component {
                 <Text>报表类型</Text>
               </View>
               <View className="section-text">
-                <Picker
-                  mode="selector"
-                  range={reportTitleList}
-                  value={reportSelectIndex}
-                  onChange={this.onReportChange.bind(this)}
+                <Picker mode="selector"
+                        range={reportTitleList}
+                        value={reportSelectIndex}
+                        onChange={this.onReportChange.bind(this)}
                 >
                   <View className="section-picker">
-                    当前选择：{reportSelect['title']}
+                    当前选择：{reportSelect["title"]}
                   </View>
                 </Picker>
               </View>
             </View>
-            {afterConfig}
+            <View> {
+              fieldKeys.map((fieldKey, index) => {
+                const value = reportData[fieldKey];
+                const fieldBody = reportFields[fieldKey];
+                let valueRange = fieldBody["values"] || {};
+                let mode = fieldBody["values"] ? "selector" : "date";
+                let valueShow = fieldBody["values"] ? valueRange[value] : value;
+                let type = fieldBody["type"];
+                // noinspection JSXNamespaceValidation
+                return (<View className="section" key={index}>
+                  <View className="section-title">
+                    <Text>{fieldBody["title"]}</Text>
+                  </View>
+                  <View className="section-text">
+                    <Picker mode={mode}
+                            range={valueRange}
+                            end={dateNow}
+                            value={value}
+                            fields={type}
+                            onChange={this.onDateChange.bind(this, reportType, fieldKey, valueRange)}
+                    >
+                      <View className="section-picker">当前选择：{valueShow}</View>
+                    </Picker>
+                  </View>
+                </View>)
+              })
+            } </View>
           </View>
         </AtModalContent>
         <AtModalAction>
           <Button onClick={this.onClose.bind(this, "")}>取消</Button>
-          <Button
-            disabled={!reportSelect}
-            onClick={this.handleSubmitClick.bind(this, reportSelect['api'])}
-          >
+          <Button disabled={!reportSelect} onClick={this.handleSubmitClick.bind(this, reportSelect["api"])}>
             确定
           </Button>
         </AtModalAction>
