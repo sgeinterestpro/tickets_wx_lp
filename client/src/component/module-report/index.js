@@ -52,7 +52,7 @@ export default class Index extends Taro.Component {
     dataIndex[reportType] = dataIndex[reportType] || {};
     dataIndex[reportType][fieldKey] = Array.isArray(val) ? val.join("-") : val;
 
-    const valSubmit = valueRange ? valueRange[val] : val;
+    const valSubmit = Object.keys(valueRange).length ? valueRange[val] : val;
     dataSubmit[reportType] = dataSubmit[reportType] || {};
     dataSubmit[reportType][fieldKey] = Array.isArray(valSubmit) ? valSubmit.join("-") : valSubmit;
 
