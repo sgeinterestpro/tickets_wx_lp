@@ -43,8 +43,9 @@ export default class Index extends Taro.Component {
       sportList: sports,
       ticketList: [],
       signInTime: "2019年09月17日 19:07:15",
-      signInType: "",
-      signInUser: real_name
+      signInType: "badminton",
+      signInUser: real_name,
+      modalCheckInShow: false,
     }
   }
 
@@ -73,6 +74,20 @@ export default class Index extends Taro.Component {
     });
   };
 
+  signIn = (checker_id, sportClass) => {
+    ticketSignIn({
+      checker_id: checker_id,
+      class: sportClass
+    }).then((res) => {
+      this.updateTicketList();
+      if (res.code !== 0) {
+        Taro.showModal({content: res.message, showCancel: false}).then();
+      } else {
+        this.checkInShow(sportClass, res.data.time);
+      }
+    }).catch();
+  };
+
   /**
    * 开启微信扫描
    */
@@ -83,45 +98,43 @@ export default class Index extends Taro.Component {
       const result_list = result.split('?');
       console.log(result_list);
       if (result_list.length < 2 || result_list[0] !== qrCodeBase)
-        return Taro.showToast({title: "二维码无效", icon: "none"}).then();
-      ticketSignIn({
-        checker_id: result_list[1],
-        class: sportClass
-      }).then((res) => {
-        this.updateTicketList();
-        if (res.code !== 0) {
-          Taro.showModal({content: res.message, showCancel: false}).then();
-        } else {
-          this.modalTicketDisplayShow(sportClass, res.data.time);
-        }
-      }).catch();
+        return Taro.showToast({title: "错误的二维码", icon: "none"}).then();
+      Taro.showModal({
+        title: ticketClass[sportClass],
+        content: "您正在签到“" + ticketClass[sportClass] + "”运动项目，请确认项目信息准确后点击确认按钮完成签到。",
+        confirmText: "确认",
+        cancelText: "取消",
+      }).then(res => res.confirm && !res.cancel).then(confirm => {
+        if (confirm) this.signIn(result_list[1], sportClass);
+        else Taro.showToast({title: "签到已取消", icon: "none"}).then()
+      });
     }).catch(() => {
-      Taro.showToast({title: "二维码扫描失败", icon: "none"}).then()
+      Taro.showToast({title: "扫描已取消", icon: "none"}).then()
     })
   };
 
   /**
    * 显示票券详情对话框
    */
-  modalTicketDisplayShow = (sport, time) => {
+  checkInShow = (sport, time) => {
     this.setState({
       signInType: sport,
       signInTime: time,
-      modalTicketDisplayShow: true
+      modalCheckInShow: true
     })
   };
 
   /**
    * 关闭券详情对话框操作
    */
-  modalTicketDisplayReturn = () => {
+  onCheckInClose = () => {
     this.setState({
-      modalTicketDisplayShow: false
+      modalCheckInShow: false
     });
   };
 
   render() {
-    const {sportKeys, sportList, ticketList, modalTicketDisplayShow, signInTime, signInType, signInUser} = this.state;
+    const {sportKeys, sportList, ticketList, modalCheckInShow, signInTime, signInType, signInUser} = this.state;
 
     const all_count = 3;
     const use_count = ticketList.length;
@@ -130,7 +143,7 @@ export default class Index extends Taro.Component {
     return (
       <View class="bg">
         <View class="transparent-modal">
-          <AtModal isOpened={modalTicketDisplayShow} closeOnClickOverlay={false}>
+          <AtModal isOpened={modalCheckInShow} closeOnClickOverlay={false}>
             <AtModalContent>
               <View class="text title">打卡成功！</View>
               <View class="float-block">
@@ -141,18 +154,30 @@ export default class Index extends Taro.Component {
                   <View class="icon">
                     <Image src={ticketIcon[signInType] || success}/>
                   </View>
-                  <View class="text blank">{signInTime}</View>
+                  <View class="text blank big">{signInUser}</View>
                   <View class="text blank">{ticketClass[signInType]}</View>
-                  <View class="text blank">{signInUser}</View>
+                  <View class="text blank">{signInTime}</View>
                 </View>
               </View>
-              <AtButton className={"button"} circle onClick={this.modalTicketDisplayReturn.bind(this)}>完成打卡</AtButton>
+              <AtButton className="button" circle onClick={this.onCheckInClose.bind(this,)}>关闭</AtButton>
             </AtModalContent>
           </AtModal>
         </View>
 
-        <View class="block center">
-          <View class="body">本周已打卡 {use_count}/{all_count} 次</View>
+        <View class="block">
+          <View class="body center">本周已打卡 {use_count}/{all_count} 次</View>
+          {ticketList.length > 0 && <View class="list">
+            <AtList hasBorder={false}>
+              {ticketList.map((item, index) => (
+                <AtListItem
+                  key={index}
+                  title={ticketClass[item["class"]]}
+                  note={item["expiry_date"]}
+                  thumb={ticketIcon[item["class"]]}
+                />
+              ))}
+            </AtList>
+          </View>}
         </View>
 
         <View class="block">
