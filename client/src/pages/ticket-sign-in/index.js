@@ -1,6 +1,6 @@
 /**
  * muumlover@2019-09-17
- * 用户打卡签到页面
+ * 用户打卡打卡页面
  */
 import Taro from "@tarojs/taro"
 import {Image, View} from "@tarojs/components"
@@ -54,7 +54,7 @@ export default class Index extends Taro.Component {
    */
   componentDidShow() {
     this.updateTicketList();
-  }
+  } 
 
   /**
    * 更新页面内票券列表数据
@@ -101,12 +101,12 @@ export default class Index extends Taro.Component {
         return Taro.showToast({title: "错误的二维码", icon: "none"}).then();
       Taro.showModal({
         title: ticketClass[sportClass],
-        content: "您正在签到“" + ticketClass[sportClass] + "”运动项目，请确认项目信息准确后点击确认按钮完成签到。",
+        content: "您正在打卡“" + ticketClass[sportClass] + "”运动项目，请确认项目信息准确后点击确认按钮完成打卡。",
         confirmText: "确认",
         cancelText: "取消",
       }).then(res => res.confirm && !res.cancel).then(confirm => {
         if (confirm) this.signIn(result_list[1], sportClass);
-        else Taro.showToast({title: "签到已取消", icon: "none"}).then()
+        else Taro.showToast({title: "打卡已取消", icon: "none"}).then()
       });
     }).catch(() => {
       Taro.showToast({title: "扫描已取消", icon: "none"}).then()
