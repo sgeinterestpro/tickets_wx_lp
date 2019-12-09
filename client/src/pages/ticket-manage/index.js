@@ -258,12 +258,11 @@ export default class Index extends Taro.Component {
             <View class="list">
               {ticketLogList.length > 0 ?
                 <View>
-                  {ticketLogList.map((item, index) => (
+                  {ticketLogList.map((items, index) => (
                     <View key={index} class="list-item">
-                      <View class="time">{item.time}</View>
-                      <View class="text">
-                        {`${ticketOption[item["option"]]} ${item["ticket_id"].substr(0, 20)} ${item["real_name"]}`}
-                      </View>
+                      {items.map((item, index) => (
+                        <View key={index} class="text">{item}</View>
+                      ))}
                     </View>
                   ))}
                   <AtLoadMore
