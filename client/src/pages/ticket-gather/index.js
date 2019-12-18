@@ -10,7 +10,7 @@ import {Canvas, View} from "@tarojs/components"
 import "./index.scss"
 import TicketTabBar from "../../component/tab-bar"
 import ModalTicketDisplay from "../../component/module-ticket-checked";
-import {qrCodeBase, ticketClass} from "../../config";
+import {qrCodeBase} from "../../config";
 import {ticketCheckLog} from "../../apis";
 import drawQrcode from "weapp-qrcode";
 
@@ -120,12 +120,11 @@ export default class Index extends Taro.Component {
                     {`今日已扫描 ${ticketCheckLogList.length} 张`}
                   </View>
                 </View>
-                {ticketCheckLogList.map((item, index) => (
+                {ticketCheckLogList.map((items, index) => (
                   <View key={index} class="list-item">
-                    <View class="text">{`编号：${item["_id"].substr(0, 20)}`}</View>
-                    <View class="text">{`用户：${item["user_init"]["real_name"] || "已注销"}`}</View>
-                    <View class="text">{`项目：${ticketClass[item["class"]]}`}</View>
-                    <View class="time">{`时间：${item["check_time"]}`}</View>
+                    {items.map((item, index) => (
+                      <View key={index} class="text">{item}</View>
+                    ))}
                   </View>
                 ))}
               </View>

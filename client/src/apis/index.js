@@ -97,6 +97,10 @@ const ticketCheckLog = (start, end) => {
   console.log(`API: ticketCheckLog(${start}, ${end})`);
   return POST(`${urlBase}/ticket_check_log`, {start, end});
 };
+const ticketCheckCount = (start, end) => {
+  console.log(`API: ticketCheckCount(${start}, ${end})`);
+  return POST(`${urlBase}/ticket_check_count`, {start, end});
+};
 const userBind = (data) => {
   console.log(`API: userBind(${JSON.stringify(data)})`);
   return POST(`${urlBase}/user_bind`, data);
@@ -129,9 +133,13 @@ const memberList = () => {
   console.log(`API: userList()`);
   return POST(`${urlBase}/member_list`);
 };
-const reportExport = (type, start, end) => {
-  console.log(`API: reportExport(${type},${start}, ${end})`);
-  return POST(`${urlBase}/report_export`, {type, start, end});
+const reportExport = (type, params) => {
+  console.log(`API: reportExport(${type},${params})`);
+  return POST(`${urlBase}/report_export`, {type, params});
+};
+const reportList = () => {
+  console.log(`API: reportList()`);
+  return GET(`${urlBase}/report_list`);
 };
 const rsaPubKey = () => {
   console.log(`API: rsa_pub_key()`);
@@ -154,10 +162,12 @@ export {
   purchaseTicket,
   refundTicket,
   reportExport,
+  reportList,
   rsaPubKey,
   ticketSignIn,
   ticketPackage,
   ticketCheckLog,
+  ticketCheckCount,
   ticketGenerate,
   ticketLog,
   ticketUsage,

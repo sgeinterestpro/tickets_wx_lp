@@ -1,35 +1,42 @@
-.tickets-scan {
+.search {
   box-sizing: border-box;
   box-shadow: 0 0 2px 0 rgba(25, 29, 33, 0.15);
   position: relative;
-  width: 670px;
-  margin: 40px auto 0;
-  padding: 0 40px;
+  //width: 670px;
+  margin: 40px auto;
   background: #fff;
   border-radius: 12px;
 
   .input-container {
     padding: 10px 0 0 0;
-    width: 590px;
     margin: 0 auto;
 
     .text-view {
       position: relative;
-      padding: 24px 0;
       color: #333;
-      background-color: #FFF;
-      margin-left: 32px;
-      margin-bottom: 1px;
+      background-color: #EEE;
+      border-radius: 12px;
       display: flex;
 
       .text-value {
         font-size: 32px;
         width: 536px;
-        margin: auto;
+        margin: auto 20px;
       }
     }
   }
 
 }
 
+.grid {
+  padding: 20px 10px;
+  text-align: center;
 
+  .name {
+    font-size: 48px;
+  }
+
+  .count {
+    font-size: 32px;
+  }
+}

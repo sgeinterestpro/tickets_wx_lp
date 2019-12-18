@@ -8,7 +8,9 @@
   }
 
   .float-block {
-    background-color: #6190E8;
+    //background-color: #6190E8;
+    background-color: #111111EE;
+    box-shadow: 2PX 2PX 4PX #07070777;
     color: #FFFFFF;
     border-radius: 24px;
     margin: 48px 0;
@@ -57,6 +59,10 @@
     text-shadow: 2PX 2PX 4PX #000000;
   }
 
+  .big {
+    font-size: 84px;
+  }
+
   .title {
     font-size: 60px;
     text-align: center;
@@ -64,12 +70,13 @@
 
 
   .blank {
-    margin-top: 36px;
+    margin-top: 24px;
   }
 
   .button {
     color: #FFFFFF;
-    background-color: transparent;
+    background-color: #88888888;
     font-size: 48px;
+    text-shadow: 2PX 2PX 4PX #000000;
   }
 }
