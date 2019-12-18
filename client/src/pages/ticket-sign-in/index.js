@@ -2,15 +2,15 @@
  * muumlover@2019-09-17
  * 用户打卡打卡页面
  */
+import { Image, View } from "@tarojs/components"
 import Taro from "@tarojs/taro"
-import {Image, View} from "@tarojs/components"
-import {AtButton, AtList, AtListItem, AtModal, AtModalContent} from "taro-ui"
-import "./index.scss"
+import { AtButton, AtList, AtListItem, AtModal, AtModalContent } from "taro-ui"
+import { ticketPackage, ticketSignIn } from "../../apis"
 import TicketTabBar from "../../component/tab-bar"
+import { qrCodeBase, ticketClass, ticketIcon, ticketState } from "../../config"
 import flash from "../../img/flash.png"
 import success from "../../img/success.png"
-import {qrCodeBase, ticketClass, ticketIcon, ticketState} from "../../config";
-import {ticketPackage, ticketSignIn} from "../../apis";
+import "./index.scss"
 
 export default class Index extends Taro.Component {
   config = {
@@ -22,8 +22,8 @@ export default class Index extends Taro.Component {
 
   constructor() {
     super(...arguments);
-    let {sports} = Taro.getStorageSync("UserInfo");
-    const {real_name} = Taro.getStorageSync("UserInfo");
+    let { sports } = Taro.getStorageSync("UserInfo");
+    const { real_name } = Taro.getStorageSync("UserInfo");
     let sportKeys = [];
     if (!sports || Object.keys(sports).length <= 0) {
       sports = [];
@@ -54,7 +54,7 @@ export default class Index extends Taro.Component {
    */
   componentDidShow() {
     this.updateTicketList();
-  } 
+  }
 
   /**
    * 更新页面内票券列表数据
@@ -66,11 +66,11 @@ export default class Index extends Taro.Component {
       res.items.map((item) => {
         ticketListNew.push(item)
       });
-      Taro.setStorage({key: 'ticket-package-ticketList', data: ticketListNew}).then();
-      this.setState({ticketList: ticketListNew, openIndex: -1, tOpened: false});
+      Taro.setStorage({ key: 'ticket-package-ticketList', data: ticketListNew }).then();
+      this.setState({ ticketList: ticketListNew, openIndex: -1, tOpened: false });
     }).catch(err => {
       console.error(err);
-      Taro.showModal({title: "错误", content: "数据加载失败", showCancel: false}).then();
+      Taro.showModal({ title: "错误", content: "数据加载失败", showCancel: false }).then();
     });
   };
 
@@ -81,7 +81,7 @@ export default class Index extends Taro.Component {
     }).then((res) => {
       this.updateTicketList();
       if (res.code !== 0) {
-        Taro.showModal({content: res.message, showCancel: false}).then();
+        Taro.showModal({ content: res.message, showCancel: false }).then();
       } else {
         this.checkInShow(sportClass, res.data.time);
       }
@@ -98,7 +98,7 @@ export default class Index extends Taro.Component {
       const result_list = result.split('?');
       console.log(result_list);
       if (result_list.length < 2 || result_list[0] !== qrCodeBase)
-        return Taro.showToast({title: "错误的二维码", icon: "none"}).then();
+        return Taro.showToast({ title: "错误的二维码", icon: "none" }).then();
       Taro.showModal({
         title: ticketClass[sportClass],
         content: "您正在打卡“" + ticketClass[sportClass] + "”运动项目，请确认项目信息准确后点击确认按钮完成打卡。",
@@ -106,10 +106,10 @@ export default class Index extends Taro.Component {
         cancelText: "取消",
       }).then(res => res.confirm && !res.cancel).then(confirm => {
         if (confirm) this.signIn(result_list[1], sportClass);
-        else Taro.showToast({title: "打卡已取消", icon: "none"}).then()
+        else Taro.showToast({ title: "打卡已取消", icon: "none" }).then()
       });
     }).catch(() => {
-      Taro.showToast({title: "扫描已取消", icon: "none"}).then()
+      Taro.showToast({ title: "扫描已取消", icon: "none" }).then()
     })
   };
 
@@ -134,7 +134,7 @@ export default class Index extends Taro.Component {
   };
 
   render() {
-    const {sportKeys, sportList, ticketList, modalCheckInShow, signInTime, signInType, signInUser} = this.state;
+    const { sportKeys, sportList, ticketList, modalCheckInShow, signInTime, signInType, signInUser } = this.state;
 
     const all_count = 3;
     const use_count = ticketList.length;
@@ -148,18 +148,18 @@ export default class Index extends Taro.Component {
               <View class="text title">打卡成功！</View>
               <View class="float-block">
                 <View class="background">
-                  <Image src={flash} mode="aspectFill"/>
+                  <Image src={flash} mode="aspectFill" />
                 </View>
                 <View class="container">
                   <View class="icon">
-                    <Image src={ticketIcon[signInType] || success}/>
+                    <Image src={ticketIcon[signInType] || success} />
                   </View>
                   <View class="text blank big">{signInUser}</View>
                   <View class="text blank">{ticketClass[signInType]}</View>
                   <View class="text blank">{signInTime}</View>
                 </View>
               </View>
-              <AtButton className="button" circle onClick={this.onCheckInClose.bind(this,)}>关闭</AtButton>
+              <AtButton className="button" circle onClick={this.onCheckInClose.bind(this)}>关闭</AtButton>
             </AtModalContent>
           </AtModal>
         </View>
@@ -196,12 +196,12 @@ export default class Index extends Taro.Component {
                     onClick={this.onBtnScanClick.bind(this, sport)}
                   />
                 )) :
-                <AtListItem className="list-item" title="今日无可用项目"/>
+                <AtListItem className="list-item" title="今日无可用项目" />
               }
             </AtList>
           </View>
         </View>
-        <TicketTabBar/>
+        <TicketTabBar />
       </View>
     )
   }

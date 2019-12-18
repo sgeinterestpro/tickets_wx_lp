@@ -1,17 +1,16 @@
-import Taro from "@tarojs/taro"
-import {Text, View} from "@tarojs/components"
-import {AtBadge, AtButton, AtGrid, AtLoadMore, AtProgress, AtToast} from "taro-ui";
-import "./index.scss"
-import GenerateModule from "../../component/module-generate"
-import ReportModule from "../../component/module-report"
-import SystemModule from "../../component/module-system"
-import TicketTabBar from "../../component/tab-bar"
-import {messageCount, reportList, ticketLog, ticketUsage} from "../../apis";
-import {ticketOption} from "../../config";
+import { Text, View } from "@tarojs/components";
+import Taro from "@tarojs/taro";
+import { AtBadge, AtButton, AtGrid, AtLoadMore, AtProgress, AtToast } from "taro-ui";
+import { messageCount, reportList, ticketLog, ticketUsage } from "../../apis";
+import GenerateModule from "../../component/module-generate";
+import ReportModule from "../../component/module-report";
+import SystemModule from "../../component/module-system";
+import TicketTabBar from "../../component/tab-bar";
+import imgGenerate from "../../img/action/generate.png";
+import imgReport from "../../img/action/report.png";
+import imgSystem from "../../img/action/system.png";
+import "./index.scss";
 
-import imgGenerate from "../../img/action/generate.png"
-import imgReport from "../../img/action/report.png"
-import imgSystem from "../../img/action/system.png"
 
 // import {ticketClass, ticketState} from "../../config";
 
@@ -55,7 +54,7 @@ export default class Index extends Taro.Component {
     reportList().then(res => {
       console.debug(res);
       if (res.code === 0) {
-        Taro.setStorage({key: 'ticket-manage-reportList', data: res.items}).then();
+        Taro.setStorage({ key: 'ticket-manage-reportList', data: res.items }).then();
       }
     })
   };
@@ -78,15 +77,15 @@ export default class Index extends Taro.Component {
             usedCount += ticketCounts[count]
           }
         }
-        Taro.setStorage({key: 'ticket-manage-lastCount', data: lastCount}).then();
-        Taro.setStorage({key: 'ticket-manage-usedCount', data: usedCount}).then();
-        this.setState({lastCount, usedCount})
+        Taro.setStorage({ key: 'ticket-manage-lastCount', data: lastCount }).then();
+        Taro.setStorage({ key: 'ticket-manage-usedCount', data: usedCount }).then();
+        this.setState({ lastCount, usedCount })
       } else {
         throw `res.code = ${res.code}`;
       }
     }).catch(err => {
       console.error(err);
-      Taro.showModal({title: "错误", content: "获取票券使用信息失败", showCancel: false}).then();
+      Taro.showModal({ title: "错误", content: "获取票券使用信息失败", showCancel: false }).then();
     });
   };
 
@@ -96,14 +95,14 @@ export default class Index extends Taro.Component {
   updateMessageCount() {
     messageCount().then(res => {
       if (res.code === 0) {
-        Taro.setStorage({key: 'ticket-manage-messageCount', data: res.count}).then();
-        this.setState({messageCount: res.count});
+        Taro.setStorage({ key: 'ticket-manage-messageCount', data: res.count }).then();
+        this.setState({ messageCount: res.count });
       } else {
         throw `res.code = ${res.code}`;
       }
     }).catch(err => {
       console.error(err);
-      Taro.showModal({title: "错误", content: "获取消息数量失败", showCancel: false}).then();
+      Taro.showModal({ title: "错误", content: "获取消息数量失败", showCancel: false }).then();
     });
   };
 
@@ -111,7 +110,7 @@ export default class Index extends Taro.Component {
    * 更新票券使用记录
    */
   updateTicketLogList = (append = false, limit = 5) => {
-    let {ticketLogList} = this.state;
+    let { ticketLogList } = this.state;
     let skip = 0;
     if (append) {
       skip = ticketLogList.length;
@@ -126,12 +125,12 @@ export default class Index extends Taro.Component {
         } else {
           ticketLogList = res.items;
         }
-        Taro.setStorage({key: 'ticket-manage-logList', data: ticketLogList}).then();
-        this.setState({ticketLogList, openIndex: -1, tOpened: false, status: "more"});
+        Taro.setStorage({ key: 'ticket-manage-logList', data: ticketLogList }).then();
+        this.setState({ ticketLogList, openIndex: -1, tOpened: false, status: "more" });
         resolve(res.items.length === limit);
       }).catch(err => {
         console.error(err);
-        Taro.showModal({title: "错误", content: "获取票券使用记录失败", showCancel: false}).then();
+        Taro.showModal({ title: "错误", content: "获取票券使用记录失败", showCancel: false }).then();
         reject()
       });
     });
@@ -165,46 +164,46 @@ export default class Index extends Taro.Component {
   };
 
   handleClick = () => {
-    this.setState({status: "loading"});
+    this.setState({ status: "loading" });
     this.updateTicketLogList(true).then((res) => {
       if (res)
-        this.setState({status: "more"});
+        this.setState({ status: "more" });
       else
-        this.setState({status: "noMore"});
+        this.setState({ status: "noMore" });
     }).catch(err => {
       console.error(err);
-      this.setState({status: "more"})
+      this.setState({ status: "more" })
     });
   };
 
   onToastClose = () => {
-    this.setState({tOpened: false});
+    this.setState({ tOpened: false });
   };
 
   onMessageViewClick = () => {
-    Taro.navigateTo({url: '/pages/message-list/index'}).then()
+    Taro.navigateTo({ url: '/pages/message-list/index' }).then()
   };
 
   render() {
-    const {moduleGenerateShow, moduleReportShow, moduleSystemShow} = this.state;
-    const {tOpened, tText, tStatus, tDuration} = this.state;
-    const {lastCount, usedCount} = this.state;
-    const {ticketLogList} = this.state;
+    const { moduleGenerateShow, moduleReportShow, moduleSystemShow } = this.state;
+    const { tOpened, tText, tStatus, tDuration } = this.state;
+    const { lastCount, usedCount } = this.state;
+    const { ticketLogList } = this.state;
     // const percent = 100 * (lastCount / ((usedCount + usedCount) || 1));
     const percent = 100 * (lastCount / 500);
-    const {messageCount} = this.state;
+    const { messageCount } = this.state;
     // noinspection JSXNamespaceValidation
     return (
       <View>
         <View class="bg">
           <AtToast isOpened={tOpened} text={tText} status={tStatus} duration={tDuration} hasMask={tDuration === 0}
-                   onClose={this.onToastClose.bind(this)}/>
-          {moduleGenerateShow && <GenerateModule onClose={this.handleModuleClose.bind(this)}/>}
-          {moduleReportShow && <ReportModule onClose={this.handleModuleClose.bind(this)}/>}
-          {moduleSystemShow && <SystemModule onClose={this.handleModuleClose.bind(this)}/>}
+            onClose={this.onToastClose.bind(this)} />
+          {moduleGenerateShow && <GenerateModule onClose={this.handleModuleClose.bind(this)} />}
+          {moduleReportShow && <ReportModule onClose={this.handleModuleClose.bind(this)} />}
+          {moduleSystemShow && <SystemModule onClose={this.handleModuleClose.bind(this)} />}
           <View class="block">
             <View class="body">
-              <AtProgress className="info-progress" percent={percent} isHidePercent status="progress" strokeWidth={20}/>
+              <AtProgress className="info-progress" percent={percent} isHidePercent status="progress" strokeWidth={20} />
               <View className="at-row">
                 <View className="at-col info-item">
                   <View className="item-title">库存剩余数量</View>
@@ -251,7 +250,7 @@ export default class Index extends Taro.Component {
                     data0: 'moduleSystemShow'
                   }
                 ]
-              } onClick={this.handleModuleShow.bind(this)}/>
+              } onClick={this.handleModuleShow.bind(this)} />
             </View>
           </View>
           <View class="block">
@@ -277,7 +276,7 @@ export default class Index extends Taro.Component {
             </View>
           </View>
         </View>
-        <TicketTabBar/>
+        <TicketTabBar />
       </View>
     )
   }

@@ -97,6 +97,10 @@ const ticketCheckLog = (start, end) => {
   console.log(`API: ticketCheckLog(${start}, ${end})`);
   return POST(`${urlBase}/ticket_check_log`, {start, end});
 };
+const ticketCheckCount = (start, end) => {
+  console.log(`API: ticketCheckCount(${start}, ${end})`);
+  return POST(`${urlBase}/ticket_check_count`, {start, end});
+};
 const userBind = (data) => {
   console.log(`API: userBind(${JSON.stringify(data)})`);
   return POST(`${urlBase}/user_bind`, data);
@@ -163,6 +167,7 @@ export {
   ticketSignIn,
   ticketPackage,
   ticketCheckLog,
+  ticketCheckCount,
   ticketGenerate,
   ticketLog,
   ticketUsage,
