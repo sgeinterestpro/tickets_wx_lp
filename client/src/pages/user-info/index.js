@@ -95,22 +95,25 @@ export default class Index extends Taro.Component {
     return (
       <View class="bg">
         <View class="user-card">
-          <View class="avatar">
-            {/*<AtAvatar openData={{type: "userAvatarUrl"}}/>*/}
-            <AtAvatar image={userInfo["avatarUrl"] || 'https://jdc.jd.com/img/200'}/>
-          </View>
-          <View class="info">
-            {/*<OpenData type="userNickName"/>*/}
-            {userInfo["avatarUrl"] ? <View>{userInfo["nickName"] || "同步微信信息失败"}</View>
-              : <AtButton
-                type="primary"
-                openType="getUserInfo"
-                size="normal"
-                onGetUserInfo={this.onGetUserInfo.bind(this)}
-              >
-                授权获取用户信息
-              </AtButton>}
-          </View>
+          {userInfo["avatarUrl"] ? <View>
+            <View class="avatar">
+              {/*<AtAvatar openData={{type: "userAvatarUrl"}}/>*/}
+              <AtAvatar image={userInfo["avatarUrl"] || 'https://jdc.jd.com/img/200'}/>
+            </View>
+            <View class="info">
+              {/*<OpenData type="userNickName"/>*/}
+              <View>{userInfo["nickName"] || "同步微信信息失败"}</View>
+            </View>
+          </View> : <View>
+            <AtButton
+              type="primary"
+              openType="getUserInfo"
+              size="normal"
+              onGetUserInfo={this.onGetUserInfo.bind(this)}
+            >
+              授权获取用户信息
+            </AtButton>
+          </View>}
         </View>
         {/*{userInfo["avatarUrl"] ? "" : <View class="button-full">*/}
         {/*  <AtButton*/}
