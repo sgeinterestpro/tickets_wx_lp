@@ -66,17 +66,17 @@ export default class Index extends Taro.Component {
     const roleKey = roleKeyList[e.detail.value];
     Taro.setStorageSync("Role", roleKey);
     this.setState({roleSelectIndex});
-    Taro.reLaunch({url: "/pages/user-info/index"});
+    Taro.reLaunch({url: "/pages/user-info/index"}).then();
   };
 
   handleSyncUser = () => {
-    Taro.navigateTo({url: "/pages/user-auth/index"});
+    Taro.navigateTo({url: "/pages/user-auth/index"}).then();
   };
 
   onGetUserInfo = (res) => {
     console.debug(res);
     userUpdate(res.detail);
-    Taro.reLaunch({url: "/pages/user-info/index"});
+    Taro.reLaunch({url: "/pages/user-info/index"}).then();
     // redirectTo({url: "/pages/index/index"})
   };
 
@@ -94,27 +94,25 @@ export default class Index extends Taro.Component {
     // noinspection JSXNamespaceValidation
     return (
       <View class="bg">
-        <View class="user-card">
-          {userInfo["avatarUrl"] ? <View>
-            <View class="avatar">
-              {/*<AtAvatar openData={{type: "userAvatarUrl"}}/>*/}
-              <AtAvatar image={userInfo["avatarUrl"] || 'https://jdc.jd.com/img/200'}/>
-            </View>
-            <View class="info">
-              {/*<OpenData type="userNickName"/>*/}
-              <View>{userInfo["nickName"] || "同步微信信息失败"}</View>
-            </View>
-          </View> : <View>
-            <AtButton
-              type="primary"
-              openType="getUserInfo"
-              size="normal"
-              onGetUserInfo={this.onGetUserInfo.bind(this)}
-            >
-              授权获取用户信息
-            </AtButton>
-          </View>}
-        </View>
+        {userInfo["avatarUrl"] ? <View class="user-card">
+          <View class="avatar">
+            {/*<AtAvatar openData={{type: "userAvatarUrl"}}/>*/}
+            <AtAvatar image={userInfo["avatarUrl"] || 'https://jdc.jd.com/img/200'}/>
+          </View>
+          <View class="info">
+            {/*<OpenData type="userNickName"/>*/}
+            <View>{userInfo["nickName"] || "同步微信信息失败"}</View>
+          </View>
+        </View> : <View class="user-card">
+          <AtButton
+            type="primary"
+            openType="getUserInfo"
+            size="normal"
+            onGetUserInfo={this.onGetUserInfo.bind(this)}
+          >
+            授权获取用户信息
+          </AtButton>
+        </View>}
         {/*{userInfo["avatarUrl"] ? "" : <View class="button-full">*/}
         {/*  <AtButton*/}
         {/*    type="secondary"*/}
