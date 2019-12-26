@@ -11,6 +11,7 @@ import {AtAvatar, AtButton, AtList, AtListItem} from "taro-ui"
 import "./index.scss"
 import {roleAllList, ticketClass} from "../../config";
 import TicketTabBar from "../../component/tab-bar"
+import {userUpdate} from "../../apis";
 
 export default class Index extends Taro.Component {
   config = {
@@ -72,6 +73,13 @@ export default class Index extends Taro.Component {
     Taro.navigateTo({url: "/pages/user-auth/index"});
   };
 
+  onGetUserInfo = (res) => {
+    console.debug(res);
+    userUpdate(res.detail);
+    Taro.reLaunch({url: "/pages/user-info/index"});
+    // redirectTo({url: "/pages/index/index"})
+  };
+
   render() {
     const {roleSelectIndex, roleList, userInfo} = this.state;
     // const roleValueList = Object.values(roleList);
@@ -93,19 +101,26 @@ export default class Index extends Taro.Component {
           </View>
           <View class="info">
             {/*<OpenData type="userNickName"/>*/}
-            <View>{userInfo["nickName"] || "同步微信信息失败"}</View>
-
+            {userInfo["avatarUrl"] ? <View>{userInfo["nickName"] || "同步微信信息失败"}</View>
+              : <AtButton
+                type="primary"
+                openType="getUserInfo"
+                size="normal"
+                onGetUserInfo={this.onGetUserInfo.bind(this)}
+              >
+                授权获取用户信息
+              </AtButton>}
           </View>
         </View>
-        {userInfo["avatarUrl"] ? "" : <View class="button-full">
-          <AtButton
-            type="secondary"
-            circle
-            onClick={this.handleSyncUser.bind(this, userInfo['init_id'])}
-          >
-            同步用户信息
-          </AtButton>
-        </View>}
+        {/*{userInfo["avatarUrl"] ? "" : <View class="button-full">*/}
+        {/*  <AtButton*/}
+        {/*    type="secondary"*/}
+        {/*    circle*/}
+        {/*    onClick={this.handleSyncUser.bind(this, userInfo['init_id'])}*/}
+        {/*  >*/}
+        {/*    同步用户信息*/}
+        {/*  </AtButton>*/}
+        {/*</View>}*/}
         <View class="block">
           <AtList hasBorder={false}>
             <AtListItem title="姓名" extraText={userInfo["real_name"]}/>
