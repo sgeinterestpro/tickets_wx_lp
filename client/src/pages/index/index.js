@@ -7,7 +7,7 @@
 import Taro from "@tarojs/taro"
 import {View} from "@tarojs/components"
 import "./index.scss"
-import {defaultBindUrl, defaultRoleUrl} from "../../config";
+import {defaultBindUrl, defaultRoleUrl, roleTabUrls} from "../../config";
 import {userInfo} from "../../apis";
 
 export default class Index extends Taro.Component {
@@ -54,8 +54,19 @@ export default class Index extends Taro.Component {
         // 用户已经绑定身份
         Taro.setStorageSync("UserInfo", res.data);
         const roles = res.data.role;
+        const {jump} = this.$router.params;
         if (!roles.includes(role)) {
           role = roles[0] || "other";
+        }
+        // console.debug('jump', jump);
+        // console.debug('role', role);
+        // console.debug('roleTabUrls[\'role\']', roleTabUrls[role]);
+        // console.debug('roleTabUrls[role].includes(jump)', roleTabUrls[role].includes(jump));
+        for (let x of roleTabUrls[role]) {
+          // console.debug('x', x);
+          if (x.url === jump) {
+            Taro.redirectTo({url: jump}).then()
+          }
         }
         Taro.setStorageSync("Role", role);
         Taro.redirectTo({url: defaultRoleUrl[role]}).then()

@@ -75,8 +75,8 @@ export default class Index extends Taro.Component {
 
   onGetUserInfo = (res) => {
     console.debug(res);
-    userUpdate(res.detail);
-    Taro.reLaunch({url: "/pages/user-info/index"}).then();
+    // Taro.reLaunch({url: "/pages/index/index?jump=/pages/user-info/index"}).then()
+    userUpdate(res.detail).then(() => Taro.reLaunch({url: "/pages/index/index?jump=/pages/user-info/index"}).then())
     // redirectTo({url: "/pages/index/index"})
   };
 
