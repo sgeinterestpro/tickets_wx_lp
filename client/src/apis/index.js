@@ -1,8 +1,6 @@
 import Taro from "@tarojs/taro";
 
-// const urlBase = "http://localhost:10000"; //本地调试
-const urlBase = "https://ticket.sge.ronpy.com"; //正式环境
-// const urlBase = "https://ticket-test.sge.ronpy.com"; //测试环境
+const urlBase = "http://localhost:10000"; //本地调试
 
 const request = (method, url, data, dataType = "json") => {
   Taro.showNavigationBarLoading();

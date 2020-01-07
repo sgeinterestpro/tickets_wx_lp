@@ -24,7 +24,9 @@ export default class Index extends Taro.Component {
     super(...arguments);
     this.state = {
       roleList: {},
-      userInfo: {}
+      userInfo: {
+        sports: []
+      }
     };
 
     this.sportsOption = Object.keys(ticketClass).map((key) => ({
