@@ -1,0 +1,1 @@
+npm install -g mirror-config-china & (yarn global add @tarojs/cli || cnpm install -g @tarojs/cli ||  npm install -g @tarojs/cli)
