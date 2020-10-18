@@ -2,8 +2,8 @@ import Taro from "@tarojs/taro"
 import Index from "./pages/index"
 
 import "./app.scss"
-import {login} from "./common/getUserInfo";
-import {rsaPubKey} from "./apis";
+import { login } from "./common/getUserInfo";
+import { rsaPubKey } from "./apis";
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -15,6 +15,7 @@ class App extends Taro.Component {
   config = {
     pages: [
       "pages/index/index",
+      "pages/error/index",
       "pages/message-list/index",
       "pages/scan-history/index",
       "pages/ticket-gather/index",
@@ -49,7 +50,7 @@ class App extends Taro.Component {
     if (!Taro.getStorageSync("PubKey")) {
       rsaPubKey().then(res => {
         console.log(res);
-        Taro.setStorage({key: "PubKey", data: res}).then();
+        Taro.setStorage({ key: "PubKey", data: res }).then();
       });
     }
   }
@@ -67,8 +68,8 @@ class App extends Taro.Component {
   // 请勿修改此函数
   render() {
     // noinspection JSXNamespaceValidation
-    return (<Index/>)
+    return (<Index />)
   }
 }
 
-Taro.render(<App/>, document.getElementById("app"));
+Taro.render(<App />, document.getElementById("app"));

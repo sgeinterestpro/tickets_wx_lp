@@ -168,6 +168,11 @@ export const defaultBindUrl = "/pages/user-bind/index";
  */
 export const defaultAuthUrl = "/pages/user-auth/index";
 /**
+ * 访问错误页面
+ * @type {string}
+ */
+export const defaultErrorUrl = "/pages/error/index";
+/**
  * 每个角色的默认页面路径
  * @type {{other: string, admin: string, checker: string, user: string}}
  */

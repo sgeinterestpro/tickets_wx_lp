@@ -1,6 +1,7 @@
 import Taro from "@tarojs/taro";
+import { defaultErrorUrl } from "../config";
 
-const urlBase = "http://localhost:10000"; //本地调试
+const urlBase = "https://ticket.sge.ronpy.com"; //正式环境
 
 const request = (method, url, data, dataType = "json") => {
   Taro.showNavigationBarLoading();
@@ -19,9 +20,13 @@ const request = (method, url, data, dataType = "json") => {
       dataType: dataType
     }).then(res => {
       Taro.hideNavigationBarLoading();
-      if (res.statusCode >= 400) {
+      if (res.statusCode >= 500) {
         console.error(res);
         reject(res.data);
+      } else if (res.statusCode >= 400) {
+        console.error(res.data);
+        Taro.setStorage({ key: "ErrorInfo", data: res.data }).then();
+        Taro.redirectTo({ url: defaultErrorUrl }).then()
       } else {
         console.debug(res);
         resolve(res.data);
@@ -41,7 +46,7 @@ const POST = (url, data, dataType) => request("POST", url, data, dataType);
 
 const wxLogin = (js_code) => {
   console.log(`API: wxLogin(${js_code})`);
-  return POST(`${urlBase}/auth/weixin/login`, {js_code: js_code});
+  return POST(`${urlBase}/auth/weixin/login`, { js_code: js_code });
 };
 const ticketPackage = () => {
   console.log(`API: ticketPackage()`);
@@ -53,15 +58,15 @@ const purchaseTicket = (data) => {
 };
 const refundTicket = (ticket_id) => {
   console.log(`API: refundTicket(${ticket_id})`);
-  return POST(`${urlBase}/ticket_refund`, {ticket_id});
+  return POST(`${urlBase}/ticket_refund`, { ticket_id });
 };
 const inspectTicket = (ticket_id) => {
   console.log(`API: inspectTicket(${ticket_id})`);
-  return POST(`${urlBase}/ticket_inspect`, {ticket_id});
+  return POST(`${urlBase}/ticket_inspect`, { ticket_id });
 };
 const checkedTicket = (ticket_id) => {
   console.log(`API: checkedTicket(${ticket_id})`);
-  return POST(`${urlBase}/ticket_checked`, {ticket_id});
+  return POST(`${urlBase}/ticket_checked`, { ticket_id });
 };
 const messageList = () => {
   console.log(`API: messageList()`);
@@ -73,7 +78,7 @@ const messageCount = () => {
 };
 const messageAction = (message_id) => {
   console.log(`API: messageAction(${message_id})`);
-  return POST(`${urlBase}/message_action`, {message_id})
+  return POST(`${urlBase}/message_action`, { message_id })
 };
 const ticketSignIn = (data) => {
   console.log(`API: ticketSignIn(${JSON.stringify(data)})`);
@@ -81,7 +86,7 @@ const ticketSignIn = (data) => {
 };
 const ticketGenerate = (count) => {
   console.log(`API: ticketGenerate(${count})`);
-  return POST(`${urlBase}/ticket_generate`, {count});
+  return POST(`${urlBase}/ticket_generate`, { count });
 };
 const ticketUsage = () => {
   console.log(`API: ticketUsage()`);
@@ -89,15 +94,15 @@ const ticketUsage = () => {
 };
 const ticketLog = (skip, limit) => {
   console.log(`API: ticketLog(${skip}, ${limit})`);
-  return POST(`${urlBase}/ticket_log`, {skip, limit});
+  return POST(`${urlBase}/ticket_log`, { skip, limit });
 };
 const ticketCheckLog = (start, end) => {
   console.log(`API: ticketCheckLog(${start}, ${end})`);
-  return POST(`${urlBase}/ticket_check_log`, {start, end});
+  return POST(`${urlBase}/ticket_check_log`, { start, end });
 };
 const ticketCheckCount = (start, end) => {
   console.log(`API: ticketCheckCount(${start}, ${end})`);
-  return POST(`${urlBase}/ticket_check_count`, {start, end});
+  return POST(`${urlBase}/ticket_check_count`, { start, end });
 };
 const userBind = (data) => {
   console.log(`API: userBind(${JSON.stringify(data)})`);
@@ -121,11 +126,11 @@ const memberEdit = (data) => {
 };
 const memberDelete = (init_id) => {
   console.log(`API: userDelete(${init_id})`);
-  return POST(`${urlBase}/member_delete`, {init_id});
+  return POST(`${urlBase}/member_delete`, { init_id });
 };
 const memberFind = (init_id) => {
   console.log(`API: userFind(${init_id})`);
-  return POST(`${urlBase}/member_find`, {init_id});
+  return POST(`${urlBase}/member_find`, { init_id });
 };
 const memberList = () => {
   console.log(`API: userList()`);
@@ -133,7 +138,7 @@ const memberList = () => {
 };
 const reportExport = (type, params) => {
   console.log(`API: reportExport(${type},${params})`);
-  return POST(`${urlBase}/report_export`, {type, params});
+  return POST(`${urlBase}/report_export`, { type, params });
 };
 const reportList = () => {
   console.log(`API: reportList()`);
