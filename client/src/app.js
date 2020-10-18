@@ -40,7 +40,7 @@ class App extends Taro.Component {
       navigationBarTextStyle: "white",
     },
     networkTimeout: {
-      request: 20000
+      request: 30000
     }
   };
 
