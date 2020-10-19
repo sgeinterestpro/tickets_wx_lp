@@ -24,7 +24,9 @@ export default class Index extends Taro.Component {
     super(...arguments);
     this.state = {
       roleList: {},
-      userInfo: {}
+      userInfo: {
+        sports: []
+      }
     };
 
     this.sportsOption = Object.keys(ticketClass).map((key) => ({
@@ -99,24 +101,15 @@ export default class Index extends Taro.Component {
             <AtInput class="form-item" name="real_name" title="用户姓名" type="text" placeholder="请输入用户姓名"
                      value={userInfo["real_name"]}
                      onChange={this.handleChange.bind(this, "real_name")}/>
+            <AtInput class="form-item" name="department" title="所属部门" type="text" placeholder="请输入所属部门"
+                     value={userInfo["department"]}
+                     onChange={this.handleChange.bind(this, "department")}/>
             <AtInput class="form-item" name="email" title="电子邮件" type="text" placeholder="请输入电子邮件"
                      value={userInfo["email"]}
                      onChange={this.handleChange.bind(this, "email")}/>
             <AtInput class="form-item" name="phone" title="手机号码" type="text" placeholder="请输入手机号码"
                      value={userInfo["phone"]}
                      onChange={this.handleChange.bind(this, "phone")}/>
-            {/*<View class="form-item">*/}
-            {/*  <View class="key">*/}
-            {/*    运动项目*/}
-            {/*  </View>*/}
-            {/*  <View class="value">*/}
-            {/*    <AtCheckbox*/}
-            {/*      options={this.sportsOption}*/}
-            {/*      selectedList={userInfo["sports"]}*/}
-            {/*      onChange={this.handleChange.bind(this, "sports")}*/}
-            {/*    />*/}
-            {/*  </View>*/}
-            {/*</View>*/}
             <View class="form-item">
               <View class="key">
                 用户角色
@@ -129,6 +122,18 @@ export default class Index extends Taro.Component {
                 />
               </View>
             </View>
+            {/*<View class="form-item">*/}
+            {/*  <View class="key">*/}
+            {/*    运动项目*/}
+            {/*  </View>*/}
+            {/*  <View class="value">*/}
+            {/*    <AtCheckbox*/}
+            {/*      options={this.sportsOption}*/}
+            {/*      selectedList={userInfo["sports"]}*/}
+            {/*      onChange={this.handleChange.bind(this, "sports")}*/}
+            {/*    />*/}
+            {/*  </View>*/}
+            {/*</View>*/}
             <View class="buttons">
               <AtButton className="button" formType="reset">重置</AtButton>
               <AtButton className="button" formType="submit">提交</AtButton>

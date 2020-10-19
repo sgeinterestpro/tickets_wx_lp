@@ -59,8 +59,8 @@ export default class Index extends Taro.Component {
 
   handleDeleteUser = (id) => {
     Taro.showModal({
-      title: "删除该用户？",
-      content: "用户删除后该用户将无法登录并使用本系统，点击删除后将无法撤销删除操作，请确认是否继续删除？",
+      title: "删除该用户账户？",
+      content: "用户账户删除后该用户将无法登录并使用本系统，点击删除后将无法撤销删除操作，请确认是否继续删除用户账户？",
       confirmText: "取消",
       confirmColor: "#000000",
       cancelText: "删除",
@@ -71,14 +71,14 @@ export default class Index extends Taro.Component {
           if (res.code !== 0) {
             this.setState({
               tOpened: false,
-              tText: "删除失败",
+              tText: "用户账户删除失败",
               tStatus: "error",
             });
             Taro.showModal({content: res.message, showCancel: false}).then();
           } else {
             this.setState({
               tOpened: true,
-              tText: "删除成功",
+              tText: "用户账户删除成功",
               tStatus: "success",
             });
             Taro.navigateBack().then();
@@ -87,12 +87,86 @@ export default class Index extends Taro.Component {
         this.setState({
           openIndex: -1,
           tOpened: true,
-          tText: "删除中...",
+          tText: "用户账户删除中...",
           tStatus: "loading",
         });
       }
     });
-  };
+  }
+
+  handleSuspendUser = (id) => {
+    Taro.showModal({
+      title: "停用该用户账户？",
+      content: "用户账户停用后该用户将无法登录并使用本系统，请确认是否继续停用用户账户？",
+      confirmText: "取消",
+      confirmColor: "#000000",
+      cancelText: "停用",
+      cancelColor: "#FF0000"
+    }).then(res => !res.confirm && res.cancel).then(confirm => {
+      if (confirm) {
+        memberDelete(id).then(res => {
+          if (res.code !== 0) {
+            this.setState({
+              tOpened: false,
+              tText: "用户账户停用失败",
+              tStatus: "error",
+            });
+            Taro.showModal({content: res.message, showCancel: false}).then();
+          } else {
+            this.setState({
+              tOpened: true,
+              tText: "用户账户停用成功",
+              tStatus: "success",
+            });
+            Taro.navigateBack().then();
+          }
+        });
+        this.setState({
+          openIndex: -1,
+          tOpened: true,
+          tText: "用户账户停用中...",
+          tStatus: "loading",
+        });
+      }
+    });
+  }
+
+  handleResumeUser = (id) => {
+    Taro.showMo恢复该用户账户dal({
+      title: "？",
+      content: "用户账户恢复后该用户可以正常登录并使用本系统，请确认是否继续恢复用户账户？",
+      confirmText: "取消",
+      confirmColor: "#000000",
+      cancelText: "恢复",
+      cancelColor: "#0000FF"
+    }).then(res => !res.confirm && res.cancel).then(confirm => {
+      if (confirm) {
+        memberDelete(id).then(res => {
+          if (res.code !== 0) {
+            this.setState({
+              tOpened: false,
+              tText: "用户账户恢复失败",
+              tStatus: "error",
+            });
+            Taro.showModal({content: res.message, showCancel: false}).then();
+          } else {
+            this.setState({
+              tOpened: true,
+              tText: "用户账户恢复成功",
+              tStatus: "success",
+            });
+            Taro.navigateBack().then();
+          }
+        });
+        this.setState({
+          openIndex: -1,
+          tOpened: true,
+          tText: "用户账户恢复中...",
+          tStatus: "loading",
+        });
+      }
+    });
+  }
 
   handleEnableEdit = () => {
     const {userInfo} = this.state;
@@ -162,15 +236,35 @@ export default class Index extends Taro.Component {
                 编辑用户
               </AtButton>
             </View>
-            <View class="button-full button-danger">
-              <AtButton
-                type="secondary"
-                circle
-                onClick={this.handleDeleteUser.bind(this, userInfo['init_id'])}
-              >
-                删除用户
-              </AtButton>
-            </View>
+            {/* 20201014 移除删除功能，改为停用和恢复，保证数据完整性*/}
+            {/*<View class="button-full button-danger">*/}
+            {/*  <AtButton*/}
+            {/*    type="secondary"*/}
+            {/*    circle*/}
+            {/*    onClick={this.handleDeleteUser.bind(this, userInfo['init_id'])}*/}
+            {/*  >*/}
+            {/*    删除用户账户*/}
+            {/*  </AtButton>*/}
+            {/*</View>*/}
+
+            {userInfo["state"] === "suspend" ? <View class="button-full">
+                <AtButton
+                  type="secondary"
+                  circle
+                  onClick={this.handleResumeUser.bind(this, userInfo['init_id'])}
+                >
+                  恢复用户账户
+                </AtButton>
+              </View> :
+              <View class="button-full button-danger">
+                <AtButton
+                  type="secondary"
+                  circle
+                  onClick={this.handleSuspendUser.bind(this, userInfo['init_id'])}
+                >
+                  停用用户账户
+                </AtButton>
+              </View>}
           </View> :
           <View class="block">
             <AtForm
