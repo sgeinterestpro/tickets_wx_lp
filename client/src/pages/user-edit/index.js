@@ -132,8 +132,8 @@ export default class Index extends Taro.Component {
   }
 
   handleResumeUser = (id) => {
-    Taro.showMo恢复该用户账户dal({
-      title: "？",
+    Taro.showModal({
+      title: "恢复该用户账户？",
       content: "用户账户恢复后该用户可以正常登录并使用本系统，请确认是否继续恢复用户账户？",
       confirmText: "取消",
       confirmColor: "#000000",
