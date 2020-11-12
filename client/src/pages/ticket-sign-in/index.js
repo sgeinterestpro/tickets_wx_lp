@@ -176,22 +176,6 @@ export default class Index extends Taro.Component {
         </View>
 
         <View class="block">
-          <View class="body center">本周已打卡 {use_count}/{all_count} 次</View>
-          {ticketList.length > 0 && <View class="list">
-            <AtList hasBorder={false}>
-              {ticketList.map((item, index) => (
-                <AtListItem
-                  key={index}
-                  title={ticketClass[item["class"]]}
-                  note={item["expiry_date"]}
-                  thumb={ticketIcon[item["class"]]}
-                />
-              ))}
-            </AtList>
-          </View>}
-        </View>
-
-        <View class="block">
           <View class="list">
             <AtList hasBorder={false}>
               {sportKeys.length > 0 ?
@@ -212,6 +196,23 @@ export default class Index extends Taro.Component {
             </AtList>
           </View>
         </View>
+
+        <View class="block">
+          <View class="body center">本周已打卡 {use_count}/{all_count} 次</View>
+          {ticketList.length > 0 && <View class="list">
+            <AtList hasBorder={false}>
+              {ticketList.map((item, index) => (
+                <AtListItem
+                  key={index}
+                  title={ticketClass[item["class"]]}
+                  note={item["expiry_date"]}
+                  thumb={ticketIcon[item["class"]]}
+                />
+              ))}
+            </AtList>
+          </View>}
+        </View>
+
         <TicketTabBar/>
       </View>
     )
