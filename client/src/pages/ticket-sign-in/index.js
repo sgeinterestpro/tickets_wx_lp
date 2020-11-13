@@ -205,7 +205,7 @@ export default class Index extends Taro.Component {
                 <AtListItem
                   key={index}
                   title={ticketClass[item["class"]]}
-                  note={item["expiry_date"]}
+                  note={item["purch_time"]}
                   thumb={ticketIcon[item["class"]]}
                 />
               ))}
