@@ -122,18 +122,18 @@ export default class Index extends Taro.Component {
                 />
               </View>
             </View>
-            {/*<View class="form-item">*/}
-            {/*  <View class="key">*/}
-            {/*    运动项目*/}
-            {/*  </View>*/}
-            {/*  <View class="value">*/}
-            {/*    <AtCheckbox*/}
-            {/*      options={this.sportsOption}*/}
-            {/*      selectedList={userInfo["sports"]}*/}
-            {/*      onChange={this.handleChange.bind(this, "sports")}*/}
-            {/*    />*/}
-            {/*  </View>*/}
-            {/*</View>*/}
+            {userInfo["role"] && userInfo["role"].includes("user") && <View class="form-item">
+              <View class="key">
+                运动项目
+              </View>
+              <View class="value">
+                <AtCheckbox
+                  options={this.sportsOption}
+                  selectedList={userInfo["sports"]}
+                  onChange={this.handleChange.bind(this, "sports")}
+                />
+              </View>
+            </View>}
             <View class="buttons">
               <AtButton className="button" formType="reset">重置</AtButton>
               <AtButton className="button" formType="submit">提交</AtButton>
