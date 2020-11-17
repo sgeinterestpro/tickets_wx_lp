@@ -1,9 +1,6 @@
 /**
  * muumlover@2019-05-27
- * 票券扫描页面
- * 1、提供扫描票券功能
- * 2、显示票券信息供人工核实
- * 3、TODO 显示扫描历史
+ * 检票员展示二维码页面
  */
 import Taro from "@tarojs/taro"
 import {Canvas, View} from "@tarojs/components"
@@ -35,7 +32,7 @@ export default class Index extends Taro.Component {
   }
 
   componentDidMount() {
-    const {_id: user_id} = Taro.getStorageSync('UserInfo');
+    const {init_id: user_id} = Taro.getStorageSync('UserInfo');
     console.log(user_id);
     Taro.getSystemInfo({
       success: res => {

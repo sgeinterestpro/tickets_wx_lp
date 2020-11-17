@@ -89,7 +89,9 @@ export default class Index extends Taro.Component {
     let sportList = [];
     const {sports} = Taro.getStorageSync("UserInfo");
     if (!(sports && sports.length > 0)) {
-      sportList = Object.keys(ticketClass)
+      sportList = Object.keys(sports).filter((key) => {
+        return sports[key] && sports[key].joined;
+      })
     }
     // noinspection JSXNamespaceValidation
     return (

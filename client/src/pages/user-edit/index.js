@@ -29,6 +29,11 @@ export default class Index extends Taro.Component {
       roleList: [],
       sportList: []
     };
+
+    this.sportsOption = Object.keys(ticketClass).map((key) => ({
+      value: key,
+      label: ticketClass[key]
+    }));
     this.roleOption = Object.keys(roleAllList).map((key) => ({
       value: key,
       label: roleAllList[key]
@@ -36,6 +41,10 @@ export default class Index extends Taro.Component {
   }
 
   componentDidMount() {
+    this.loadUserInfo();
+  }
+
+  loadUserInfo() {
     const {id} = this.$router.params;
     const {roleList} = this.state;
     memberFind(id).then((res) => {
@@ -49,8 +58,8 @@ export default class Index extends Taro.Component {
           }
         }
         let sportList = [];
-        if (!(userInfo["sports"] && userInfo["sports"].length > 0)) {
-          sportList = Object.keys(ticketClass)
+        if (userInfo["sports"] && userInfo["sports"].length > 0) {
+          sportList = userInfo["sports"]
         }
         this.setState({userInfo, roleList, sportList})
       }
@@ -192,7 +201,8 @@ export default class Index extends Taro.Component {
         console.error(res);
         Taro.showToast({title: res.message, icon: "none", duration: 2000}).then();
       } else {
-        this.setState({editShow: false})
+        this.setState({editShow: false});
+        this.loadUserInfo();
       }
     }).catch(err => console.exception(err))
   };
@@ -223,7 +233,7 @@ export default class Index extends Taro.Component {
                   角色：{(userInfo["role"] || []).map((role) => roleAllList[role] || '未知').join(',')}
                 </View>
                 <View class="list-item">
-                  项目：{sportList.map((sport) => ticketClass[sport] || '未知').join(',')}
+                  项目：{sportList.map((sport) => ticketClass[sport] || '未知').join(',') || "未加入任何项目"}
                 </View>
               </View>
             </View>
@@ -281,18 +291,6 @@ export default class Index extends Taro.Component {
               <AtInput class="form-item" name="phone" title="手机号码" type="text" placeholder="请输入手机号码"
                        value={userInfo["phone"]}
                        onChange={this.handleInfoChange.bind(this, "phone")}/>
-              {/*<View class="form-item">*/}
-              {/*  <View class="key">*/}
-              {/*    运动项目*/}
-              {/*  </View>*/}
-              {/*  <View class="value">*/}
-              {/*    <AtCheckbox*/}
-              {/*      options={this.sportsOption}*/}
-              {/*      selectedList={userInfo["sports"]}*/}
-              {/*      onChange={this.handleChange.bind(this, "sports")}*/}
-              {/*    />*/}
-              {/*  </View>*/}
-              {/*</View>*/}
               <View class="form-item">
                 <View class="key">
                   用户角色
@@ -305,6 +303,18 @@ export default class Index extends Taro.Component {
                   />
                 </View>
               </View>
+              {userInfo["role"] && userInfo["role"].includes("user") && <View class="form-item">
+                <View class="key">
+                  运动项目
+                </View>
+                <View class="value">
+                  <AtCheckbox
+                    options={this.sportsOption}
+                    selectedList={userInfo["sports"]}
+                    onChange={this.handleInfoChange.bind(this, "sports")}
+                  />
+                </View>
+              </View>}
               <View class="buttons">
                 <AtButton className="button" formType="reset">取消</AtButton>
                 <AtButton className="button" formType="submit">提交</AtButton>
